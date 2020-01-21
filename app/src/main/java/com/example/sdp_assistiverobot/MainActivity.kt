@@ -15,15 +15,31 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // By default, load the patients fragment
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.container, PatientsFragment())
+            addToBackStack(null)
+            commit()
+        }
+
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.navigation_home -> {
-                    openFragment(HomeFragment())
+                R.id.navigation_patients -> {
+                    openFragment(PatientsFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
-                R.id.navigation_patients -> {
-                    openFragment(MessageFragment())
+                R.id.navigation_analytics -> {
+                    openFragment(AnalyticsFragment())
+                    return@setOnNavigationItemSelectedListener true
+                }
+                R.id.navigation_addPatient -> {
+                    openFragment(AddPatientFragment())
+                    return@setOnNavigationItemSelectedListener true
+                }
+                R.id.navigation_map -> {
+                    openFragment(MapFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navigation_me -> {
