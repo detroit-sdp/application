@@ -1,5 +1,6 @@
 package com.example.sdp_assistiverobot
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Message
@@ -18,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.navigation_home -> {
-                    openFragment(MessageFragment())//HomepageFragment())
+                    openFragment(HomeFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navigation_patients -> {
@@ -42,4 +43,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        val intent = Intent(Intent.ACTION_MAIN)
+        intent.addCategory(Intent.CATEGORY_HOME)
+        startActivity(intent)
+    }
 }
