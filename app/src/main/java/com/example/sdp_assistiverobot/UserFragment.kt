@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_user.*
 
 class UserFragment : Fragment() {
 
-    private lateinit var currentUser: FirebaseUser
+    private lateinit var auth: FirebaseAuth
     private val TAG = "UserFragment"
 
     override fun onCreateView(
@@ -29,10 +29,11 @@ class UserFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        currentUser = FirebaseAuth.getInstance().currentUser!!
-        user_name.text = currentUser.displayName
-        user_email.text = currentUser.email
-        user_phone.text = currentUser.phoneNumber
+        auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
+        user_name.text = currentUser?.displayName
+        user_email.text = currentUser?.email
+        user_phone.text = currentUser?.phoneNumber
 
         user_name.setOnClickListener {
             updateName()
@@ -52,9 +53,9 @@ class UserFragment : Fragment() {
         val profileUpdates = UserProfileChangeRequest.Builder()
             .setDisplayName("test")
             .build()
-
-        currentUser.updateProfile(profileUpdates)
-            .addOnCompleteListener { task ->
+        val currentUser = auth.currentUser
+        currentUser?.updateProfile(profileUpdates)
+            ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "User profile updated.")
                     user_name.text = currentUser.displayName
@@ -63,8 +64,9 @@ class UserFragment : Fragment() {
     }
 
     private fun updateEmail() {
-        currentUser.updateEmail("niu123456@123.com")
-            .addOnCompleteListener { task ->
+        val currentUser = auth.currentUser
+        currentUser?.updateEmail("niu123456@123.com")
+            ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "User email address updated.")
                     user_email.text = currentUser.email

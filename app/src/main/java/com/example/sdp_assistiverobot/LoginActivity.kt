@@ -1,11 +1,13 @@
 package com.example.sdp_assistiverobot
 
 import android.content.Intent
+import android.media.tv.TvContract
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.view.isVisible
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_login.*
@@ -20,11 +22,10 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        auth = FirebaseAuth.getInstance()
-        val currentUser = auth.currentUser
-        updateUI(currentUser)
-
         setContentView(R.layout.activity_login)
+
+        auth = FirebaseAuth.getInstance()
+        updateUI(auth.currentUser)
 
         button_login.setOnClickListener {
             val usr = username.text.toString()
@@ -36,7 +37,6 @@ class LoginActivity : AppCompatActivity() {
             startActivityForResult(intent, REQUEST_SIGNUP)
         }
 
-        isEnabledAll(true)
     }
 
     private fun login(username: String, password: String) {
@@ -91,11 +91,13 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUI(user: FirebaseUser?) {
         Log.d(TAG, "updateUI")
         if (user != null) {
+            Log.d(TAG, "user signed in")
             val intent = Intent(this, MainActivity::class.java).apply {
                 putExtra("email", user.email)
             }
             startActivity(intent)
         } else {
+            Log.d(TAG, "user not signed in")
             loading.visibility = ProgressBar.GONE
             isEnabledAll(true)
         }
