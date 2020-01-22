@@ -33,11 +33,11 @@ class SignupActivity : AppCompatActivity() {
     private fun validate() : Boolean {
         val usr = useremail.text.toString()
         val pwd = password.text.toString()
-        val pwd2 = password.text.toString()
+        val pwd2 = confirmPassword.text.toString()
         val name = username.text.toString()
 
         if (name.isEmpty()) {
-            username.error = "enter a valid email address"
+            username.error = "enter a valid username"
             return false
         } else {
             username.error = null
@@ -57,8 +57,8 @@ class SignupActivity : AppCompatActivity() {
             password.error = null
         }
 
-        if (!pwd.contentEquals(pwd2)) {
-            confirmPassword.error = "password is incorrect"
+        if (pwd != pwd2) {
+            confirmPassword.error = "password does not match"
             return false
         } else {
             confirmPassword.error = null
