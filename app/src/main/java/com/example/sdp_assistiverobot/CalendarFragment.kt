@@ -10,14 +10,19 @@ import android.view.ViewGroup
 /**
  * A simple [Fragment] subclass.
  */
-class AnalyticsFragment : Fragment() {
+class CalendarFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_analytics, container, false)
+        return inflater.inflate(R.layout.fragment_calendar, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
     }
 
 

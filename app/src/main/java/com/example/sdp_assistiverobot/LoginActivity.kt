@@ -3,29 +3,28 @@ package com.example.sdp_assistiverobot
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
-import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_login.*
-import java.net.Authenticator
 
 class LoginActivity : AppCompatActivity() {
 
     private val REQUEST_SIGNUP = 0
-    private var LOGIN_STATUS = 0
     private val TAG = "LoginActivity"
 
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
 
         auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
+        updateUI(currentUser)
+
+        setContentView(R.layout.activity_login)
 
         button_login.setOnClickListener {
             val usr = username.text.toString()
@@ -40,20 +39,12 @@ class LoginActivity : AppCompatActivity() {
         isEnabledAll(true)
     }
 
-    override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        if (currentUser == null) {
-
-        }
-    }
-
     private fun login(username: String, password: String) {
-        LOGIN_STATUS = 1
+        Log.d(TAG, "login")
         isEnabledAll(false)
 
         if (!validate()) {
+            updateUI(null)
             return
         }
 
@@ -70,24 +61,17 @@ class LoginActivity : AppCompatActivity() {
                     updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
+                    Toast.makeText(baseContext, "Login failed", Toast.LENGTH_LONG).show()
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
                     updateUI(null)
                 }
             }
 
-
-//        if (usr == "niu123456@163.com" && pwd == "123456") {
-//            onLoginSuccess(null)
-//        } else {
-//            onLoginFailed()
-//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-                //TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
                 finish()
             }
         }
@@ -105,14 +89,15 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun updateUI(user: FirebaseUser?) {
+        Log.d(TAG, "updateUI")
         if (user != null) {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java).apply {
+                putExtra("email", user.email)
+            }
             startActivity(intent)
         } else {
-            LOGIN_STATUS = 0
-            Toast.makeText(baseContext, "Login failed", Toast.LENGTH_LONG).show()
-            isEnabledAll(true)
             loading.visibility = ProgressBar.GONE
+            isEnabledAll(true)
         }
     }
 
@@ -127,7 +112,7 @@ class LoginActivity : AppCompatActivity() {
             username.error = null
         }
 
-        if (pwd.isEmpty()) {
+        if (pwd.isEmpty() || pwd.length < 6) {
             password.error = "password is incorrect"
             return false
         } else {

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,26 +17,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // By default, load the patients fragment
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.container, PatientsFragment())
-            addToBackStack(null)
-            commit()
-        }
+        // By default, load the dashboard fragment
+        bottom_navigation.selectedItemId = R.id.navigation_dashboard
+        openFragment(DashboardFragment())
 
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigationView.setOnNavigationItemSelectedListener {
+        bottom_navigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
+                R.id.navigation_dashboard -> {
+                    openFragment(DashboardFragment())
+                    return@setOnNavigationItemSelectedListener true
+                }
                 R.id.navigation_patients -> {
                     openFragment(PatientsFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
-                R.id.navigation_analytics -> {
-                    openFragment(AnalyticsFragment())
-                    return@setOnNavigationItemSelectedListener true
-                }
-                R.id.navigation_addPatient -> {
-                    openFragment(AddPatientFragment())
+                R.id.navigation_calendar -> {
+                    openFragment(CalendarFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navigation_map -> {
@@ -51,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun openFragment(fragment: Fragment) {
+    private fun openFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.container, fragment)
             addToBackStack(null)
