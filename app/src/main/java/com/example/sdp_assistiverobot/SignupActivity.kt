@@ -1,7 +1,10 @@
 package com.example.sdp_assistiverobot
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +13,11 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_signup.*
+import android.net.NetworkInfo
+import android.os.Build
+import androidx.core.content.ContextCompat.getSystemService
 
 class SignupActivity : AppCompatActivity() {
 
@@ -64,6 +71,11 @@ class SignupActivity : AppCompatActivity() {
             confirmPassword.error = null
         }
 
+        if (!Util.isInternetAvailable(baseContext)) {
+            Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show()
+            return false
+        }
+
         return true
     }
 
@@ -83,6 +95,13 @@ class SignupActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(usr, pwd)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
+                    // Create user instance
+                    val db = FirebaseFirestore.getInstance()
+                    db.collection("Users").document(usr)
+                        .set(User(username.text.toString(), "Female"))
+                        .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+                        .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success")
                     val user = auth.currentUser
@@ -90,8 +109,7 @@ class SignupActivity : AppCompatActivity() {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(baseContext, "Authentication failed.",
-                        Toast.LENGTH_SHORT).show()
+                    useremail.error = "email is registered."
                     updateUI(null)
                 }
             }
@@ -125,9 +143,11 @@ class SignupActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         } else {
-            Toast.makeText(baseContext, "Login failed", Toast.LENGTH_LONG).show()
+//            Toast.makeText(this, "Login failed", Toast.LENGTH_LONG).show()
             loading.visibility = ProgressBar.GONE
             isEnabledAll(true)
         }
+
+
     }
 }
