@@ -32,7 +32,7 @@ class PatientsFragment : Fragment() {
         database = FirebaseDatabase.getInstance().reference
         addPatient.setOnClickListener {
             // Start add patient activity
-            val intent = Intent(this.context, AddPatientActivity::class.java).also {
+            Intent(this.context, AddPatientActivity::class.java).also {
                 startActivity((it))
             }
         }
