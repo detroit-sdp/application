@@ -2,6 +2,7 @@ package com.example.sdp_assistiverobot
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
@@ -28,6 +29,8 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_patient)
+        setSupportActionBar(findViewById(R.id.my_toolbar))
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val states = this.resources.getStringArray(R.array.medicalStates)
         medicalState.adapter = SpinnerArrayAdapter<String>(this, android.R.layout.simple_spinner_item, states.toList())
@@ -48,7 +51,7 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
             val curYear = calendar.get(Calendar.YEAR)
 
             DatePickerDialog(this,
-                android.R.style.Theme_Holo_Dialog,
+                android.R.style.Theme_Holo_Light_Dialog,
                 DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                     birthday.setText("$dayOfMonth/${month+1}/$year")
                 }, curYear, curMonth, curDay).apply {
@@ -60,6 +63,8 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         button_save.setOnClickListener {
             uploadNewPatient()
         }
+
+        setSupportActionBar(findViewById(R.id.my_toolbar))
 
         db = FirebaseFirestore.getInstance()
     }
@@ -172,5 +177,10 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
             }
             return view
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy")
     }
 }

@@ -7,6 +7,7 @@ import android.os.Message
 import android.os.PersistableBundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.Window
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -22,11 +23,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (savedInstanceState != null) {
-            selectedId = savedInstanceState.getInt("index")
-        }
-        Log.d(TAG, "onCreate $selectedId")
-        Log.d(TAG, "onCreate ${savedInstanceState == null}")
+        openFragment(DashboardFragment())
+
         bottom_navigation.selectedItemId = selectedId
 
         bottom_navigation.setOnNavigationItemSelectedListener {
@@ -57,12 +55,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        Log.d(TAG, "saving ${selectedId}")
-        outState.putInt("index", selectedId)
-    }
-
     private fun openFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.container, fragment)
@@ -76,4 +68,6 @@ class MainActivity : AppCompatActivity() {
         intent.addCategory(Intent.CATEGORY_HOME)
         startActivity(intent)
     }
+
+
 }
