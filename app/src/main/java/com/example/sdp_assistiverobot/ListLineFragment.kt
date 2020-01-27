@@ -1,5 +1,6 @@
 package com.example.sdp_assistiverobot
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +32,12 @@ class ListLineFragment : Fragment() {
         val v = inflater.inflate(R.layout.fragment_list_line, container, false)
         val line = v.findViewById<TextView>(R.id.listLine)
         line.text = "$first $last"
+        line.isClickable = true
+        line.setOnClickListener {
+            Intent(context, PatientViewActivity::class.java).apply {
+                startActivity(this)
+            }
+        }
         return v
     }
 

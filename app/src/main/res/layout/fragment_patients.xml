@@ -25,7 +25,7 @@
         android:layout_marginBottom="40dp"
         android:clickable="true"
         android:focusable="true"
-        android:src="@drawable/sharp_add_black_18dp"
+        android:src="@drawable/outline_add_white_36"
         android:visibility="visible"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
