@@ -1,13 +1,13 @@
-package com.example.sdp_assistiverobot
+package com.example.sdp_assistiverobot.login
 
 import android.content.Intent
-import android.media.tv.TvContract
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.core.view.isVisible
+import com.example.sdp_assistiverobot.MainActivity
+import com.example.sdp_assistiverobot.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_login.*

@@ -1,10 +1,7 @@
-package com.example.sdp_assistiverobot
+package com.example.sdp_assistiverobot.login
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,9 +12,10 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_signup.*
-import android.net.NetworkInfo
-import android.os.Build
-import androidx.core.content.ContextCompat.getSystemService
+import com.example.sdp_assistiverobot.MainActivity
+import com.example.sdp_assistiverobot.R
+import com.example.sdp_assistiverobot.User
+import com.example.sdp_assistiverobot.Util
 
 class SignupActivity : AppCompatActivity() {
 
@@ -98,7 +96,12 @@ class SignupActivity : AppCompatActivity() {
                     // Create user instance
                     val db = FirebaseFirestore.getInstance()
                     db.collection("Users").document(usr)
-                        .set(User(username.text.toString(), "Female"))
+                        .set(
+                            User(
+                                username.text.toString(),
+                                "Female"
+                            )
+                        )
                         .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
                         .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
 

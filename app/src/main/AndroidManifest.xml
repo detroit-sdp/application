@@ -9,10 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddPatientActivity"
+        <activity android:name=".patients.AddPatientActivity"
             android:parentActivityName=".MainActivity"/>
-        <activity android:name=".SignupActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".login.SignupActivity" />
+        <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

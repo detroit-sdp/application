@@ -1,8 +1,7 @@
-package com.example.sdp_assistiverobot
+package com.example.sdp_assistiverobot.patients
 
 import android.app.DatePickerDialog
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
@@ -11,8 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.example.sdp_assistiverobot.R
+import com.example.sdp_assistiverobot.Util
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_add_patient.*
 import java.util.*
@@ -33,7 +32,11 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val states = this.resources.getStringArray(R.array.medicalStates)
-        medicalState.adapter = SpinnerArrayAdapter<String>(this, android.R.layout.simple_spinner_item, states.toList())
+        medicalState.adapter = SpinnerArrayAdapter<String>(
+            this,
+            android.R.layout.simple_spinner_item,
+            states.toList()
+        )
             .apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
         medicalState.onItemSelectedListener = this
 
@@ -44,19 +47,22 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         }
 
         birthday.inputType = InputType.TYPE_NULL
+        val calendar = Calendar.getInstance()
+        var curDay = calendar.get(Calendar.DAY_OF_MONTH)
+        var curMonth = calendar.get(Calendar.MONTH)
+        var curYear = calendar.get(Calendar.YEAR)
         birthday.setOnClickListener{
-            val calendar = Calendar.getInstance()
-            val curDay = calendar.get(Calendar.DAY_OF_MONTH)
-            val curMonth = calendar.get(Calendar.MONTH)
-            val curYear = calendar.get(Calendar.YEAR)
-
             DatePickerDialog(this,
                 android.R.style.Theme_Holo_Light_Dialog,
                 DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                     birthday.setText("$dayOfMonth/${month+1}/$year")
+                    curDay = dayOfMonth
+                    curMonth = month
+                    curYear = year
                 }, curYear, curMonth, curDay).apply {
                 show()
                 this.datePicker.maxDate = System.currentTimeMillis()-1000
+                this.datePicker.updateDate(curYear, curMonth, curDay)
             }
         }
 
@@ -127,8 +133,10 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
             return
         }
 
-        val patient = Patient(firstText.text.toString(), lastText.text.toString(),
-            birthday.text.toString(), mGender, state!!, notesText.text.toString())
+        val patient = Patient(
+            firstText.text.toString(), lastText.text.toString(),
+            birthday.text.toString(), mGender, state!!, notesText.text.toString()
+        )
 
         db.collection("Patients").document(id.text.toString()).set(patient)
             .addOnSuccessListener {
@@ -179,8 +187,4 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "onDestroy")
-    }
 }
