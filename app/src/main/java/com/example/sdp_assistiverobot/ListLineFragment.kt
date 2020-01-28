@@ -44,9 +44,9 @@ class ListLineFragment : Fragment() {
     ): View? {
         val v = inflater.inflate(R.layout.fragment_list_line, container, false)
         val line = v.findViewById<TextView>(R.id.line_view)
-        val card = v.findViewById<TextView>(R.id.card_view)
+//        val card = v.findViewById<TextView>(R.id.card_view)
         line.text = "$first $last"
-        card.setOnClickListener {
+        line.setOnClickListener {
             Intent(context, PatientViewActivity::class.java).apply {
                 startActivity(this)
             }
