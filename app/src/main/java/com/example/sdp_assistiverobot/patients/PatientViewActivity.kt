@@ -1,8 +1,8 @@
-package com.example.sdp_assistiverobot
+package com.example.sdp_assistiverobot.patients
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
+import com.example.sdp_assistiverobot.R
 
 class PatientViewActivity : AppCompatActivity() {
 

@@ -8,12 +8,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.fragment_patients.*
+import android.widget.TextView
 import com.example.sdp_assistiverobot.ListLineFragment
 import com.example.sdp_assistiverobot.R
-import com.google.firebase.database.*
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.fragment_list_line.*
-import kotlinx.android.synthetic.main.fragment_patients.*
+
 
 /**
  * A simple [Fragment] subclass.
@@ -22,12 +22,14 @@ class PatientsFragment : Fragment() {
 
     val TAG = "PatientsFragment"
     private lateinit var db: FirebaseFirestore
+    private lateinit var mInflater: LayoutInflater
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        mInflater = inflater
         return inflater.inflate(R.layout.fragment_patients, container, false)
     }
 
@@ -41,12 +43,16 @@ class PatientsFragment : Fragment() {
             }
         }
 
+        loadPatients()
+
+    }
+
+    private fun loadPatients() {
         db = FirebaseFirestore.getInstance()
         db.collection("Patients").get()
             .addOnSuccessListener {results ->
                 for (document in results) {
                     Log.d(TAG, "${document.id} => ${document.data}")
-
                     // Inflate list line
                     childFragmentManager.beginTransaction().apply {
                         add(
@@ -60,8 +66,21 @@ class PatientsFragment : Fragment() {
                     }
                 }
             }
-
     }
 
+
+//    private class someTask() : AsyncTask<Void, Void, String>() {
+//        override fun doInBackground(vararg params: Void?): String? {
+//            super.
+//        }
+//
+//        override fun onPreExecute() {
+//            super.onPreExecute()
+//        }
+//
+//        override fun onPostExecute(result: String?) {
+//            super.onPostExecute(result)
+//        }
+//    }
 
 }
