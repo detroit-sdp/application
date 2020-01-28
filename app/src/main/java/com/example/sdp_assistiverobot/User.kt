@@ -1,3 +1,6 @@
 package com.example.sdp_assistiverobot
 
-data class User(val name: String, val email: String, val phone: String)
+data class User(val name: String,
+                val gender: String="",
+                val phone: String="",
+                val position: String="")

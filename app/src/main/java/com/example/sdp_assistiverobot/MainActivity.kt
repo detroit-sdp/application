@@ -3,43 +3,48 @@ package com.example.sdp_assistiverobot
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Message
-import android.view.MenuItem
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
+import com.example.sdp_assistiverobot.patients.PatientsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    private var selectedId: Int = 0
+    private val TAG = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // By default, load the dashboard fragment
-        bottom_navigation.selectedItemId = R.id.navigation_dashboard
         openFragment(DashboardFragment())
 
+        bottom_navigation.selectedItemId = selectedId
+
         bottom_navigation.setOnNavigationItemSelectedListener {
-            when (it.itemId) {
+            selectedId = it.itemId
+            when (selectedId) {
                 R.id.navigation_dashboard -> {
+                    titleText.text = "Dashboard"
                     openFragment(DashboardFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navigation_patients -> {
+                    titleText.text = "Patients"
                     openFragment(PatientsFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navigation_calendar -> {
+                    titleText.text = "Calendar"
                     openFragment(CalendarFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navigation_map -> {
+                    titleText.text = "Map"
                     openFragment(MapFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navigation_me -> {
+                    titleText.text = "Me"
                     openFragment(UserFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
@@ -61,4 +66,6 @@ class MainActivity : AppCompatActivity() {
         intent.addCategory(Intent.CATEGORY_HOME)
         startActivity(intent)
     }
+
+
 }

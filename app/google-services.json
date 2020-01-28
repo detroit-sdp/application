@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "252697918850",
-    "firebase_url": "https://sdp-db.firebaseio.com",
-    "project_id": "sdp-db",
-    "storage_bucket": "sdp-db.appspot.com"
+    "project_number": "75829587818",
+    "firebase_url": "https://sdp-db-ce08e.firebaseio.com",
+    "project_id": "sdp-db-ce08e",
+    "storage_bucket": "sdp-db-ce08e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:252697918850:android:7890aa64e3b8c1c729a39b",
+        "mobilesdk_app_id": "1:75829587818:android:b1af81ec8ca9dbfd24ff13",
         "android_client_info": {
           "package_name": "com.example.sdp_assistiverobot"
         }
       },
       "oauth_client": [
         {
-          "client_id": "252697918850-738o9iffur7l9cn537oaj016uvsu9r44.apps.googleusercontent.com",
+          "client_id": "75829587818-jht3b9kn5s8t3uke035kuesvbgmmcio9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDc8KvvKhVlDcZj5fX3OC_VVb-yIqpWFDM"
+          "current_key": "AIzaSyCXQ5yXH-ps5rnVWAGGu803obnEzDtdSfM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "252697918850-738o9iffur7l9cn537oaj016uvsu9r44.apps.googleusercontent.com",
+              "client_id": "75829587818-jht3b9kn5s8t3uke035kuesvbgmmcio9.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

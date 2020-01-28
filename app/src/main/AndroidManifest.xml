@@ -9,16 +9,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".patients.GetPatientsService"
+            android:enabled="false"
+            android:exported="false"></service>
 
-        <activity android:name=".SignupActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".patients.PatientViewActivity" />
+        <activity
+            android:name=".patients.AddPatientActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".login.SignupActivity" />
+        <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

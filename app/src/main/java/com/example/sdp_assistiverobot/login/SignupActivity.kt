@@ -1,4 +1,4 @@
-package com.example.sdp_assistiverobot
+package com.example.sdp_assistiverobot.login
 
 import android.app.Activity
 import android.content.Intent
@@ -10,7 +10,12 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_signup.*
+import com.example.sdp_assistiverobot.MainActivity
+import com.example.sdp_assistiverobot.R
+import com.example.sdp_assistiverobot.User
+import com.example.sdp_assistiverobot.Util
 
 class SignupActivity : AppCompatActivity() {
 
@@ -33,11 +38,11 @@ class SignupActivity : AppCompatActivity() {
     private fun validate() : Boolean {
         val usr = useremail.text.toString()
         val pwd = password.text.toString()
-        val pwd2 = password.text.toString()
+        val pwd2 = confirmPassword.text.toString()
         val name = username.text.toString()
 
         if (name.isEmpty()) {
-            username.error = "enter a valid email address"
+            username.error = "enter a valid username"
             return false
         } else {
             username.error = null
@@ -57,11 +62,16 @@ class SignupActivity : AppCompatActivity() {
             password.error = null
         }
 
-        if (!pwd.contentEquals(pwd2)) {
-            confirmPassword.error = "password is incorrect"
+        if (pwd != pwd2) {
+            confirmPassword.error = "password does not match"
             return false
         } else {
             confirmPassword.error = null
+        }
+
+        if (!Util.isInternetAvailable(baseContext)) {
+            Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show()
+            return false
         }
 
         return true
@@ -83,6 +93,18 @@ class SignupActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(usr, pwd)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
+                    // Create user instance
+                    val db = FirebaseFirestore.getInstance()
+                    db.collection("Users").document(usr)
+                        .set(
+                            User(
+                                username.text.toString(),
+                                "Female"
+                            )
+                        )
+                        .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+                        .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success")
                     val user = auth.currentUser
@@ -90,8 +112,7 @@ class SignupActivity : AppCompatActivity() {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(baseContext, "Authentication failed.",
-                        Toast.LENGTH_SHORT).show()
+                    useremail.error = "email is registered."
                     updateUI(null)
                 }
             }
@@ -125,9 +146,11 @@ class SignupActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         } else {
-            Toast.makeText(baseContext, "Login failed", Toast.LENGTH_LONG).show()
+//            Toast.makeText(this, "Login failed", Toast.LENGTH_LONG).show()
             loading.visibility = ProgressBar.GONE
             isEnabledAll(true)
         }
+
+
     }
 }
