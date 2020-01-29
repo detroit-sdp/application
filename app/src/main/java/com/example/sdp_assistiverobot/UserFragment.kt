@@ -50,28 +50,30 @@ class UserFragment : Fragment() {
     }
 
     private fun updateName() {
-        val profileUpdates = UserProfileChangeRequest.Builder()
-            .setDisplayName("test")
-            .build()
-        val currentUser = auth.currentUser
-        currentUser?.updateProfile(profileUpdates)
-            ?.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "User profile updated.")
-                    user_name.text = currentUser.displayName
-                }
-            }
+//        val profileUpdates = UserProfileChangeRequest.Builder()
+//            .setDisplayName("test")
+//            .build()
+//        val currentUser = auth.currentUser
+//        currentUser?.updateProfile(profileUpdates)
+//            ?.addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    Log.d(TAG, "User profile updated.")
+//                    user_name.text = currentUser.displayName
+//                }
+//            }
+        Toast.makeText(this.context, "update username", Toast.LENGTH_SHORT).show()
     }
 
     private fun updateEmail() {
-        val currentUser = auth.currentUser
-        currentUser?.updateEmail("niu123456@123.com")
-            ?.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "User email address updated.")
-                    user_email.text = currentUser.email
-                }
-            }
+//        val currentUser = auth.currentUser
+//        currentUser?.updateEmail("niu123456@123.com")
+//            ?.addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    Log.d(TAG, "User email address updated.")
+//                    user_email.text = currentUser.email
+//                }
+//            }
+        Toast.makeText(this.context, "update email", Toast.LENGTH_SHORT).show()
     }
     private fun updatePhoneNo(){
         Toast.makeText(this.context, "update phone", Toast.LENGTH_SHORT).show()
