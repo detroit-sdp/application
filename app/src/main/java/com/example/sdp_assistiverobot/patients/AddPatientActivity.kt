@@ -167,6 +167,7 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
     }
 
+    // Customized spinner adapter for medical states
     private class SpinnerArrayAdapter<String>(context: Context, resource: Int,
                                               objects : List<String>) : ArrayAdapter<String>(context, resource, objects) {
         override fun isEnabled(position: Int): Boolean {

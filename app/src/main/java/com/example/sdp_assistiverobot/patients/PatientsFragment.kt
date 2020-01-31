@@ -7,7 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,6 +28,7 @@ class PatientsFragment : Fragment() {
     private lateinit var db: FirebaseFirestore
     private lateinit var mInflater: LayoutInflater
     private val patients: ArrayList<String> = ArrayList()
+    private var pauseLoad = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,23 +63,37 @@ class PatientsFragment : Fragment() {
 
                     patients.add("$first $last")
                 }
-                val viewManager = LinearLayoutManager(this.context)
-                val viewAdapter = MyAdapter(patients)
+
                 Log.d(TAG, patients.toString())
-                patientsList.apply {
-                    // use this setting to improve performance if you know that changes
-                    // in content do not change the layout size of the RecyclerView
-                    setHasFixedSize(true)
 
-                    // use a linear layout manager
-                    layoutManager = viewManager
-
-                    adapter = viewAdapter
+                if (!pauseLoad) {
+                    val viewManager = LinearLayoutManager(this.context)
+                    val viewAdapter = MyAdapter(patients) {patientName ->
+                        Toast.makeText(this.context, "click on $patientName", Toast.LENGTH_SHORT).show()
+                        Intent(this.context, PatientViewActivity::class.java).also {
+                            startActivity(it)
+                        }
+                    }
+                    patientsList.apply {
+                        // use this setting to improve performance if you know that changes
+                        // in content do not change the layout size of the RecyclerView
+                        setHasFixedSize(true)
+                        // use a linear layout manager
+                        layoutManager = viewManager
+                        adapter = viewAdapter
+                    }
                 }
             }
+
+            }
+
+    override fun onPause() {
+        pauseLoad = true
+        super.onPause()
+    }
     }
 
-    private class MyAdapter(val myDataset: ArrayList<String>) :
+    private class MyAdapter constructor(val myDataset: ArrayList<String>, val clickListener: (String) -> Unit) :
         RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
         // Provide a reference to the views for each data item
@@ -83,6 +102,7 @@ class PatientsFragment : Fragment() {
         // Each data item is just a string in this case that is shown in a TextView.
         class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val name: TextView = view.findViewById(R.id.line_view)
+
         }
 
         // Create new views (invoked by the layout manager)
@@ -92,6 +112,7 @@ class PatientsFragment : Fragment() {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.fragment_list_line, parent, false)
             // set the view's size, margins, paddings and layout parameters
+            // ...
             return MyViewHolder(view)
         }
 
@@ -100,9 +121,12 @@ class PatientsFragment : Fragment() {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
             holder.name.text = myDataset[position]
+            holder.itemView.setOnClickListener {
+                clickListener(myDataset[position])
+            }
         }
 
         // Return the size of your dataset (invoked by the layout manager)
         override fun getItemCount() = myDataset.size
     }
-}
+
