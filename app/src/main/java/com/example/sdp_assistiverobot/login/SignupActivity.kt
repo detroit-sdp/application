@@ -14,7 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_signup.*
 import com.example.sdp_assistiverobot.MainActivity
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.User
+import com.example.sdp_assistiverobot.userpage.User
 import com.example.sdp_assistiverobot.Util
 
 class SignupActivity : AppCompatActivity() {

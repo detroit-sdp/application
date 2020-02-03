@@ -27,7 +27,7 @@ class PatientsFragment : Fragment() {
     val TAG = "PatientsFragment"
     private lateinit var db: FirebaseFirestore
     private lateinit var mInflater: LayoutInflater
-    private val patients: ArrayList<String> = ArrayList()
+    private val patients: ArrayList<Patient> = ArrayList()
     private var pauseLoad = false
 
     override fun onCreateView(
@@ -58,19 +58,34 @@ class PatientsFragment : Fragment() {
             .addOnSuccessListener { results ->
                 for (document in results) {
                     Log.d(TAG, "${document.id} => ${document.data}")
-                    val first = document.get("first").toString()
-                    val last = document.get("last").toString()
-
-                    patients.add("$first $last")
+                    var first: String
+                    var last: String
+                    var dob: String
+                    var gender: String
+                    var medicalState: String
+                    var location: String
+                    var note: String
+                    document.apply {
+                        first = get("first").toString()
+                        last = get("last").toString()
+                        dob = get("dob").toString()
+                        gender = get("gender").toString()
+                        medicalState = get("medicalState").toString()
+                        location = get("location").toString()
+                        note = get("note").toString()
+                    }
+                    val patient = Patient(first,last,dob,gender,medicalState,note,location)
+                    patients.add(patient)
                 }
 
                 Log.d(TAG, patients.toString())
 
                 if (!pauseLoad) {
                     val viewManager = LinearLayoutManager(this.context)
-                    val viewAdapter = MyAdapter(patients) {patientName ->
-                        Toast.makeText(this.context, "click on $patientName", Toast.LENGTH_SHORT).show()
+                    val viewAdapter = MyAdapter(patients) {patient ->
+//                        Toast.makeText(this.context, "click on $patientName", Toast.LENGTH_SHORT).show()
                         Intent(this.context, PatientViewActivity::class.java).also {
+                            it.putExtra("patient", patient)
                             startActivity(it)
                         }
                     }
@@ -93,7 +108,7 @@ class PatientsFragment : Fragment() {
     }
     }
 
-    private class MyAdapter constructor(val myDataset: ArrayList<String>, val clickListener: (String) -> Unit) :
+    private class MyAdapter constructor(val myDataset: ArrayList<Patient>, val clickListener: (Patient) -> Unit) :
         RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
         // Provide a reference to the views for each data item
@@ -120,7 +135,7 @@ class PatientsFragment : Fragment() {
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-            holder.name.text = myDataset[position]
+            holder.name.text = "${myDataset[position].first} ${myDataset[position].last}"
             holder.itemView.setOnClickListener {
                 clickListener(myDataset[position])
             }

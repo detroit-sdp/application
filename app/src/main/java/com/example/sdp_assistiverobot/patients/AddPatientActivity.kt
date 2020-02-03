@@ -40,7 +40,7 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
             .apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
         medicalState.onItemSelectedListener = this
 
-        gender.setOnCheckedChangeListener { radioGroup, i ->
+        gender.setOnCheckedChangeListener { radioGroup, _ ->
             val id = radioGroup.checkedRadioButtonId
             val radio:RadioButton = findViewById(id)
             mGender = radio.text.toString()

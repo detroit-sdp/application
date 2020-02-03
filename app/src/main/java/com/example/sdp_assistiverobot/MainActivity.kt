@@ -4,7 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.example.sdp_assistiverobot.calendar.CalendarFragment
+import com.example.sdp_assistiverobot.dashboard.DashboardFragment
+import com.example.sdp_assistiverobot.map.MapFragment
 import com.example.sdp_assistiverobot.patients.PatientsFragment
+import com.example.sdp_assistiverobot.userpage.UserFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
