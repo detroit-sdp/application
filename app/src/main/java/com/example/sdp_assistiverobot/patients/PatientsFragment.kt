@@ -7,17 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_patients.*
 import com.example.sdp_assistiverobot.R
-import kotlinx.android.synthetic.main.fragment_list_line.*
 
 /**
  * A simple [Fragment] subclass.
@@ -125,7 +120,7 @@ class PatientsFragment : Fragment() {
                                         viewType: Int): MyViewHolder {
             // create a new view
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_list_line, parent, false)
+                .inflate(R.layout.patients_list_row, parent, false)
             // set the view's size, margins, paddings and layout parameters
             // ...
             return MyViewHolder(view)

@@ -55,7 +55,9 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
             DatePickerDialog(this,
                 android.R.style.Theme_Holo_Light_Dialog,
                 DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                    birthday.setText("$dayOfMonth/${month+1}/$year")
+                    val padMonth = "$month".padStart(2,'0')
+                    val padDay = "$dayOfMonth".padStart(2,'0')
+                    birthday.setText("$padDay/$padMonth/$year")
                     curDay = dayOfMonth
                     curMonth = month
                     curYear = year
@@ -67,6 +69,7 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         }
 
         button_save.setOnClickListener {
+//            createsTestUsers()
             uploadNewPatient()
         }
 
@@ -123,6 +126,33 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         }
 
         return true
+    }
+
+    /**
+     * For Test
+     */
+    private fun createsTestUsers() {
+        for (x in 0..99) {
+            // Generate random dob
+            val rnd = Random()
+            val ms = -946771200000L + (Math.abs(rnd.nextLong()) % (70L * 365 * 24 * 60 * 60 * 1000))
+            val dob = Date(ms)
+            val day = "${dob.day}".padStart(2,'0')
+            val month = "${dob.month}".padStart(2,'0')
+            val patient = Patient(
+                "Test", "User$x",
+                "$day/$month/19${dob.year}", "Male", "Stable", "None", "Bed 1 Room 315"
+            )
+            db.collection("Patients").document("$x".padStart(10, '0')).set(patient)
+                .addOnSuccessListener {
+                    Log.d(TAG, "DocumentSnapshot successfully written!")
+//                    finish()
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Error adding document", e)
+                    isEnable(true)
+                }
+        }
     }
 
     private fun uploadNewPatient() {

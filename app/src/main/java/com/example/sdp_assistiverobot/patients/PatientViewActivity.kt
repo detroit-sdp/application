@@ -30,4 +30,9 @@ class PatientViewActivity : AppCompatActivity() {
         medicalState.text = "Medical state: ${patient.medicalState}"
         notes.text = "Notes: ${patient.note}"
     }
+
+    /**
+     * Search bar on top: filter to specify the attribute for search / use special format (attribute:query) as filter
+     * Update User Info
+     */
 }

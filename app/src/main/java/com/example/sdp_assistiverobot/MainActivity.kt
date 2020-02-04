@@ -28,27 +28,27 @@ class MainActivity : AppCompatActivity() {
             selectedId = it.itemId
             when (selectedId) {
                 R.id.navigation_dashboard -> {
-                    titleText.text = "Dashboard"
+                    toolbar_title.text = "Dashboard"
                     openFragment(DashboardFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navigation_patients -> {
-                    titleText.text = "Patients"
+                    toolbar_title.text = "Patients"
                     openFragment(PatientsFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navigation_calendar -> {
-                    titleText.text = "Calendar"
+                    toolbar_title.text = "Calendar"
                     openFragment(CalendarFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navigation_map -> {
-                    titleText.text = "Map"
+                    toolbar_title.text = "Map"
                     openFragment(MapFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navigation_me -> {
-                    titleText.text = "Me"
+                    toolbar_title.text = "Me"
                     openFragment(UserFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
