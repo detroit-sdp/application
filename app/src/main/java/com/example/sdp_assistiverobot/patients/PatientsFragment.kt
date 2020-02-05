@@ -3,11 +3,10 @@ package com.example.sdp_assistiverobot.patients
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,6 +30,7 @@ class PatientsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mInflater = inflater
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_patients, container, false)
     }
 
@@ -45,6 +45,11 @@ class PatientsFragment : Fragment() {
         }
 
         loadPatients()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater!!.inflate(R.menu.patients_toolbar_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun loadPatients() {

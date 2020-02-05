@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.sdp_assistiverobot.R
 import kotlinx.android.synthetic.main.activity_patient_view.*
-import java.io.Serializable
 
 class PatientViewActivity : AppCompatActivity() {
 
@@ -12,12 +11,14 @@ class PatientViewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_patient_view)
 
         patient = intent.getSerializableExtra("patient") as Patient
-        my_toolbar.title = "${patient.first} ${patient.last}"
-        setSupportActionBar(findViewById(R.id.my_toolbar))
+        toolbar_title.text = "${patient.first} ${patient.last}"
+        setSupportActionBar(findViewById(R.id.patient_toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         setPatientInfo()
     }

@@ -28,7 +28,7 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_patient)
-        setSupportActionBar(findViewById(R.id.my_toolbar))
+        setSupportActionBar(findViewById(R.id.add_patient_toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val states = this.resources.getStringArray(R.array.medicalStates)
@@ -73,7 +73,7 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
             uploadNewPatient()
         }
 
-        setSupportActionBar(findViewById(R.id.my_toolbar))
+        setSupportActionBar(findViewById(R.id.add_patient_toolbar))
 
         db = FirebaseFirestore.getInstance()
     }
