@@ -10,6 +10,5 @@
     <item
         android:id="@+id/action_add"
         android:title="A"
-        app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="androidx.appcompat.widget.AppCompatButton"/>
+        app:showAsAction="ifRoom|collapseActionView"/>
 </menu>
