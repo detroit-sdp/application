@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sdp_assistiverobot">
 
+    <uses-sdk android:minSdkVersion="14" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,15 +17,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".WifiActivity"></activity>
         <activity
             android:name=".patients.PatientViewActivity"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".patients.AddPatientActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".login.SignupActivity"
-            android:parentActivityName=".login.LoginActivity"/>
+        <activity
+            android:name=".login.SignupActivity"
+            android:parentActivityName=".login.LoginActivity" />
         <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +44,8 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAA5XtDe4d03DYxH1GNEWljOuwdWXsEE5Y"/>
+            android:value="AIzaSyAA5XtDe4d03DYxH1GNEWljOuwdWXsEE5Y" />
+
     </application>
 
 </manifest>
