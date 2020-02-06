@@ -28,9 +28,11 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_patient)
-        setSupportActionBar(findViewById(R.id.my_toolbar))
+        setSupportActionBar(findViewById(R.id.add_patient_toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        // Set functionalities to each components
         val states = this.resources.getStringArray(R.array.medicalStates)
         medicalState.adapter = SpinnerArrayAdapter<String>(
             this,
@@ -40,43 +42,46 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
             .apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
         medicalState.onItemSelectedListener = this
 
-        gender.setOnCheckedChangeListener { radioGroup, i ->
+        gender.setOnCheckedChangeListener { radioGroup, _ ->
             val id = radioGroup.checkedRadioButtonId
             val radio:RadioButton = findViewById(id)
             mGender = radio.text.toString()
         }
 
-        birthday.inputType = InputType.TYPE_NULL
-        val calendar = Calendar.getInstance()
-        var curDay = calendar.get(Calendar.DAY_OF_MONTH)
-        var curMonth = calendar.get(Calendar.MONTH)
-        var curYear = calendar.get(Calendar.YEAR)
         birthday.setOnClickListener{
-            DatePickerDialog(this,
-                android.R.style.Theme_Holo_Light_Dialog,
-                DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                    birthday.setText("$dayOfMonth/${month+1}/$year")
-                    curDay = dayOfMonth
-                    curMonth = month
-                    curYear = year
-                }, curYear, curMonth, curDay).apply {
-                show()
-                this.datePicker.maxDate = System.currentTimeMillis()-1000
-                this.datePicker.updateDate(curYear, curMonth, curDay)
-            }
+            createDatePickerDialog()
         }
 
         button_save.setOnClickListener {
             uploadNewPatient()
         }
 
-        setSupportActionBar(findViewById(R.id.my_toolbar))
-
         db = FirebaseFirestore.getInstance()
     }
 
-    private fun validate(): Boolean {
+    private fun createDatePickerDialog() {
+        birthday.inputType = InputType.TYPE_NULL
+        val calendar = Calendar.getInstance()
+        var curDay = calendar.get(Calendar.DAY_OF_MONTH)
+        var curMonth = calendar.get(Calendar.MONTH)
+        var curYear = calendar.get(Calendar.YEAR)
+        DatePickerDialog(this,
+            android.R.style.Theme_Holo_Light_Dialog,
+            DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                val padMonth = "$month".padStart(2,'0')
+                val padDay = "$dayOfMonth".padStart(2,'0')
+                birthday.setText("$padDay/$padMonth/$year")
+                curDay = dayOfMonth
+                curMonth = month
+                curYear = year
+            }, curYear, curMonth, curDay).apply {
+            show()
+            this.datePicker.maxDate = System.currentTimeMillis()-1000
+            this.datePicker.updateDate(curYear, curMonth, curDay)
+        }
+    }
 
+    private fun validate(): Boolean {
         if (id.text.toString().length != 10) {
             id.error = "NHS is not correct"
             return false
@@ -125,6 +130,33 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         return true
     }
 
+    /**
+     * For Test
+     */
+    private fun createsTestUsers() {
+        for (x in 0..99) {
+            // Generate random dob
+            val rnd = Random()
+            val ms = -946771200000L + (Math.abs(rnd.nextLong()) % (70L * 365 * 24 * 60 * 60 * 1000))
+            val dob = Date(ms)
+            val day = "${dob.day}".padStart(2,'0')
+            val month = "${dob.month}".padStart(2,'0')
+            val patient = Patient(
+                "Test", "User$x",
+                "$day/$month/19${dob.year}", "Male", "Stable", "None", "Bed 1 Room 315"
+            )
+            db.collection("Patients").document("$x".padStart(10, '0')).set(patient)
+                .addOnSuccessListener {
+                    Log.d(TAG, "DocumentSnapshot successfully written!")
+//                    finish()
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Error adding document", e)
+                    isEnable(true)
+                }
+        }
+    }
+
     private fun uploadNewPatient() {
         isEnable(false)
 
@@ -135,7 +167,7 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
         val patient = Patient(
             firstText.text.toString(), lastText.text.toString(),
-            birthday.text.toString(), mGender, state!!, notesText.text.toString()
+            birthday.text.toString(), mGender, state!!, notesText.text.toString(), locationText.text.toString()
         )
 
         db.collection("Patients").document(id.text.toString()).set(patient)
@@ -156,6 +188,7 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         lastText.isEnabled = enable
         gender.isEnabled = enable
         medicalState.isEnabled = enable
+        location.isEnabled = enable
         notes.isEnabled = enable
     }
 

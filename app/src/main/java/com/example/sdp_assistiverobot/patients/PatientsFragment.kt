@@ -3,21 +3,15 @@ package com.example.sdp_assistiverobot.patients
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_patients.*
 import com.example.sdp_assistiverobot.R
-import kotlinx.android.synthetic.main.fragment_list_line.*
 
 /**
  * A simple [Fragment] subclass.
@@ -27,7 +21,7 @@ class PatientsFragment : Fragment() {
     val TAG = "PatientsFragment"
     private lateinit var db: FirebaseFirestore
     private lateinit var mInflater: LayoutInflater
-    private val patients: ArrayList<String> = ArrayList()
+    private val patients: ArrayList<Patient> = ArrayList()
     private var pauseLoad = false
 
     override fun onCreateView(
@@ -36,6 +30,7 @@ class PatientsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mInflater = inflater
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_patients, container, false)
     }
 
@@ -52,25 +47,45 @@ class PatientsFragment : Fragment() {
         loadPatients()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater!!.inflate(R.menu.patients_toolbar_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
     private fun loadPatients() {
         db = FirebaseFirestore.getInstance()
         db.collection("Patients").get()
             .addOnSuccessListener { results ->
                 for (document in results) {
                     Log.d(TAG, "${document.id} => ${document.data}")
-                    val first = document.get("first").toString()
-                    val last = document.get("last").toString()
-
-                    patients.add("$first $last")
+                    var first: String
+                    var last: String
+                    var dob: String
+                    var gender: String
+                    var medicalState: String
+                    var location: String
+                    var note: String
+                    document.apply {
+                        first = get("first").toString()
+                        last = get("last").toString()
+                        dob = get("dob").toString()
+                        gender = get("gender").toString()
+                        medicalState = get("medicalState").toString()
+                        location = get("location").toString()
+                        note = get("note").toString()
+                    }
+                    val patient = Patient(first,last,dob,gender,medicalState,note,location)
+                    patients.add(patient)
                 }
 
                 Log.d(TAG, patients.toString())
 
                 if (!pauseLoad) {
                     val viewManager = LinearLayoutManager(this.context)
-                    val viewAdapter = MyAdapter(patients) {patientName ->
-                        Toast.makeText(this.context, "click on $patientName", Toast.LENGTH_SHORT).show()
+                    val viewAdapter = MyAdapter(patients) {patient ->
+//                        Toast.makeText(this.context, "click on $patientName", Toast.LENGTH_SHORT).show()
                         Intent(this.context, PatientViewActivity::class.java).also {
+                            it.putExtra("patient", patient)
                             startActivity(it)
                         }
                     }
@@ -93,7 +108,7 @@ class PatientsFragment : Fragment() {
     }
     }
 
-    private class MyAdapter constructor(val myDataset: ArrayList<String>, val clickListener: (String) -> Unit) :
+    private class MyAdapter constructor(val myDataset: ArrayList<Patient>, val clickListener: (Patient) -> Unit) :
         RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
         // Provide a reference to the views for each data item
@@ -110,7 +125,7 @@ class PatientsFragment : Fragment() {
                                         viewType: Int): MyViewHolder {
             // create a new view
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_list_line, parent, false)
+                .inflate(R.layout.patients_list_row, parent, false)
             // set the view's size, margins, paddings and layout parameters
             // ...
             return MyViewHolder(view)
@@ -120,7 +135,7 @@ class PatientsFragment : Fragment() {
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-            holder.name.text = myDataset[position]
+            holder.name.text = "${myDataset[position].first} ${myDataset[position].last}"
             holder.itemView.setOnClickListener {
                 clickListener(myDataset[position])
             }

@@ -1,4 +1,4 @@
-package com.example.sdp_assistiverobot
+package com.example.sdp_assistiverobot.map
 
 
 import android.os.Bundle
@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.sdp_assistiverobot.R
 
 /**
  * A simple [Fragment] subclass.

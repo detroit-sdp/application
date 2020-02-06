@@ -4,7 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.example.sdp_assistiverobot.calendar.CalendarFragment
+import com.example.sdp_assistiverobot.dashboard.DashboardFragment
+import com.example.sdp_assistiverobot.map.MapFragment
 import com.example.sdp_assistiverobot.patients.PatientsFragment
+import com.example.sdp_assistiverobot.userpage.UserFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -15,6 +19,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(R.id.main_toolbar))
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         openFragment(DashboardFragment())
 
@@ -24,27 +30,27 @@ class MainActivity : AppCompatActivity() {
             selectedId = it.itemId
             when (selectedId) {
                 R.id.navigation_dashboard -> {
-                    titleText.text = "Dashboard"
+                    toolbar_title.text = "Dashboard"
                     openFragment(DashboardFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navigation_patients -> {
-                    titleText.text = "Patients"
+                    toolbar_title.text = "Patients"
                     openFragment(PatientsFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navigation_calendar -> {
-                    titleText.text = "Calendar"
+                    toolbar_title.text = "Calendar"
                     openFragment(CalendarFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navigation_map -> {
-                    titleText.text = "Map"
+                    toolbar_title.text = "Map"
                     openFragment(MapFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navigation_me -> {
-                    titleText.text = "Me"
+                    toolbar_title.text = "Me"
                     openFragment(UserFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
@@ -66,6 +72,5 @@ class MainActivity : AppCompatActivity() {
         intent.addCategory(Intent.CATEGORY_HOME)
         startActivity(intent)
     }
-
 
 }

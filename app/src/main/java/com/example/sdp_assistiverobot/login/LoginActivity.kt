@@ -21,12 +21,11 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_login)
-
         auth = FirebaseAuth.getInstance()
         updateUI(auth.currentUser)
 
+        // Set up listeners for buttons
         button_login.setOnClickListener {
             val usr = username.text.toString()
             val pwd = password.text.toString()
@@ -36,9 +35,11 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, SignupActivity::class.java)
             startActivityForResult(intent, REQUEST_SIGNUP)
         }
-
     }
 
+    /**
+     * Connect to Firebase to check the authentication
+     */
     private fun login(username: String, password: String) {
         Log.d(TAG, "login")
         isEnabledAll(false)
@@ -69,6 +70,9 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * When user successfully signs up, remove the login activity from the stack
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
@@ -81,6 +85,9 @@ class LoginActivity : AppCompatActivity() {
         moveTaskToBack(true)
     }
 
+    /**
+     * Control all frames on the screen
+     */
     private fun isEnabledAll(enable : Boolean) {
         button_login.isEnabled = enable
         button_signup.isEnabled = enable
@@ -88,6 +95,9 @@ class LoginActivity : AppCompatActivity() {
         password.isEnabled = enable
     }
 
+    /**
+     * Update the UI based on whether the user is signed in correctly or not
+     */
     private fun updateUI(user: FirebaseUser?) {
         Log.d(TAG, "updateUI")
         if (user != null) {
@@ -103,6 +113,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Check the validation of user input
+     */
     private fun validate() : Boolean {
         val usr = username.text.toString()
         val pwd = password.text.toString()

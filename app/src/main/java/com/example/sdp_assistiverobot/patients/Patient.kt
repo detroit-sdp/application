@@ -1,5 +1,6 @@
 package com.example.sdp_assistiverobot.patients
 
+import java.io.Serializable
 import java.util.*
 
 data class Patient(val first: String,
@@ -8,7 +9,7 @@ data class Patient(val first: String,
                    val gender: String,
                    val medicalState: String,
                    var note: String = "",
-                   val location: String = "") {
+                   val location: String = ""): Serializable {
 
     fun getAge(): Int {
         val parts= dob.split("/")
