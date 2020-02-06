@@ -35,7 +35,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:hint="NHS Number"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/add_patient_toolbar">
@@ -48,7 +47,8 @@
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
+    <TextView
+        style="@style/Widget.AppCompat.AutoCompleteTextView"
         android:id="@+id/birthday"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
