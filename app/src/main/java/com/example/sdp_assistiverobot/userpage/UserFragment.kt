@@ -11,6 +11,7 @@ import android.widget.Toast
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.android.synthetic.main.fragment_user.*
 
 class UserFragment : Fragment() {
@@ -35,6 +36,9 @@ class UserFragment : Fragment() {
         user_phone.text = currentUser?.phoneNumber
 
         user_name.setOnClickListener {
+//            Intent(this.context, ChangeNameActivity::class.java).also {
+//                startActivity((it))
+//            }
             updateName()
         }
         user_email.setOnClickListener {
@@ -49,7 +53,18 @@ class UserFragment : Fragment() {
     }
 
     private fun updateName() {
-        // TODO
+        val user = FirebaseAuth.getInstance().currentUser
+
+        val profileUpdates = UserProfileChangeRequest.Builder()
+            .setDisplayName("New name")
+            .build()
+
+        user?.updateProfile(profileUpdates)
+            ?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this.context, "Name updated", Toast.LENGTH_SHORT).show()
+                }
+            }
     }
     private fun updateEmail() {
         // TODO
