@@ -13,10 +13,16 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/pieChart1"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="222dp" />
+            android:layout_height="234dp"
+            android:orientation="horizontal">
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChart1"
+                android:layout_width="match_parent"
+                android:layout_height="222dp" />
+        </LinearLayout>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -33,7 +39,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
-                    android:text="High Priority" />
+                    android:text="Alerts" />
 
                 <ImageView
                     android:id="@+id/imageView1"
@@ -84,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
-                    android:text="Low Priority" />
+                    android:text="Tadashi Log" />
 
                 <ImageView
                     android:id="@+id/imageView3"

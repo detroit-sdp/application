@@ -1,7 +1,6 @@
 package com.example.sdp_assistiverobot.dashboard
 
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,14 +10,11 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.patients.Patient
-import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_dashboard.*
-import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 
 /**
  * A simple [Fragment] subclass.
@@ -27,11 +23,10 @@ class DashboardFragment : Fragment() {
 
     val TAG = "Dashboard Fragment"
     private lateinit var db: FirebaseFirestore
-    private val happyPatients: ArrayList<Patient> = ArrayList()
-    private val neutralPatients: ArrayList<Patient> = ArrayList()
-    private val priorityPatients: ArrayList<Patient> = ArrayList()
+    private val lowPriorPatients: ArrayList<Patient> = ArrayList()
+    private val medPriorPatients: ArrayList<Patient> = ArrayList()
+    private val highPriorPatients: ArrayList<Patient> = ArrayList()
     val patientTypes = arrayOf("High Priority", "Medium Priority", "Low Priority")
-//    private val highPriorHappy: ArrayList<>()
 
 
 
@@ -74,23 +69,26 @@ class DashboardFragment : Fragment() {
                     }
                     val patient = Patient(first,last,dob,gender,medicalState,note,location)
                     if (patient.medicalState == "Satisfactory"){
-                        happyPatients.add(patient)
+                        lowPriorPatients.add(patient)
+                        pieChart1.notifyDataSetChanged()
                         Log.d(TAG, "added low")
                     }
                     else if(patient.medicalState == "Stable"){
-                        neutralPatients.add(patient)
+                        medPriorPatients.add(patient)
+                        pieChart1.notifyDataSetChanged()
                         Log.d(TAG, "added med")
                     }
                     else{
-                        priorityPatients.add(patient)
+                        highPriorPatients.add(patient)
+                        pieChart1.notifyDataSetChanged()
                         Log.d(TAG, "added high")
                     }
 
                 }
 
-                val highPriorNum = priorityPatients.size.toFloat()
-                val medPriorNum = neutralPatients.size.toFloat()
-                val lowPriorNum = happyPatients.size.toFloat()
+                val highPriorNum = highPriorPatients.size.toFloat()
+                val medPriorNum = medPriorPatients.size.toFloat()
+                val lowPriorNum = lowPriorPatients.size.toFloat()
 
                 Log.d(TAG, "high")
                 Log.d(TAG, highPriorNum.toString())
@@ -100,7 +98,7 @@ class DashboardFragment : Fragment() {
                 Log.d(TAG, lowPriorNum.toString())
 
                 val patientTypesNum = arrayOf(highPriorNum, medPriorNum, lowPriorNum)
-                setupPieChart(patientTypesNum)
+                patientTypeChart(patientTypesNum)
 
             }
             .addOnFailureListener { exception ->
@@ -109,7 +107,7 @@ class DashboardFragment : Fragment() {
 
     }
 
-    private fun setupPieChart(patientTypesNum: Array<Float>) {
+    private fun patientTypeChart(patientTypesNum: Array<Float>) {
         val pieEntries: ArrayList<PieEntry> = ArrayList()
         for (i in patientTypes.indices){
             val pieEntry = PieEntry(patientTypesNum[i], patientTypes[i])
@@ -122,13 +120,12 @@ class DashboardFragment : Fragment() {
         val colorSecond = context?.let { ContextCompat.getColor(it, R.color.colorPrimaryYellow) }
         val colorThird = context?.let { ContextCompat.getColor(it, R.color.colorPrimary) }
         dataSet1.colors = mutableListOf(colorFirst, colorSecond, colorThird)
-//        val colourSet = intArrayOf(R.color.colorPrimaryRed, R.color.colorPrimaryYellow, R.color.colorPrimary))
-//        dataSet1.colors(colourSet)
         val data1 = PieData(dataSet1)
 
         //get Chart
-//        pieChart1 = view?.findViewById(R.id.pieChart1) as PieChart
         pieChart1.setData(data1)
+        pieChart1.setDrawSliceText(false)
+        pieChart1.setDescription(null)
         pieChart1.animateY(500)
         pieChart1.invalidate()
 
