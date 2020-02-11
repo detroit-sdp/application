@@ -13,6 +13,11 @@
         android:orientation="vertical"
         android:padding="10dp">
 
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pieChart1"
+            android:layout_width="match_parent"
+            android:layout_height="222dp" />
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -35,6 +40,7 @@
                     android:layout_width="20dp"
                     android:layout_height="match_parent"
                     android:src="@color/colorPrimaryRed" />
+
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
