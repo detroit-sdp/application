@@ -1,18 +1,18 @@
 package com.example.sdp_assistiverobot.dashboard
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.core.content.ContextCompat
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.patients.Patient
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.data.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
@@ -26,6 +26,10 @@ class DashboardFragment : Fragment() {
     private val lowPriorPatients: ArrayList<Patient> = ArrayList()
     private val medPriorPatients: ArrayList<Patient> = ArrayList()
     private val highPriorPatients: ArrayList<Patient> = ArrayList()
+
+    private var deliveries = 0
+    private val deliveryAmounts: IntArray = intArrayOf(10,20,30,40,50,60,deliveries)
+
     val patientTypes = arrayOf("High Priority", "Medium Priority", "Low Priority")
 
 
@@ -42,6 +46,14 @@ class DashboardFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         getPatients()
         Log.d(TAG, "Getting patients data")
+        setDeliveriesChart()
+        val button: Button = button_sendTadashi
+        button.setOnClickListener {
+            // Choose patient to send Tadashi to
+            Intent(this.context, ChoosePatientActivity::class.java).also {
+                startActivity((it))
+            }
+        }
     }
 
     private fun getPatients(){
@@ -90,13 +102,6 @@ class DashboardFragment : Fragment() {
                 val medPriorNum = medPriorPatients.size.toFloat()
                 val lowPriorNum = lowPriorPatients.size.toFloat()
 
-                Log.d(TAG, "high")
-                Log.d(TAG, highPriorNum.toString())
-                Log.d(TAG, "med")
-                Log.d(TAG, medPriorNum.toString())
-                Log.d(TAG, "low")
-                Log.d(TAG, lowPriorNum.toString())
-
                 val patientTypesNum = arrayOf(highPriorNum, medPriorNum, lowPriorNum)
                 patientTypeChart(patientTypesNum)
 
@@ -128,6 +133,33 @@ class DashboardFragment : Fragment() {
         pieChart1.setDescription(null)
         pieChart1.animateY(500)
         pieChart1.invalidate()
+
+    }
+
+    private fun setDeliveriesChart(){
+        //TODO: stacked bar chart for types of deliveries (food, water, other)?
+        val barEntries: ArrayList<BarEntry> = ArrayList()
+
+        //populate with fake data
+        barEntries.add(BarEntry(0f, deliveryAmounts[0].toFloat()))
+        barEntries.add(BarEntry(1f, deliveryAmounts[1].toFloat()))
+        barEntries.add(BarEntry(2f, deliveryAmounts[2].toFloat()))
+        barEntries.add(BarEntry(3f, deliveryAmounts[3].toFloat()))
+        barEntries.add(BarEntry(4f, deliveryAmounts[4].toFloat()))
+        barEntries.add(BarEntry(5f, deliveryAmounts[5].toFloat()))
+
+        barEntries.add(BarEntry(6f, deliveries.toFloat()))
+
+        val deliveryDataSet = BarDataSet(barEntries, "Deliveries through the week")
+        val deliveryData = BarData(deliveryDataSet)
+        barChart1.setData(deliveryData)
+//        barChart1.setDrawGridLines(false)
+        barChart1.setDrawGridBackground(false)
+        barChart1.setDrawValueAboveBar(false)
+        barChart1.setDrawBorders(false)
+        barChart1.setDescription(null)
+        barChart1.animateY(500)
+        barChart1.invalidate()
 
     }
 
