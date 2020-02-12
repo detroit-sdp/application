@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
     android:orientation="vertical"
     tools:context=".patients.AddPatientActivity">
 
@@ -11,19 +12,20 @@
         android:id="@+id/add_patient_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:elevation="4dp"
+        android:elevation="-1dp"
+        android:gravity="center"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
         <TextView
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Patient"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:text="Add Patient" />
     </androidx.appcompat.widget.Toolbar>
 
 
@@ -48,8 +50,8 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        style="@style/Widget.AppCompat.AutoCompleteTextView"
         android:id="@+id/birthday"
+        style="@style/Widget.AppCompat.AutoCompleteTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -59,7 +61,7 @@
         android:focusable="true"
         android:hint="Date of Birth"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gender"/>
+        app:layout_constraintTop_toBottomOf="@+id/gender" />
 
     <Spinner
         android:id="@+id/medicalState"
@@ -81,15 +83,15 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
+        android:hint="Patient's Location"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:hint="Patient's Location"
         app:layout_constraintTop_toBottomOf="@+id/medicalState">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/locationText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/locationText"/>
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -99,24 +101,24 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
+        android:hint="Notes (allergies or medicines)"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:hint="Notes (allergies or medicines)"
         app:layout_constraintTop_toBottomOf="@+id/location">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/notesText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/notesText"/>
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginStart="32dp"
         android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -126,10 +128,10 @@
         android:id="@+id/gender"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/first">
@@ -138,8 +140,7 @@
             android:id="@+id/text_gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Gender">
-        </TextView>
+            android:text="Gender"></TextView>
 
         <RadioButton
             android:id="@+id/male"
@@ -161,9 +162,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/nhs"
+        app:layout_constraintEnd_toStartOf="@id/last"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/last">
+        app:layout_constraintTop_toBottomOf="@+id/nhs">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/firstText"
@@ -176,12 +177,12 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/last"
         android:layout_width="0dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="8dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/first"
-        app:layout_constraintTop_toBottomOf="@+id/nhs"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/nhs">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/lastText"
@@ -191,26 +192,26 @@
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
-<!--    <TextView-->
-<!--        android:id="@+id/title"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:text="Add Patient"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/title"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:text="Add Patient"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-<!--    <ImageView-->
-<!--        android:id="@+id/back"-->
-<!--        android:layout_width="27dp"-->
-<!--        android:layout_height="20dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/title"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        android:clickable="true"-->
-<!--        app:srcCompat="@drawable/baseline_navigate_before_black_18dp" />-->
+    <!--    <ImageView-->
+    <!--        android:id="@+id/back"-->
+    <!--        android:layout_width="27dp"-->
+    <!--        android:layout_height="20dp"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/title"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        android:clickable="true"-->
+    <!--        app:srcCompat="@drawable/baseline_navigate_before_black_18dp" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
