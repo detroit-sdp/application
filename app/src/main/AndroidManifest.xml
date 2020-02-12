@@ -3,23 +3,23 @@
     package="com.example.sdp_assistiverobot">
 
     <uses-permission
-        android:required="true"
-        android:name="android.permission.CHANGE_NETWORK_STATE" />
+        android:name="android.permission.CHANGE_NETWORK_STATE"
+        android:required="true" />
     <uses-permission
-        android:required="true"
-        android:name="android.permission.ACCESS_NETWORK_STATE" />
+        android:name="android.permission.ACCESS_NETWORK_STATE"
+        android:required="true" />
     <uses-permission
-        android:required="true"
-        android:name="android.permission.ACCESS_FINE_LOCATION"/>
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:required="true" />
     <uses-permission
-        android:required="true"
-        android:name="android.permission.ACCESS_WIFI_STATE"/>
+        android:name="android.permission.ACCESS_WIFI_STATE"
+        android:required="true" />
     <uses-permission
-        android:required="true"
-        android:name="android.permission.CHANGE_WIFI_STATE"/>
+        android:name="android.permission.CHANGE_WIFI_STATE"
+        android:required="true" />
     <uses-permission
-        android:required="true"
-        android:name="android.permission.INTERNET"/>
+        android:name="android.permission.INTERNET"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -28,6 +28,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".map.NetworkCommService"
+            android:enabled="false"
+            android:exported="false"></service>
+
         <activity
             android:name=".patients.PatientViewActivity"
             android:parentActivityName=".MainActivity" />
@@ -55,7 +60,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAA5XtDe4d03DYxH1GNEWljOuwdWXsEE5Y" />
-
     </application>
 
 </manifest>

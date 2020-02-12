@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.TextView
-import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
