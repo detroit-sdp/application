@@ -13,9 +13,11 @@ import androidx.fragment.app.Fragment
 import com.example.sdp_assistiverobot.R
 import kotlinx.android.synthetic.main.fragment_map.*
 import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStreamReader
 import java.io.PrintWriter
 import java.net.Socket
+import java.net.UnknownHostException
 
 class MapFragment : Fragment() {
 
@@ -23,10 +25,8 @@ class MapFragment : Fragment() {
 
     private val IP_ADDRESS = "172.20.97.106"
     private val PORT = 8080
-    private lateinit var socket: Socket
     private lateinit var out: PrintWriter
     private lateinit var input: BufferedReader
-    private var isConnected  = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,31 +34,57 @@ class MapFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_map, container, false)
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        button_connect.setOnClickListener {
-            Thread(Runnable {
-                socket = Socket(IP_ADDRESS, PORT)
-                out = PrintWriter(socket.getOutputStream())
-                input = BufferedReader(InputStreamReader(socket.getInputStream()))
-                isConnected = socket.isConnected
-                Log.d(TAG, "Connected!")
-            }).start()
+        btnConnect.setOnClickListener {
+            Thread(Thread1()).start()
         }
 
-        send.setOnClickListener{
-            val message: String = out_text.text.toString()
+        btnSend.setOnClickListener{
+            val message: String = etMessage.text.toString()
             if (message.isNotEmpty()) {
                 Thread(Runnable {
                     out.write(message)
                     out.flush()
-                    out_text.text = null
+                    etMessage.text = null
                     Log.d(TAG, "Message send: $message")
                 })
+            }
+        }
+    }
+
+    inner class Thread1: Runnable{
+        override fun run() {
+            var socket: Socket?
+            try{
+                socket = Socket(etIP.text.toString().trim(), Integer.parseInt(etPort.text.toString().trim()))
+                out = PrintWriter(socket.getOutputStream())
+                input = BufferedReader(InputStreamReader(socket.getInputStream()))
+                tvMessages.text = "Connected\n"
+                Thread(Thread2()).start()
+            } catch (e: UnknownHostException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    inner class Thread2: Runnable {
+        override fun run() {
+            while (true) {
+                try {
+                    val message = input.readLine()
+                    if (message != null) {
+                        tvMessages.append("server: $message\n")
+                    } else {
+                        Thread(Thread1()).start()
+                        return
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
             }
         }
     }

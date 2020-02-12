@@ -38,15 +38,5 @@ class NetworkCommService : Service() {
     }
 
     private fun connect() {
-//        Thread(Runnable {
-//            socket = Socket(IP_ADDRESS, PORT)
-//            out = PrintWriter(socket.getOutputStream())
-//            input = BufferedReader(InputStreamReader(socket.getInputStream()))
-//            isConnected = true
-//        }).start()
-//
-//        sendBroadcast(Intent("connection").apply {
-//
-//        })
     }
 }
