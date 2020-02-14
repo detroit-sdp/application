@@ -8,7 +8,5 @@ class SendMessageRunnable(output: PrintWriter): Runnable {
         // Move the current thread into the background
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND)
 
-
-
     }
 }

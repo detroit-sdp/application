@@ -7,11 +7,12 @@ import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
 object NetworkManager {
-    private val outWordQueue: BlockingQueue<Runnable> = LinkedBlockingQueue<Runnable>()
+    private val outWorkQueue: BlockingQueue<Runnable> = LinkedBlockingQueue<Runnable>()
 
-    fun startSendMessage() {
+    fun startConnection() {
 
     }
+
     // Check how many processors on the machine
     private val NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors()
     // Sets the amount of time an idle thread waits before terminating
@@ -24,6 +25,6 @@ object NetworkManager {
         NUMBER_OF_CORES,       // Max pool size
         KEEP_ALIVE_TIME,
         KEEP_ALIVE_TIME_UNIT,
-        outWordQueue
+        outWorkQueue
     )
 }
