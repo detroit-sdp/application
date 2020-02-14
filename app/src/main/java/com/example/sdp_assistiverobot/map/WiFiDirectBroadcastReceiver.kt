@@ -1,4 +1,4 @@
-//package com.example.sdp_assistiverobot.map
+package com.example.sdp_assistiverobot.map
 //
 //import android.content.BroadcastReceiver
 //import android.content.Context

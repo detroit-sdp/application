@@ -1,16 +1,42 @@
 package com.example.sdp_assistiverobot.map
 
-import android.app.Service
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
 object NetworkManager {
-    private val outWorkQueue: BlockingQueue<Runnable> = LinkedBlockingQueue<Runnable>()
+    private val networkWorkQueue: BlockingQueue<Runnable> = LinkedBlockingQueue<Runnable>()
 
-    fun startConnection() {
+    fun getInstance(): NetworkManager {
+        return this
+    }
 
+    fun startListening() {
+
+    }
+
+    fun removeListening(netTask: NetworkTask, hostName: String) {
+
+    }
+
+    fun sendMessage(message: String) {
+
+    }
+
+    fun cancelAll() {
+        /*
+         * Creates and populates an array of Runnables with the Runnables in the queue
+         */
+        val taskArray: Array<NetworkTask?> = arrayOfNulls(this.networkWorkQueue.size)
+
+        /*
+         * Iterates over the array of Runnables and interrupts each one's Thread.
+         */
+        synchronized(this) {
+            // Iterates over the array of tasks
+
+        }
     }
 
     // Check how many processors on the machine
@@ -25,6 +51,6 @@ object NetworkManager {
         NUMBER_OF_CORES,       // Max pool size
         KEEP_ALIVE_TIME,
         KEEP_ALIVE_TIME_UNIT,
-        outWorkQueue
+        networkWorkQueue
     )
 }

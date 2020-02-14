@@ -14,18 +14,7 @@ class NetworkCommService : Service() {
         return null
     }
 
-    private val IP_ADDRESS = "127.0.0.1"
-    private val PORT = 8080
-    private lateinit var socket: Socket
-    private lateinit var out: PrintWriter
-    private lateinit var input: BufferedReader
-    private var isConnected  = false
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-
-        when (intent?.action) {
-            "Connect" -> connect()
-        }
 
         // Listen the port forever
         Thread(Runnable {
@@ -37,6 +26,4 @@ class NetworkCommService : Service() {
         return START_STICKY
     }
 
-    private fun connect() {
-    }
 }

@@ -12,8 +12,6 @@ import androidx.fragment.app.Fragment
 import com.example.sdp_assistiverobot.R
 import kotlinx.android.synthetic.main.fragment_map.*
 import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
 import java.io.PrintWriter
 import java.net.*
 import java.nio.charset.Charset
@@ -23,7 +21,7 @@ class MapFragment : Fragment() {
 
     private val TAG = "MapFragment"
 
-    private val IP_ADDRESS = "100.67.203.23"
+    private val IP_ADDRESS = "192.168.137.1"
     private val PORT = 20001
     private lateinit var out: PrintWriter
     private lateinit var input: BufferedReader
@@ -59,7 +57,7 @@ class MapFragment : Fragment() {
                     val sendData = ("Hello world!").toByteArray()
                     val sendPackage = DatagramPacket(sendData, sendData.size, inetAddress, PORT)
                     socket.send(sendPackage)
-                    Log.d(TAG, "Message sent to ${inetAddress.hostName}: ${sendData.toString(Charset.defaultCharset())}")
+                    Log.d(TAG, "Message sent to ${inetAddress.hostName}: ${sendData.toString(Charset.defaultCharset()).subSequence(0,sendData.toString(Charset.defaultCharset()).lastIndex)}")
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
