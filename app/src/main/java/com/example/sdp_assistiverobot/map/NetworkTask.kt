@@ -1,35 +1,44 @@
 package com.example.sdp_assistiverobot.map
 
+import android.util.Log
+import android.widget.TextView
+import java.lang.Exception
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 
-class NetworkTask: SendMessageRunnable.SendMessageInterface, ReceiveMessageRunnable.ReceiveMessageInterface {
+class NetworkTask: ListenerRunnable.ReceiveMessageInterface, SendCommandRunnable.SendCommandInterface {
 
-    var inetAddress = InetAddress.getByName("127.0.0.1")
+    var inetAddress = InetAddress.getByName("100.67.203.12")
     private val robotPort = 20001
     private var mPort = 12345
 
-    private lateinit var sendMessageRunnable: SendMessageRunnable
-    private lateinit var receiveMessageRunnable: ReceiveMessageRunnable
+    private lateinit var mSocket: DatagramSocket
+    private var listenerRunnable: ListenerRunnable
+    private lateinit var sendCommRunnable: SendCommandRunnable
     private lateinit var mReceiveThread: Thread
     private lateinit var mSendThread: Thread
-    private val mNetworkManager: NetworkManager
+    private val mNetworkManager: NetworkManager = NetworkManager.getInstance()
+    lateinit var buffer: ByteArray
 
-    constructor() {
-        mNetworkManager = NetworkManager.getInstance()
-        receiveMessageRunnable = ReceiveMessageRunnable(this)
+    constructor(ipAddress: String) {
+        inetAddress = InetAddress.getByName(ipAddress)
+        listenerRunnable = ListenerRunnable(this)
     }
 
-    constructor(message: String) {
-        sendMessageRunnable = SendMessageRunnable(this, message)
-        mNetworkManager = NetworkManager.getInstance()
+    fun initializeSendTask(message: String) {
+//        sendCommRunnable = SendCommandRunnable(this, message)
     }
 
     fun openSocket(): DatagramSocket {
-        return DatagramSocket(mPort).also {
-            it.broadcast = true
+        try {
+            mSocket = DatagramSocket(mPort).also {
+                it.broadcast = true
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
+        return mSocket
     }
 
     fun createPackage(message: String): DatagramPacket {
@@ -42,36 +51,26 @@ class NetworkTask: SendMessageRunnable.SendMessageInterface, ReceiveMessageRunna
         return DatagramPacket(buffer, buffer.size)
     }
 
-    fun setIpAddress(ipAddress: String) {
-        inetAddress = InetAddress.getByName(ipAddress)
+    fun setInBuffer(buffer: ByteArray) {
+        this.buffer = buffer
     }
 
-    fun setPort(port: Int) {
-        mPort = port
+    fun getSocket(): DatagramSocket {
+        return mSocket
     }
 
-    fun getReceiveMessageRunnable(): Runnable {
-        return receiveMessageRunnable
+    fun getSendCommRunnable(): SendCommandRunnable {
+        return sendCommRunnable
     }
 
-    fun getSendMessageRunnable(): Runnable? {
-        return sendMessageRunnable
+    fun getListenerRunnable(): ListenerRunnable {
+        return listenerRunnable
     }
 
     override fun setSendThread(currentThread: Thread) {
         synchronized(mNetworkManager) {
             mSendThread = currentThread
         }
-    }
-
-    override fun getSendThread(): Thread {
-        synchronized(mNetworkManager) {
-            return mSendThread
-        }
-    }
-
-    override fun handleSendState(state: Int) {
-
     }
 
     override fun setReceiveThread(currentThread: Thread) {
@@ -86,11 +85,21 @@ class NetworkTask: SendMessageRunnable.SendMessageInterface, ReceiveMessageRunna
         }
     }
 
+    override fun getSendThread(): Thread {
+        synchronized(mNetworkManager) {
+            return mSendThread
+        }
+    }
+
+    override fun handleSendState(state: Int) {
+
+    }
+
     override fun handleReceiveState(state: Int) {
 
     }
 
-    private fun handleState(state: Int) {
+    private fun outState(state: Int) {
 
     }
 }

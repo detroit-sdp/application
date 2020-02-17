@@ -28,10 +28,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver
+            android:name=".map.NetworkBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
+
         <service
             android:name=".map.NetworkCommService"
-            android:enabled="false"
-            android:exported="false"></service>
+            android:enabled="true"
+            android:exported="true" />
 
         <activity
             android:name=".patients.PatientViewActivity"
@@ -45,6 +50,7 @@
         <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
