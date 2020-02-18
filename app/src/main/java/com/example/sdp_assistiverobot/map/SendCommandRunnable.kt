@@ -1,24 +1,13 @@
 package com.example.sdp_assistiverobot.map
 
 import android.os.Process.THREAD_PRIORITY_BACKGROUND
+import android.provider.ContactsContract
 import android.util.Log
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 
 class SendCommandRunnable(private val ip: String, private val port: Int, private val message: String): Runnable {
-
-    companion object {
-        const val SEND_FAILURE = -1
-        const val SEND_START = 0
-        const val SEND_SUCCEED = 1
-    }
-
-    interface SendCommandInterface{
-        fun setSendThread(currentThread: Thread)
-        fun getSendThread(): Thread
-        fun handleSendState(state: Int)
-    }
 
     private val TAG = "SendMessageRunnable"
     lateinit var mThread: Thread
@@ -27,13 +16,15 @@ class SendCommandRunnable(private val ip: String, private val port: Int, private
         android.os.Process.setThreadPriority(THREAD_PRIORITY_BACKGROUND)
 
         mThread = Thread.currentThread()
-
+        val socket: DatagramSocket
         try {
-            Log.d(TAG, "Sending $message")
+            Log.d(TAG, "Sending $message to $ip:$port")
+
+
             if(Thread.interrupted()) {
                 return
             }
-            val socket = DatagramSocket().also {
+            socket = DatagramSocket().also {
                 it.broadcast = true
             }
 

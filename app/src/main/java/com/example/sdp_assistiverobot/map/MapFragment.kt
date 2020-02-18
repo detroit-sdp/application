@@ -66,8 +66,19 @@ class MapFragment : Fragment() {
         }
 
         btnSend.setOnClickListener {
-            senderThreadPool.execute(SendCommandRunnable("100.67.203.12", 20001, etMessage.text.toString()))
+            senderThreadPool.execute(SendCommandRunnable("192.168.105.111", 20001, etMessage.text.toString()))
         }
     }
 
+    inner class NetworkBroadcastReceiver : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            when (intent.action) {
+                "com.example.sdp_assistiverobot.getMessage" -> {
+                    // Push message to chat frame
+                    tvMessages.append(intent.getCharSequenceExtra("message"))
+                }
+            }
+        }
+    }
 }

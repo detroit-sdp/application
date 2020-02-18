@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.fragment_map.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
+import java.lang.StringBuilder
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.Socket
@@ -19,7 +20,7 @@ class NetworkCommService : Service() {
 
     private val TAG = "NetworkCommService"
 
-    private val LISTEN_PORT = 20002
+    private val LISTENER_PORT = 20002
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -41,7 +42,7 @@ class NetworkCommService : Service() {
 
     private fun openPort() {
         try{
-            mSocket = DatagramSocket(LISTEN_PORT).also {
+            mSocket = DatagramSocket(LISTENER_PORT).also {
                 it.broadcast = true
             }
         } catch (e: Exception) {
@@ -54,18 +55,22 @@ class NetworkCommService : Service() {
         Log.d("ListenerRunnable", "Start Listening...")
 
         val buffer = ByteArray(1024)
-        val outPacket = DatagramPacket(buffer, buffer.size)
-
+        val packet = DatagramPacket(buffer, buffer.size)
         while (true) {
             try {
                 if(Thread.interrupted()) {
                     mSocket.close()
                     return
                 }
-                mSocket.receive(outPacket)
-                if (outPacket.data != null) {
+                mSocket.receive(packet)
+                if (packet.data != null) {
 //                    mTask.setInBuffer(buffer.data)
-                    Log.d(TAG, "${outPacket.data}")
+                    val inMessage = String(packet.data, 0, packet.length)
+                    Log.d(TAG, inMessage)
+                    sendBroadcast(Intent().apply {
+                        action = "com.example.sdp_assistiverobot.getMessage"
+                        putExtra("message", inMessage)
+                    })
 //                    mTask.handleReceiveState(DATA_RECEIVED)
                 }
             } catch (e: Exception) {
@@ -74,11 +79,5 @@ class NetworkCommService : Service() {
             }
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mSocket.close()
-    }
-
 
 }

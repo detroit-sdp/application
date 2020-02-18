@@ -82,7 +82,7 @@ object NetworkManager {
     fun removeListening(netTask: NetworkTask, hostName: String) {
         if (netTask.inetAddress == InetAddress.getByName(hostName)) {
             synchronized(sInstance) {
-                netTask.getReceiveThread().interrupt()
+//                netTask.getReceiveThread().interrupt()
             }
         }
 
@@ -99,10 +99,10 @@ object NetworkManager {
          */
         synchronized(this) {
             // Iterates over the array of tasks
-            runnableArray.map { (it as? ListenerRunnable)?.mThread }
-                .forEach { thread ->
-                    thread?.interrupt()
-                }
+//            runnableArray.map { (it as? ListenerRunnable)?.mThread }
+//                .forEach { thread ->
+//                    thread?.interrupt()
+//                }
         }
     }
 

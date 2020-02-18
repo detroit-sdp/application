@@ -7,7 +7,7 @@ import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 
-class NetworkTask: ListenerRunnable.ReceiveMessageInterface, SendCommandRunnable.SendCommandInterface {
+class NetworkTask {
 
     var inetAddress = InetAddress.getByName("100.67.203.12")
     private val robotPort = 20001
@@ -67,37 +67,37 @@ class NetworkTask: ListenerRunnable.ReceiveMessageInterface, SendCommandRunnable
         return listenerRunnable
     }
 
-    override fun setSendThread(currentThread: Thread) {
-        synchronized(mNetworkManager) {
-            mSendThread = currentThread
-        }
-    }
-
-    override fun setReceiveThread(currentThread: Thread) {
-        synchronized(mNetworkManager) {
-            mReceiveThread = currentThread
-        }
-    }
-
-    override fun getReceiveThread(): Thread {
-        synchronized(mNetworkManager) {
-            return mReceiveThread
-        }
-    }
-
-    override fun getSendThread(): Thread {
-        synchronized(mNetworkManager) {
-            return mSendThread
-        }
-    }
-
-    override fun handleSendState(state: Int) {
-
-    }
-
-    override fun handleReceiveState(state: Int) {
-
-    }
+//    override fun setSendThread(currentThread: Thread) {
+//        synchronized(mNetworkManager) {
+//            mSendThread = currentThread
+//        }
+//    }
+//
+//    override fun setReceiveThread(currentThread: Thread) {
+//        synchronized(mNetworkManager) {
+//            mReceiveThread = currentThread
+//        }
+//    }
+//
+//    override fun getReceiveThread(): Thread {
+//        synchronized(mNetworkManager) {
+//            return mReceiveThread
+//        }
+//    }
+//
+//    override fun getSendThread(): Thread {
+//        synchronized(mNetworkManager) {
+//            return mSendThread
+//        }
+//    }
+//
+//    override fun handleSendState(state: Int) {
+//
+//    }
+//
+//    override fun handleReceiveState(state: Int) {
+//
+//    }
 
     private fun outState(state: Int) {
 
