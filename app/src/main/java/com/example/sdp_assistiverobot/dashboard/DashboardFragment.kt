@@ -1,6 +1,7 @@
 package com.example.sdp_assistiverobot.dashboard
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -53,12 +54,16 @@ class DashboardFragment : Fragment() {
         val button: Button = button_sendTadashi
         button.setOnClickListener {
             // Choose patient to send Tadashi to
-            val patientsFragment = PatientsFragment()
-            val fragmentManager: FragmentManager? = fragmentManager
-            val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
-            fragmentTransaction.replace(R.id.container, patientsFragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+            Intent(this.context, ChoosePatientActivity::class.java).also {
+//                it.putExtra("patient", patient)
+                startActivity(it)
+            }
+//            val patientsFragment = PatientsFragment()
+//            val fragmentManager: FragmentManager? = fragmentManager
+//            val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
+//            fragmentTransaction.replace(R.id.container, patientsFragment)
+//            fragmentTransaction.addToBackStack(null)
+//            fragmentTransaction.commit()
 
 //            Intent(this.context, ChoosePatientActivity::class.java).also {
 //                startActivity((it))
