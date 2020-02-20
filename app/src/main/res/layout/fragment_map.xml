@@ -1,107 +1,56 @@
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    tools:context=".map.MapFragment">-->
+<?xml version="1.0" encoding="utf-8"?>
 
-<!--&lt;!&ndash;    <com.google.android.material.button.MaterialButton&ndash;&gt;-->
-<!--&lt;!&ndash;        android:id="@+id/discovery"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_width="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:text="Search Devices"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:layout_constraintTop_toTopOf="parent" />&ndash;&gt;-->
-
-<!--&lt;!&ndash;    <androidx.recyclerview.widget.RecyclerView&ndash;&gt;-->
-<!--&lt;!&ndash;        android:id="@+id/peers_list"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:layout_constraintHorizontal_bias="0.0"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:layout_constraintTop_toBottomOf="@+id/discovery"&ndash;&gt;-->
-<!--&lt;!&ndash;        app:layout_constraintVertical_bias="0.068" />&ndash;&gt;-->
-
-
+<!--<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:tools = "http://schemas.android.com/tools"-->
+<!--    android:layout_width = "match_parent"-->
+<!--    android:layout_height = "match_parent"-->
+<!--    android:layout_margin = "16dp"-->
+<!--    android:background="@drawable/map_demo_room"-->
+<!--    tools:context = ".MainActivity">-->
+<!--    <EditText-->
+<!--        android:id = "@+id/etIP"-->
+<!--        android:layout_width = "match_parent"-->
+<!--        android:layout_height = "wrap_content"-->
+<!--        android:hint = "IP-Address"-->
+<!--        android:inputType = "text" />-->
 <!--    <Button-->
-<!--        android:id="@+id/button_connect"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Connect"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
+<!--        android:id = "@+id/btnConnect"-->
+<!--        android:layout_width = "match_parent"-->
+<!--        android:layout_height = "wrap_content"-->
+<!--        android:layout_below = "@+id/etIP"-->
+<!--        android:layout_gravity = "center"-->
+<!--        android:layout_marginTop = "16dp"-->
+<!--        android:text = "Connect To Server" />-->
+<!--    <TextView-->
+<!--        android:id = "@+id/tvMessages"-->
+<!--        android:layout_width = "match_parent"-->
+<!--        android:layout_height = "wrap_content"-->
+<!--        android:layout_above = "@+id/etMessage"-->
+<!--        android:layout_below = "@+id/btnConnect"-->
+<!--        android:inputType = "textMultiLine"-->
+<!--        android:textAppearance = "@style/Base.TextAppearance.AppCompat.Medium" />-->
+<!--    <EditText-->
+<!--        android:id = "@+id/etMessage"-->
+<!--        android:layout_width = "match_parent"-->
+<!--        android:layout_height = "wrap_content"-->
+<!--        android:layout_above = "@+id/btnSend"-->
+<!--        android:hint = "Enter Message"-->
+<!--        android:inputType = "text" />-->
+<!--    <Button-->
+<!--        android:id = "@+id/btnSend"-->
+<!--        android:layout_width = "match_parent"-->
+<!--        android:layout_height = "wrap_content"-->
+<!--        android:layout_alignParentBottom = "true"-->
+<!--        android:text = "SEND" />-->
+<!--</RelativeLayout>-->
 
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/textInputLayout"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/button_connect"-->
-<!--        app:layout_constraintEnd_toStartOf="@id/send">-->
-
-<!--        <com.google.android.material.textfield.TextInputEditText-->
-<!--            android:id="@+id/out_text"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:hint="hint" />-->
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
-
-<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android = "http://schemas.android.com/apk/res/android"
     xmlns:tools = "http://schemas.android.com/tools"
     android:layout_width = "match_parent"
     android:layout_height = "match_parent"
-    android:layout_margin = "16dp"
-    tools:context = ".MainActivity">
-    <EditText
-        android:id = "@+id/etIP"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:hint = "IP-Address"
-        android:inputType = "text" />
-    <Button
-        android:id = "@+id/btnConnect"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:layout_below = "@+id/etIP"
-        android:layout_gravity = "center"
-        android:layout_marginTop = "16dp"
-        android:text = "Connect To Server" />
-    <TextView
-        android:id = "@+id/tvMessages"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:layout_above = "@+id/etMessage"
-        android:layout_below = "@+id/btnConnect"
-        android:inputType = "textMultiLine"
-        android:textAppearance = "@style/Base.TextAppearance.AppCompat.Medium" />
-    <EditText
-        android:id = "@+id/etMessage"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:layout_above = "@+id/btnSend"
-        android:hint = "Enter Message"
-        android:inputType = "text" />
-    <Button
-        android:id = "@+id/btnSend"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:layout_alignParentBottom = "true"
-        android:text = "SEND" />
-</RelativeLayout>
 
-<!--    <Button-->
-<!--        android:id="@+id/send"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Send"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/textInputLayout"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/button_connect" />-->
-<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+    android:background="@drawable/map_demo_room"
+    tools:context = ".MainActivity">
+
+</androidx.constraintlayout.widget.ConstraintLayout>

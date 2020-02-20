@@ -3,7 +3,6 @@ package com.example.sdp_assistiverobot.map
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -66,7 +65,7 @@ class MapFragment : Fragment() {
         }
 
         btnSend.setOnClickListener {
-            senderThreadPool.execute(SendCommandRunnable("192.168.105.111", 20001, etMessage.text.toString()))
+            senderThreadPool.execute(SendCommandRunnable("129.215.2.49", 20001, etMessage.text.toString()))
         }
     }
 
