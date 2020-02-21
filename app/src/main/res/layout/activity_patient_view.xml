@@ -44,6 +44,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:padding="16dp"
         app:layout_constraintTop_toBottomOf="@id/divider">
 
         <TextView
@@ -53,21 +54,14 @@
             android:text="User Profile" />
 
         <TextView
-            android:id="@+id/gender"
+            android:id="@+id/priority"
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
 
         <TextView
-            android:id="@+id/dob"
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/age"
+            android:id="@+id/location"
             android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -81,27 +75,13 @@
             android:background="?android:attr/listDivider" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/health_info_title"
+            android:id="@+id/delivery_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Health Information" />
+            android:text="Delivery History" />
 
         <TextView
-            android:id="@+id/medicalState"
-            android:layout_marginTop="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/location"
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/notes"
+            android:id="@+id/delivery_history"
             android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

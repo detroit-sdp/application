@@ -6,22 +6,19 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.TextView
-import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sdp_assistiverobot.DatabaseManager
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_patients.*
 import com.example.sdp_assistiverobot.R
+import com.example.sdp_assistiverobot.Resident
 
-/**
- * A simple [Fragment] subclass.
- */
 class PatientsFragment : Fragment() {
 
     val TAG = "PatientsFragment"
-    private lateinit var db: FirebaseFirestore
     private lateinit var mInflater: LayoutInflater
-    private val patients: ArrayList<Patient> = ArrayList()
+    private val db = DatabaseManager.getInstance()
     private var pauseLoad = false
 
     override fun onCreateView(
@@ -43,7 +40,6 @@ class PatientsFragment : Fragment() {
                 startActivity((it))
             }
         }
-
         loadPatients()
     }
 
@@ -53,54 +49,24 @@ class PatientsFragment : Fragment() {
     }
 
     private fun loadPatients() {
-        db = FirebaseFirestore.getInstance()
-        db.collection("Patients").get()
-            .addOnSuccessListener { results ->
-                for (document in results) {
-                    Log.d(TAG, "${document.id} => ${document.data}")
-                    var first: String
-                    var last: String
-                    var dob: String
-                    var gender: String
-                    var medicalState: String
-                    var location: String
-                    var note: String
-                    document.apply {
-                        first = get("first").toString()
-                        last = get("last").toString()
-                        dob = get("dob").toString()
-                        gender = get("gender").toString()
-                        medicalState = get("medicalState").toString()
-                        location = get("location").toString()
-                        note = get("note").toString()
-                    }
-                    val patient = Patient(first,last,dob,gender,medicalState,note,location)
-                    patients.add(patient)
-                }
-
-                Log.d(TAG, patients.toString())
-
-                if (!pauseLoad) {
-                    val viewManager = LinearLayoutManager(this.context)
-                    val viewAdapter = MyAdapter(patients) {patient ->
-//                        Toast.makeText(this.context, "click on $patientName", Toast.LENGTH_SHORT).show()
-                        Intent(this.context, PatientViewActivity::class.java).also {
-                            it.putExtra("patient", patient)
-                            startActivity(it)
-                        }
-                    }
-                    patientsList.apply {
-                        // use this setting to improve performance if you know that changes
-                        // in content do not change the layout size of the RecyclerView
-                        setHasFixedSize(true)
-                        // use a linear layout manager
-                        layoutManager = viewManager
-                        adapter = viewAdapter
-                    }
-                }
+        Log.d(TAG, "loadPatients")
+        val db = DatabaseManager.getInstance()
+        val viewManager = LinearLayoutManager(this.context)
+        val viewAdapter = MyAdapter(db.getResidents()) { resident ->
+            Intent(this.context, PatientViewActivity::class.java).also {
+                it.putExtra("resident", resident)
+                startActivity(it)
             }
-
-            }
+        }
+        patientsList.apply {
+            // use this setting to improve performance if you know that changes
+            // in content do not change the layout size of the RecyclerView
+            setHasFixedSize(true)
+            // use a linear layout manager
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
+    }
 
     override fun onPause() {
         pauseLoad = true
@@ -108,7 +74,7 @@ class PatientsFragment : Fragment() {
     }
     }
 
-    private class MyAdapter constructor(val myDataset: ArrayList<Patient>, val clickListener: (Patient) -> Unit) :
+    private class MyAdapter constructor(val myDataset: ArrayList<Resident>, val clickListener: (Resident) -> Unit) :
         RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
         // Provide a reference to the views for each data item

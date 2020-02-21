@@ -26,43 +26,8 @@
             android:layout_gravity="center"/>
     </androidx.appcompat.widget.Toolbar>
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/nhs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:hint="NHS Number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/add_patient_toolbar">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:singleLine="true" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        style="@style/Widget.AppCompat.AutoCompleteTextView"
-        android:id="@+id/birthday"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:hint="Date of Birth"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gender"/>
-
     <Spinner
-        android:id="@+id/medicalState"
+        android:id="@+id/priority"
         style="@style/Widget.AppCompat.Spinner.DropDown.ActionBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,7 +37,7 @@
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/birthday" />
+        app:layout_constraintTop_toBottomOf="@+id/first" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/location"
@@ -84,30 +49,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:hint="Patient's Location"
-        app:layout_constraintTop_toBottomOf="@+id/medicalState">
+        app:layout_constraintTop_toBottomOf="@+id/priority">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/locationText"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/notes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:hint="Notes (allergies or medicines)"
-        app:layout_constraintTop_toBottomOf="@+id/location">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/notesText"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -120,40 +67,7 @@
         android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notes" />
-
-    <RadioGroup
-        android:id="@+id/gender"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/first">
-
-        <TextView
-            android:id="@+id/text_gender"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gender">
-        </TextView>
-
-        <RadioButton
-            android:id="@+id/male"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Male" />
-
-        <RadioButton
-            android:id="@+id/female"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Female" />
-    </RadioGroup>
+        app:layout_constraintTop_toBottomOf="@+id/location" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/first"
@@ -161,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/nhs"
+        app:layout_constraintTop_toBottomOf="@+id/add_patient_toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/last">
 
@@ -180,7 +94,7 @@
         android:layout_marginTop="8dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/first"
-        app:layout_constraintTop_toBottomOf="@+id/nhs"
+        app:layout_constraintTop_toBottomOf="@+id/add_patient_toolbar"
         app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -190,26 +104,5 @@
             android:hint="Surename"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/title"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="16dp"-->
-    <!--        android:text="Add Patient"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--    <ImageView-->
-    <!--        android:id="@+id/back"-->
-    <!--        android:layout_width="27dp"-->
-    <!--        android:layout_height="20dp"-->
-    <!--        android:layout_marginTop="16dp"-->
-    <!--        app:layout_constraintEnd_toStartOf="@+id/title"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-    <!--        android:clickable="true"-->
-    <!--        app:srcCompat="@drawable/baseline_navigate_before_black_18dp" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

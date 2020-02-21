@@ -10,11 +10,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.patients.Patient
-import com.example.sdp_assistiverobot.patients.PatientsFragment
+import com.example.sdp_assistiverobot.Resident
 import com.github.mikephil.charting.data.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_dashboard.*
@@ -27,16 +24,16 @@ class DashboardFragment : Fragment() {
 
     val TAG = "Dashboard Fragment"
     private lateinit var db: FirebaseFirestore
-    private val lowPriorPatients: ArrayList<Patient> = ArrayList()
-    private val medPriorPatients: ArrayList<Patient> = ArrayList()
-    private val highPriorPatients: ArrayList<Patient> = ArrayList()
+    private val lowPriorResidents: ArrayList<Resident> = ArrayList()
+    private val medPriorResidents: ArrayList<Resident> = ArrayList()
+    private val highPriorResidents: ArrayList<Resident> = ArrayList()
 
     private var deliveries = 0
     private val deliveryAmounts: IntArray = intArrayOf(10,20,30,40,50,60,deliveries)
 
+    private var isPause = false
+
     val patientTypes = arrayOf("High Priority", "Medium Priority", "Low Priority")
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,79 +52,65 @@ class DashboardFragment : Fragment() {
         button.setOnClickListener {
             // Choose patient to send Tadashi to
             Intent(this.context, ChoosePatientActivity::class.java).also {
-//                it.putExtra("patient", patient)
                 startActivity(it)
             }
-//            val patientsFragment = PatientsFragment()
-//            val fragmentManager: FragmentManager? = fragmentManager
-//            val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
-//            fragmentTransaction.replace(R.id.container, patientsFragment)
-//            fragmentTransaction.addToBackStack(null)
-//            fragmentTransaction.commit()
-
-//            Intent(this.context, ChoosePatientActivity::class.java).also {
-//                startActivity((it))
-//            }
         }
     }
 
     private fun getPatients(){
         db = FirebaseFirestore.getInstance()
+        Log.d(TAG, "getPatients")
         val docRef = db.collection("Patients")
         docRef.get()
             .addOnSuccessListener { results ->
                 for (document in results) {
-                    Log.d(TAG, "${document.id} => ${document.data}")
+//                    Log.d(TAG, "${document.id} => ${document.data}")
                     var first: String
                     var last: String
-                    var dob: String
-                    var gender: String
-                    var medicalState: String
+                    var priority: String
                     var location: String
-                    var note: String
                     document.apply {
                         first = get("first").toString()
                         last = get("last").toString()
-                        dob = get("dob").toString()
-                        gender = get("gender").toString()
-                        medicalState = get("medicalState").toString()
+                        priority = get("priority").toString()
                         location = get("location").toString()
-                        note = get("note").toString()
                     }
-                    val patient = Patient(first,last,dob,gender,medicalState,note,location)
-                    if (patient.medicalState == "Satisfactory"){
-                        lowPriorPatients.add(patient)
-                        pieChart1.notifyDataSetChanged()
-                        Log.d(TAG, "added low")
-                    }
-                    else if(patient.medicalState == "Stable"){
-                        medPriorPatients.add(patient)
-                        pieChart1.notifyDataSetChanged()
-                        Log.d(TAG, "added med")
-                    }
-                    else{
-                        highPriorPatients.add(patient)
-                        pieChart1.notifyDataSetChanged()
-                        Log.d(TAG, "added high")
-                    }
+                    val patient = Resident(
+                        first,
+                        last,
+                        priority,
+                        location
+                    )
+                    if (!isPause && pieChart1 != null) {
+                        if (patient.priority == "Low"){
+                            lowPriorResidents.add(patient)
+                            Log.d(TAG, "added low")
+                        }
+                        else if(patient.priority == "Medium"){
+                            medPriorResidents.add(patient)
+                            Log.d(TAG, "added med")
+                        }
+                        else{
+                            highPriorResidents.add(patient)
+                            Log.d(TAG, "added high")
+                        }
+                        val highPriorNum = highPriorResidents.size.toFloat()
+                        val medPriorNum = medPriorResidents.size.toFloat()
+                        val lowPriorNum = lowPriorResidents.size.toFloat()
 
+                        val patientTypesNum = arrayOf(highPriorNum, medPriorNum, lowPriorNum)
+                        pieChart1.notifyDataSetChanged()
+                        patientTypeChart(patientTypesNum)
+                    }
                 }
-
-                val highPriorNum = highPriorPatients.size.toFloat()
-                val medPriorNum = medPriorPatients.size.toFloat()
-                val lowPriorNum = lowPriorPatients.size.toFloat()
-
-                val patientTypesNum = arrayOf(highPriorNum, medPriorNum, lowPriorNum)
-                patientTypeChart(patientTypesNum)
-
             }
             .addOnFailureListener { exception ->
                 Log.d(TAG, "get failed with ", exception)
             }
-
     }
 
     private fun patientTypeChart(patientTypesNum: Array<Float>) {
+        Log.d(TAG, "patientTypeChart")
         val pieEntries: ArrayList<PieEntry> = ArrayList()
         for (i in patientTypes.indices){
             val pieEntry = PieEntry(patientTypesNum[i], patientTypes[i])
@@ -143,12 +126,11 @@ class DashboardFragment : Fragment() {
         val data1 = PieData(dataSet1)
 
         //get Chart
-        pieChart1.setData(data1)
+        pieChart1.data = data1
         pieChart1.setDrawSliceText(false)
-        pieChart1.setDescription(null)
+        pieChart1.description = null
         pieChart1.animateY(500)
         pieChart1.invalidate()
-
     }
 
     private fun setDeliveriesChart(){
@@ -175,8 +157,11 @@ class DashboardFragment : Fragment() {
         barChart1.setDescription(null)
         barChart1.animateY(500)
         barChart1.invalidate()
-
     }
 
+    override fun onPause() {
+        isPause = true
+        super.onPause()
+    }
 
 }

@@ -3,24 +3,21 @@ package com.example.sdp_assistiverobot.patients
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.dashboard.DashboardFragment
+import com.example.sdp_assistiverobot.Resident
 import kotlinx.android.synthetic.main.activity_patient_view.*
-import java.security.AccessController.getContext
 
 class PatientViewActivity : AppCompatActivity() {
 
-    lateinit var patient: Patient
+    lateinit var resident: Resident
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_patient_view)
 
-        patient = intent.getSerializableExtra("patient") as Patient
-        toolbar_title.text = "${patient.first} ${patient.last}"
+        resident = intent.getSerializableExtra("resident") as Resident
+        toolbar_title.text = "${resident.first} ${resident.last}"
         setSupportActionBar(findViewById(R.id.patient_toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -33,12 +30,8 @@ class PatientViewActivity : AppCompatActivity() {
     }
 
     private fun setPatientInfo() {
-        gender.text = "Gender: ${patient.gender}"
-        dob.text = "Date of Birth: ${patient.dob}"
-        age.text = "Age: ${patient.getAge()}"
-        location.text = "Location: ${patient.location}"
-        medicalState.text = "Medical state: ${patient.medicalState}"
-        notes.text = "Notes: ${patient.note}"
+        location.text = "Location: ${resident.location}"
+        priority.text = "Priority: ${resident.priority}"
     }
 
     private fun sendTadashi(){
