@@ -2,8 +2,13 @@ package com.example.sdp_assistiverobot.patients
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.example.sdp_assistiverobot.R
+import com.example.sdp_assistiverobot.dashboard.DashboardFragment
 import kotlinx.android.synthetic.main.activity_patient_view.*
+import java.security.AccessController.getContext
 
 class PatientViewActivity : AppCompatActivity() {
 
@@ -21,6 +26,10 @@ class PatientViewActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         setPatientInfo()
+
+        button_sendTadashi.setOnClickListener{
+            sendTadashi()
+        }
     }
 
     private fun setPatientInfo() {
@@ -30,6 +39,19 @@ class PatientViewActivity : AppCompatActivity() {
         location.text = "Location: ${patient.location}"
         medicalState.text = "Medical state: ${patient.medicalState}"
         notes.text = "Notes: ${patient.note}"
+    }
+
+    private fun sendTadashi(){
+        val destination = location.text
+        //TODO: send request to Tadashi
+        Toast.makeText(getApplicationContext(), "Tadashi is on the way!", Toast.LENGTH_SHORT).show()
+        finish()
+//        val dashboardFragment= DashboardFragment()
+//        val fragmentManager: FragmentManager? = fragmentManager
+//        val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
+//        fragmentTransaction.replace(R.id.container, patientsFragment)
+//        fragmentTransaction.addToBackStack(null)
+//        fragmentTransaction.commit()
     }
 
     /**

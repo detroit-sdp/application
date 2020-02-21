@@ -3,18 +3,18 @@
 
     <item
         android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/home_icon"
-        android:title="Home"></item>
+        android:icon="@drawable/dashboard_icon"
+        android:title="Dashboard"></item>
 
     <item
         android:id="@+id/navigation_patients"
-        android:icon="@drawable/patients_icon"
-        android:title="Patients"></item>
+        android:icon="@drawable/patient_icon"
+        android:title="Residents"></item>
 
     <item
         android:id="@+id/navigation_calendar"
-        android:icon="@drawable/schedule_icon"
-        android:title="Schedule"></item>
+        android:icon="@drawable/calendar_icon"
+        android:title="Calendar"></item>
 
     <item
         android:id="@+id/navigation_map"
@@ -24,5 +24,5 @@
     <item
         android:id="@+id/navigation_me"
         android:icon="@drawable/settings_icon"
-        android:title="Settings"></item>
+        android:title="Me"></item>
 </menu>

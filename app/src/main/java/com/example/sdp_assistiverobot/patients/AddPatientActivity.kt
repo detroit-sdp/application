@@ -193,7 +193,7 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            state = parent?.getItemAtPosition(position) as String
+        state = parent?.getItemAtPosition(position) as String
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {

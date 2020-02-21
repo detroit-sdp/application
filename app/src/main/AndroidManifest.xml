@@ -9,15 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity
+            android:name=".dashboard.ChoosePatientActivity"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".patients.PatientViewActivity"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".patients.AddPatientActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".login.SignupActivity"
-            android:parentActivityName=".login.LoginActivity"/>
+        <activity
+            android:name=".login.SignupActivity"
+            android:parentActivityName=".login.LoginActivity" />
         <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,10 +38,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAA5XtDe4d03DYxH1GNEWljOuwdWXsEE5Y"/>
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
+            android:value="AIzaSyAA5XtDe4d03DYxH1GNEWljOuwdWXsEE5Y" />
     </application>
 
 </manifest>

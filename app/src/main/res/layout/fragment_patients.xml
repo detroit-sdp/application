@@ -10,7 +10,6 @@
         android:id="@+id/patientsList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradient_background"
         android:orientation="vertical"
         android:scrollbars="vertical"
         app:layout_constraintEnd_toEndOf="parent"

@@ -10,22 +10,21 @@
         android:id="@+id/patient_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/gradient_background"
         android:elevation="4dp"
-        android:gravity="center"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="">
+        android:gravity="center"
+        app:title=""
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <TextView
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="User" />
+            android:text="User"/>
     </androidx.appcompat.widget.Toolbar>
 
     <View
@@ -39,10 +38,9 @@
 
     <LinearLayout
         android:id="@+id/container"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/gradient_background"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,30 +54,30 @@
 
         <TextView
             android:id="@+id/gender"
+            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/dob"
+            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/age"
+            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="TextView" />
 
         <View
             android:id="@+id/divider2"
+            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="16dp"
             android:background="?android:attr/listDivider" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -90,23 +88,29 @@
 
         <TextView
             android:id="@+id/medicalState"
+            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/location"
+            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/notes"
+            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="TextView" />
+
+        <Button
+            android:id="@+id/button_sendTadashi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Send Tadashi" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
