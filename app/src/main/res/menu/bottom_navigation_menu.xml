@@ -3,26 +3,26 @@
 
     <item
         android:id="@+id/navigation_dashboard"
-        android:title="Dashboard">
-    </item>
+        android:icon="@drawable/dashboard_icon"
+        android:title="Dashboard"></item>
 
     <item
         android:id="@+id/navigation_patients"
-        android:title="Patients">
-    </item>
+        android:icon="@drawable/patient_icon"
+        android:title="Residents"></item>
 
     <item
         android:id="@+id/navigation_calendar"
-        android:title="Calendar">
-    </item>
+        android:icon="@drawable/calendar_icon"
+        android:title="Calendar"></item>
 
     <item
         android:id="@+id/navigation_map"
-        android:title="Map">
-    </item>
+        android:icon="@drawable/map_icon"
+        android:title="Map"></item>
 
     <item
         android:id="@+id/navigation_me"
-        android:title="Me">
-    </item>
+        android:icon="@drawable/settings_icon"
+        android:title="Me"></item>
 </menu>
