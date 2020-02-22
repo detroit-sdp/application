@@ -33,7 +33,7 @@ class DashboardFragment : Fragment() {
 
     private var isPause = false
 
-    val patientTypes = arrayOf("High Priority", "Medium Priority", "Low Priority")
+    val residentTypes = arrayOf("High Priority", "Medium Priority", "Low Priority")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,22 +45,24 @@ class DashboardFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        getPatients()
-        Log.d(TAG, "Getting patients data")
+        getResidents()
+        Log.d(TAG, "Getting residents data")
         setDeliveriesChart()
         val button: Button = button_sendTadashi
         button.setOnClickListener {
-            // Choose patient to send Tadashi to
-            Intent(this.context, ChoosePatientActivity::class.java).also {
+            // Choose resident to send Tadashi to
+            Intent(this.context, ChooseResidentActivity::class.java).also {
                 startActivity(it)
             }
         }
     }
 
-    private fun getPatients(){
+
+
+    private fun getResidents(){
         db = FirebaseFirestore.getInstance()
-        Log.d(TAG, "getPatients")
-        val docRef = db.collection("Patients")
+        Log.d(TAG, "getResidents")
+        val docRef = db.collection("Residents")
         docRef.get()
             .addOnSuccessListener { results ->
                 for (document in results) {
@@ -75,32 +77,32 @@ class DashboardFragment : Fragment() {
                         priority = get("priority").toString()
                         location = get("location").toString()
                     }
-                    val patient = Resident(
+                    val resident = Resident(
                         first,
                         last,
                         priority,
                         location
                     )
                     if (!isPause && pieChart1 != null) {
-                        if (patient.priority == "Low"){
-                            lowPriorResidents.add(patient)
+                        if (resident.priority == "Low"){
+                            lowPriorResidents.add(resident)
                             Log.d(TAG, "added low")
                         }
-                        else if(patient.priority == "Medium"){
-                            medPriorResidents.add(patient)
+                        else if(resident.priority == "Medium"){
+                            medPriorResidents.add(resident)
                             Log.d(TAG, "added med")
                         }
                         else{
-                            highPriorResidents.add(patient)
+                            highPriorResidents.add(resident)
                             Log.d(TAG, "added high")
                         }
                         val highPriorNum = highPriorResidents.size.toFloat()
                         val medPriorNum = medPriorResidents.size.toFloat()
                         val lowPriorNum = lowPriorResidents.size.toFloat()
 
-                        val patientTypesNum = arrayOf(highPriorNum, medPriorNum, lowPriorNum)
+                        val residentTypesNum = arrayOf(highPriorNum, medPriorNum, lowPriorNum)
                         pieChart1.notifyDataSetChanged()
-                        patientTypeChart(patientTypesNum)
+                        residentTypeChart(residentTypesNum)
                     }
                 }
             }
@@ -109,15 +111,15 @@ class DashboardFragment : Fragment() {
             }
     }
 
-    private fun patientTypeChart(patientTypesNum: Array<Float>) {
-        Log.d(TAG, "patientTypeChart")
+    private fun residentTypeChart(residentTypesNum: Array<Float>) {
+        Log.d(TAG, "residentTypeChart")
         val pieEntries: ArrayList<PieEntry> = ArrayList()
-        for (i in patientTypes.indices){
-            val pieEntry = PieEntry(patientTypesNum[i], patientTypes[i])
+        for (i in residentTypes.indices){
+            val pieEntry = PieEntry(residentTypesNum[i], residentTypes[i])
             pieEntries.add(pieEntry)
         }
 
-        val dataSet1 = PieDataSet(pieEntries, "Patient Types")
+        val dataSet1 = PieDataSet(pieEntries, "Residents Types")
 
         val colorFirst = context?.let { ContextCompat.getColor(it, R.color.colorPrimaryRed) }
         val colorSecond = context?.let { ContextCompat.getColor(it, R.color.colorPrimaryYellow) }

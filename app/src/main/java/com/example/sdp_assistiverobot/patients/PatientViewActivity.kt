@@ -22,14 +22,14 @@ class PatientViewActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        setPatientInfo()
+        setResidentInfo()
 
         button_sendTadashi.setOnClickListener{
             sendTadashi()
         }
     }
 
-    private fun setPatientInfo() {
+    private fun setResidentInfo() {
         location.text = "Location: ${resident.location}"
         priority.text = "Priority: ${resident.priority}"
     }
@@ -39,12 +39,6 @@ class PatientViewActivity : AppCompatActivity() {
         //TODO: send request to Tadashi
         Toast.makeText(getApplicationContext(), "Tadashi is on the way!", Toast.LENGTH_SHORT).show()
         finish()
-//        val dashboardFragment= DashboardFragment()
-//        val fragmentManager: FragmentManager? = fragmentManager
-//        val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
-//        fragmentTransaction.replace(R.id.container, patientsFragment)
-//        fragmentTransaction.addToBackStack(null)
-//        fragmentTransaction.commit()
     }
 
     /**

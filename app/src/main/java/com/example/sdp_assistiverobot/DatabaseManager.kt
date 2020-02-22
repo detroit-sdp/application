@@ -29,7 +29,7 @@ object DatabaseManager {
             return
         }
 
-        db.collection("Patients").apply {
+        db.collection("Residents").apply {
             listener = addSnapshotListener { snapshots, e ->
                 if (e != null) {
                     Log.w(TAG, "listen:error", e)
