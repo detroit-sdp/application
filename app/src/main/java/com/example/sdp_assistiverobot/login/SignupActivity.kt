@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_signup.*
 import com.example.sdp_assistiverobot.MainActivity
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.userpage.User
-import com.example.sdp_assistiverobot.Util
+import com.example.sdp_assistiverobot.Util.Util
 
 class SignupActivity : AppCompatActivity() {
 

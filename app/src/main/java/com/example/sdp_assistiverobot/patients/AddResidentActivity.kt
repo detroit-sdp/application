@@ -1,24 +1,21 @@
 package com.example.sdp_assistiverobot.patients
 
-import android.app.DatePickerDialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.Resident
-import com.example.sdp_assistiverobot.Util
+import com.example.sdp_assistiverobot.Util.Resident
+import com.example.sdp_assistiverobot.Util.Util
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_add_patient.*
-import java.util.*
+import kotlinx.android.synthetic.main.activity_add_resident.*
 
 
-class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+class AddResidentActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private var state: String? = null
     private lateinit var db : FirebaseFirestore
@@ -27,7 +24,7 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_patient)
+        setContentView(R.layout.activity_add_resident)
         setSupportActionBar(findViewById(R.id.add_patient_toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -111,9 +108,9 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
     private fun createsTestUsers() {
         for (x in 0..99) {
             val patient = Resident(
-                "Test", "User$x","Medium", "Bed 1 Room 315"
+                "Test", "User$x", "Medium", "Bed 1 Room 315"
             )
-            db.collection("Patients").document().set(patient)
+            db.collection("Residents").document().set(patient)
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully written!")
 //                    finish()
@@ -140,7 +137,7 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
             locationText.text.toString()
         )
 
-        db.collection("Patients").document().set(resident)
+        db.collection("Residents").document().set(resident)
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully written!")
                 finish()

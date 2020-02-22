@@ -1,4 +1,4 @@
-package com.example.sdp_assistiverobot
+package com.example.sdp_assistiverobot.Util
 
 import android.content.Context
 import android.net.ConnectivityManager

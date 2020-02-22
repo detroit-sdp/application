@@ -1,7 +1,6 @@
-package com.example.sdp_assistiverobot
+package com.example.sdp_assistiverobot.Util
 
 import android.util.Log
-import android.view.View
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -12,7 +11,8 @@ object DatabaseManager {
     private val TAG = "DatabaseManager"
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val residents: ArrayList<Resident> = ArrayList()
-    private lateinit var listener: ListenerRegistration
+    private lateinit var residentListener: ListenerRegistration
+    private lateinit var deliveryListener: ListenerRegistration
 
     fun getInstance(): DatabaseManager {
         return this
@@ -29,8 +29,8 @@ object DatabaseManager {
             return
         }
 
-        db.collection("Patients").apply {
-            listener = addSnapshotListener { snapshots, e ->
+        db.collection("Residents").apply {
+            residentListener = addSnapshotListener { snapshots, e ->
                 if (e != null) {
                     Log.w(TAG, "listen:error", e)
                     return@addSnapshotListener
@@ -39,12 +39,19 @@ object DatabaseManager {
                 for (dc in snapshots!!.documentChanges) {
                     when (dc.type) {
                         DocumentChange.Type.ADDED -> {
-                            val resident = newResident(dc.document)
+                            Log.d(TAG, "Added Resident: ${dc.document.data}")
+                            val resident =
+                                newResident(
+                                    dc.document
+                                )
                             residents.add(resident)
                         }
                         DocumentChange.Type.MODIFIED -> {
                             Log.d(TAG, "Modified Resident: ${dc.document.data}")
-                            val resident = newResident(dc.document)
+                            val resident =
+                                newResident(
+                                    dc.document
+                                )
                             residents[dc.oldIndex] = resident
                         }
                         DocumentChange.Type.REMOVED -> {
@@ -58,11 +65,10 @@ object DatabaseManager {
     }
 
     fun detachListener() {
-        listener.remove()
+        residentListener.remove()
     }
 
     private fun newResident(document: QueryDocumentSnapshot): Resident {
-//        Log.d(TAG, "New Resident: ${document.data}")
         var first: String
         var last: String
         var priority: String
@@ -73,7 +79,12 @@ object DatabaseManager {
             priority = get("priority").toString()
             location = get("location").toString()
         }
-        return Resident(first, last, priority, location)
+        return Resident(
+            first,
+            last,
+            priority,
+            location
+        )
     }
 
 }

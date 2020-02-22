@@ -11,11 +11,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.Resident
-import com.example.sdp_assistiverobot.patients.PatientViewActivity
+import com.example.sdp_assistiverobot.Util.Resident
+import com.example.sdp_assistiverobot.patients.ResidentViewActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.fragment_patients.*
+import kotlinx.android.synthetic.main.fragment_residents.*
 
 class ChoosePatientActivity : AppCompatActivity() {
 
@@ -71,7 +71,7 @@ class ChoosePatientActivity : AppCompatActivity() {
                     val viewManager = LinearLayoutManager(this)
                     val viewAdapter = MyAdapter(residents) { patient ->
                         //Toast.makeText(this.context, "click on $patientName", Toast.LENGTH_SHORT).show()
-                        Intent(this, PatientViewActivity::class.java).also {
+                        Intent(this, ResidentViewActivity::class.java).also {
                             it.putExtra("patient", patient)
                             startActivity(it)
                         }
@@ -111,7 +111,7 @@ class ChoosePatientActivity : AppCompatActivity() {
                                         viewType: Int): MyViewHolder {
             // create a new view
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.patients_list_row, parent, false)
+                .inflate(R.layout.residents_list_row, parent, false)
             // set the view's size, margins, paddings and layout parameters
             // ...
             return MyViewHolder(view)

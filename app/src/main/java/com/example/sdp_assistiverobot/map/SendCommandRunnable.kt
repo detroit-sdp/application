@@ -20,7 +20,6 @@ class SendCommandRunnable(private val ip: String, private val port: Int, private
         try {
             Log.d(TAG, "Sending $message to $ip:$port")
 
-
             if(Thread.interrupted()) {
                 return
             }

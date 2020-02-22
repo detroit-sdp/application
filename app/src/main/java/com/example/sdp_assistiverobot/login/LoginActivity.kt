@@ -21,10 +21,18 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-        auth = FirebaseAuth.getInstance()
-        updateUI(auth.currentUser)
 
+        auth = FirebaseAuth.getInstance()
+
+        // Check if the user has already logged in.
+        if (auth.currentUser != null) {
+            Log.d(TAG, "user signed in")
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        setContentView(R.layout.activity_login)
+        isEnabledAll(true)
         // Set up listeners for buttons
         button_login.setOnClickListener {
             val usr = username.text.toString()

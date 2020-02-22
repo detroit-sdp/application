@@ -1,22 +1,20 @@
 package com.example.sdp_assistiverobot
 
-import android.content.BroadcastReceiver
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.net.wifi.p2p.WifiP2pDevice
-import android.net.wifi.p2p.WifiP2pDeviceList
-import android.net.wifi.p2p.WifiP2pManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.util.Log
-import android.view.MenuItem
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import com.example.sdp_assistiverobot.Util.Constants
+import com.example.sdp_assistiverobot.Util.DatabaseManager
 import com.example.sdp_assistiverobot.calendar.CalendarFragment
 import com.example.sdp_assistiverobot.dashboard.DashboardFragment
 import com.example.sdp_assistiverobot.map.MapFragment
+import com.example.sdp_assistiverobot.map.NetworkCommService
 import com.example.sdp_assistiverobot.patients.PatientsFragment
 import com.example.sdp_assistiverobot.userpage.UserFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -33,9 +31,11 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.main_toolbar))
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        // Initialise database
         db = DatabaseManager.getInstance()
         db.initializeDB()
 
+        // Get menu list
         val navIds = arrayListOf<Int>()
         for (i in 0 until bottom_navigation.menu.size()) {
             navIds.add(bottom_navigation.menu[i].itemId)
@@ -57,6 +57,11 @@ class MainActivity : AppCompatActivity() {
                 return@setOnNavigationItemSelectedListener false
             }
         }
+
+        createNotificationChannel()
+
+        // Start listener port for receiving UDP packet.
+//        startService(Intent(this, NetworkCommService::class.java))
     }
 
     private fun chooseFragment() {
@@ -92,6 +97,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "SDPRobot"
+            val descriptionText = "Notifications from robot"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(Constants.CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putInt("selectedId", selectedId)
@@ -106,5 +127,10 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         db.detachListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        chooseFragment()
     }
 }

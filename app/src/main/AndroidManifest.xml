@@ -31,10 +31,6 @@
         <activity
             android:name=".dashboard.ChoosePatientActivity"
             android:parentActivityName=".MainActivity" />
-        <receiver
-            android:name=".map.NetworkBroadcastReceiver"
-            android:enabled="true"
-            android:exported="true"></receiver>
 
         <service
             android:name=".map.NetworkCommService"
@@ -42,10 +38,10 @@
             android:exported="true" />
 
         <activity
-            android:name=".patients.PatientViewActivity"
+            android:name=".patients.ResidentViewActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".patients.AddPatientActivity"
+            android:name=".patients.AddResidentActivity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".login.SignupActivity"

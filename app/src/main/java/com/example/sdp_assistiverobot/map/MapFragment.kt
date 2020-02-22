@@ -1,16 +1,28 @@
 package com.example.sdp_assistiverobot.map
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import com.example.sdp_assistiverobot.R
+import com.example.sdp_assistiverobot.Util.Constants
+import com.google.android.gms.maps.MapView
 import kotlinx.android.synthetic.main.fragment_map.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.InputStream
 import java.lang.Exception
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -25,7 +37,8 @@ class MapFragment : Fragment() {
 
     private val TAG = "MapFragment"
 
-    private lateinit var outIP: String
+    private val outIP: String = "192.168.105.111"
+    private val outPort = 20001
 
     private val senderWorkQueue: BlockingQueue<Runnable> = LinkedBlockingQueue<Runnable>()
     // Check how many processors on the machine
@@ -43,6 +56,9 @@ class MapFragment : Fragment() {
         senderWorkQueue
     )
 
+    private lateinit var br: NetworkBroadcastReceiver
+    private lateinit var serviceIntent: Intent
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,28 +70,54 @@ class MapFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        NetworkManager.setTextView(tvMessages)
-
-        btnConnect.setOnClickListener {
-            outIP = etIP.text.toString()
-            Log.d(TAG, "Connecting")
-            activity?.startService(Intent(this.context, NetworkCommService::class.java).apply {
-                putExtra("IP_ADDRESS", outIP)
-            })
+        val builder = NotificationCompat.Builder(this.context!!, Constants.CHANNEL_ID)
+            .setSmallIcon(R.drawable.calendar_icon)
+            .setContentTitle("My notification")
+            .setContentText("Much longer text that cannot fit one line...")
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText("Much longer text that cannot fit one line..."))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        with(NotificationManagerCompat.from(this.context!!)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(Constants.NOTIFICATION_ID++, builder.build())
         }
 
-        btnSend.setOnClickListener {
-            senderThreadPool.execute(SendCommandRunnable("129.215.2.49", 20001, etMessage.text.toString()))
+        br = NetworkBroadcastReceiver()
+        val filter = IntentFilter().apply {
+            addAction(Constants.ACTION_NETWORK_RECEIVE)
         }
+        activity?.registerReceiver(br, filter)
+
+        serviceIntent = Intent(this.context, NetworkCommService::class.java)
+
+        room_1.setOnClickListener {
+            Toast.makeText(this.context, "ROOM 1", Toast.LENGTH_SHORT).show()
+        }
+//        btnConnect.setOnClickListener {
+//            activity?.startService(serviceIntent)
+//        }
+
+//        btnSend.setOnClickListener {
+//            senderThreadPool.execute(SendCommandRunnable(outIP, outPort, etMessage.text.toString()))
+//        }
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        activity?.unregisterReceiver(br)
     }
 
     inner class NetworkBroadcastReceiver : BroadcastReceiver() {
-
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
-                "com.example.sdp_assistiverobot.getMessage" -> {
+                Constants.ACTION_NETWORK_RECEIVE -> {
+                    Log.d(TAG, "Message received")
                     // Push message to chat frame
-                    tvMessages.append(intent.getCharSequenceExtra("message"))
+//                    if (tvMessages != null) {
+//                        tvMessages.append("Tadashi: ${intent.getCharSequenceExtra("message")}\n")
+//                    }
                 }
             }
         }

@@ -11,7 +11,7 @@ import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.Resident
+import com.example.sdp_assistiverobot.Util.Resident
 import com.github.mikephil.charting.data.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_dashboard.*

@@ -4,17 +4,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.Resident
-import kotlinx.android.synthetic.main.activity_patient_view.*
+import com.example.sdp_assistiverobot.Util.Resident
+import kotlinx.android.synthetic.main.activity_resident_view.*
 
-class PatientViewActivity : AppCompatActivity() {
+class ResidentViewActivity : AppCompatActivity() {
 
     lateinit var resident: Resident
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_patient_view)
+        setContentView(R.layout.activity_resident_view)
 
         resident = intent.getSerializableExtra("resident") as Resident
         toolbar_title.text = "${resident.first} ${resident.last}"
