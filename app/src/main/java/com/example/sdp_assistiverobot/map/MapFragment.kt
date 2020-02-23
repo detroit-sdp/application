@@ -1,12 +1,9 @@
 package com.example.sdp_assistiverobot.map
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,18 +12,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.Util.Constants
-import com.google.android.gms.maps.MapView
+import com.example.sdp_assistiverobot.util.Constants
 import kotlinx.android.synthetic.main.fragment_map.*
-import java.io.File
-import java.io.FileInputStream
-import java.io.InputStream
-import java.lang.Exception
-import java.net.DatagramSocket
-import java.net.InetAddress
-import java.nio.charset.Charset
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
@@ -92,7 +82,11 @@ class MapFragment : Fragment() {
         serviceIntent = Intent(this.context, NetworkCommService::class.java)
 
         room_1.setOnClickListener {
-            Toast.makeText(this.context, "ROOM 1", Toast.LENGTH_SHORT).show()
+            if (room_1.imageTintList == ContextCompat.getColorStateList(context!!, R.color.colorOrange)) {
+                room_1.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorLightGreen)
+            } else {
+                room_1.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorOrange)
+            }
         }
 //        btnConnect.setOnClickListener {
 //            activity?.startService(serviceIntent)

@@ -1,4 +1,4 @@
-package com.example.sdp_assistiverobot.Util
+package com.example.sdp_assistiverobot.util
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentChange

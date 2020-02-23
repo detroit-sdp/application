@@ -8,4 +8,17 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MyEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorControlNormal">@color/colorAccent</item>
+    </style>
+
+    <style name="ResidentPinStyle" parent="Widget.AppCompat.ImageButton">
+        <item name="android:tint">@color/colorOrange</item>
+        <item name="android:backgroundTint">@color/colorTrans</item>
+        <item name="android:src">@drawable/baseline_person_pin_circle_black_36</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:colorControlHighlight">@color/colorTrans</item>
+    </style>
+
 </resources>

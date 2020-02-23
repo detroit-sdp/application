@@ -8,10 +8,10 @@ import androidx.fragment.app.Fragment
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sdp_assistiverobot.Util.DatabaseManager
+import com.example.sdp_assistiverobot.util.DatabaseManager
 import kotlinx.android.synthetic.main.fragment_residents.*
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.Util.Resident
+import com.example.sdp_assistiverobot.util.Resident
 
 class PatientsFragment : Fragment() {
 

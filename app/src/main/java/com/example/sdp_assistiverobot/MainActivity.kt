@@ -9,12 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
-import com.example.sdp_assistiverobot.Util.Constants
-import com.example.sdp_assistiverobot.Util.DatabaseManager
+import com.example.sdp_assistiverobot.util.Constants
+import com.example.sdp_assistiverobot.util.DatabaseManager
 import com.example.sdp_assistiverobot.calendar.CalendarFragment
 import com.example.sdp_assistiverobot.dashboard.DashboardFragment
 import com.example.sdp_assistiverobot.map.MapFragment
-import com.example.sdp_assistiverobot.map.NetworkCommService
 import com.example.sdp_assistiverobot.patients.PatientsFragment
 import com.example.sdp_assistiverobot.userpage.UserFragment
 import kotlinx.android.synthetic.main.activity_main.*

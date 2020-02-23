@@ -54,22 +54,25 @@
     android:background="@drawable/map_demo_room"
     tools:context = ".MainActivity">
 
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Room 2"
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/room_2"
+        android:layout_width="22dp"
+        android:layout_height="30dp"
+        android:theme="@style/ResidentPinStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.151"
+        app:layout_constraintHorizontal_bias="0.196"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.376" />
+        app:layout_constraintVertical_bias="0.377" />
 
-    <com.google.android.material.button.MaterialButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/charge_station"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="charging"
+        android:layout_width="52dp"
+        android:layout_height="55dp"
+        android:theme="@style/ResidentPinStyle"
+        android:src="@drawable/baseline_ev_station_black_48"
+        android:tint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.538"
@@ -79,51 +82,50 @@
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/room_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#FFFFF"
-        android:src="@drawable/map_icon"
+        android:layout_width="22dp"
+        android:layout_height="30dp"
+        android:theme="@style/ResidentPinStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.126"
+        app:layout_constraintHorizontal_bias="0.196"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.528" />
+        app:layout_constraintVertical_bias="0.611" />
 
-    <com.google.android.material.button.MaterialButton
-
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/room_3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Room 3"
+        android:layout_width="22dp"
+        android:layout_height="30dp"
+        android:theme="@style/ResidentPinStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.151"
+        app:layout_constraintHorizontal_bias="0.196"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.183" />
+        app:layout_constraintVertical_bias="0.184" />
 
-    <com.google.android.material.button.MaterialButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/room_4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Room 4"
+        android:layout_width="22dp"
+        android:layout_height="30dp"
+        android:theme="@style/ResidentPinStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.888"
+        app:layout_constraintHorizontal_bias="0.829"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.289" />
+        app:layout_constraintVertical_bias="0.255" />
 
-    <com.google.android.material.button.MaterialButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/room_5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Room 5"
+        android:layout_width="22dp"
+        android:layout_height="30dp"
+        android:theme="@style/ResidentPinStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.888"
+        app:layout_constraintHorizontal_bias="0.829"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.606" />
+        app:layout_constraintVertical_bias="0.611" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

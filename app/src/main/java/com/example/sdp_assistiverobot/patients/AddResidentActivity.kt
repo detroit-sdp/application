@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.Util.Resident
-import com.example.sdp_assistiverobot.Util.Util
+import com.example.sdp_assistiverobot.util.Resident
+import com.example.sdp_assistiverobot.util.Util
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_add_resident.*
 

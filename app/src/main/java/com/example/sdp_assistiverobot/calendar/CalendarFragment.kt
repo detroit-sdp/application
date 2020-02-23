@@ -6,7 +6,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.Util.Util
+import com.example.sdp_assistiverobot.util.Util
 import kotlinx.android.synthetic.main.fragment_calendar.*
 
 /**

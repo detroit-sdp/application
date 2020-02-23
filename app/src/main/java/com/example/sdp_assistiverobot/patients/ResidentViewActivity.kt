@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.Util.Resident
+import com.example.sdp_assistiverobot.util.Resident
 import kotlinx.android.synthetic.main.activity_resident_view.*
 
 class ResidentViewActivity : AppCompatActivity() {

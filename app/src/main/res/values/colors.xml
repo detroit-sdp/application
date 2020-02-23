@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
+<!--    <color name="colorPrimary">#008577</color>-->
 <!--    <color name="colorPrimaryDark">#00574B</color>-->
 <!--    <color name="colorAccent">#D81B60</color>-->
 <!--    <color name="colorPrimary">#598570</color>-->
@@ -8,4 +8,29 @@
     <color name="colorAccent">#BDC1C8</color>
     <color name="colorPrimaryRed">#FC0202</color>
     <color name="colorPrimaryYellow">#F4FC02</color>
+    <color name="colorOrange">#E04514</color>
+    <color name="colorLightGreen">#0D9444</color>
+    <color name="colorTrans">#FFFFFFFF</color>
+
+    <color name="color1">#fffffe</color>
+    <color name="color2">#e8ae23</color>
+    <color name="color3">#7ea043</color>
+    <color name="color4">#0f9245</color>
+    <color name="color5">#1e7f4e</color>
+    <color name="color6">#237052</color>
+    <color name="color7">#246452</color>
+    <color name="color8">#235a51</color>
+    <color name="color9">#215150</color>
+    <color name="color10">#1e494e</color>
+    <color name="color11">#19414c</color>
+    <color name="color12">#143b4b</color>
+    <color name="color13">#0f354a</color>
+    <color name="color14">#092f49</color>
+    <color name="color15">#04284a</color>
+    <color name="colorPrimary">#00214b</color>
+    <color name="color17">#00174e</color>
+    <color name="color18">#021341</color>
+    <color name="color19">#030f2d</color>
+    <color name="color20">#030817</color>
 </resources>
+

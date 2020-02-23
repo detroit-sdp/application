@@ -4,9 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import com.example.sdp_assistiverobot.Util.Constants
-import java.io.BufferedReader
-import java.io.InputStreamReader
+import com.example.sdp_assistiverobot.util.Constants
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
