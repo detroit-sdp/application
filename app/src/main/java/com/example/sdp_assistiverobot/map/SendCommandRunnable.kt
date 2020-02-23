@@ -7,10 +7,12 @@ import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 
-class SendCommandRunnable(private val ip: String, private val port: Int, private val message: String): Runnable {
+class SendCommandRunnable(private val message: String): Runnable {
 
     private val TAG = "SendMessageRunnable"
     lateinit var mThread: Thread
+    private val IP_ADDRESS = "192.168.105.172"
+    private val PORT = 20001
 
     override fun run() {
         android.os.Process.setThreadPriority(THREAD_PRIORITY_BACKGROUND)
@@ -18,7 +20,7 @@ class SendCommandRunnable(private val ip: String, private val port: Int, private
         mThread = Thread.currentThread()
         val socket: DatagramSocket
         try {
-            Log.d(TAG, "Sending $message to $ip:$port")
+            Log.d(TAG, "Sending $message to $IP_ADDRESS:$PORT")
 
             if(Thread.interrupted()) {
                 return
@@ -28,7 +30,7 @@ class SendCommandRunnable(private val ip: String, private val port: Int, private
             }
 
             val out = message.toByteArray()
-            val outPackage = DatagramPacket(out, out.size, InetAddress.getByName(ip), port)
+            val outPackage = DatagramPacket(out, out.size, InetAddress.getByName(IP_ADDRESS), PORT)
             if(Thread.interrupted()){
                 return
             }

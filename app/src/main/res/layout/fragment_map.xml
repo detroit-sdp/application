@@ -72,7 +72,7 @@
         android:layout_height="55dp"
         android:theme="@style/ResidentPinStyle"
         android:src="@drawable/baseline_ev_station_black_48"
-        android:tint="@color/colorPrimary"
+        android:tint="@color/color5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.538"

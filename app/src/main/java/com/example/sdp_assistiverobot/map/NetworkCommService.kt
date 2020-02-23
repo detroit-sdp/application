@@ -25,21 +25,26 @@ class NetworkCommService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Thread(Runnable {
             android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND)
-            openPort()
-            startListen()
+            if (openPort()) {
+                startListen()
+            }
+            Thread.currentThread().interrupt()
         }).start()
         return START_STICKY
     }
 
-    private fun openPort() {
-        Log.d(TAG, "Port opened")
+    private fun openPort(): Boolean {
+        Log.d(TAG, "Opening port...")
         try{
-            mSocket = DatagramSocket(LISTENER_PORT, InetAddress.getByName("192.168.105.106")).also {
+            mSocket = DatagramSocket(LISTENER_PORT).also {
                 it.broadcast = true
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.d(TAG, "Port is in use")
+            return false
         }
+
+        return true
     }
 
     private fun startListen() {
@@ -57,10 +62,7 @@ class NetworkCommService : Service() {
                 mSocket.receive(packet)
 
                 if (packet.data != null) {
-                    val inMessage = String(packet.data, 0, packet.length)
-                    Log.d(TAG, inMessage)
-
-                    handleReceivedMessage(inMessage)
+                    handleReceivedMessage(packet)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -76,10 +78,12 @@ class NetworkCommService : Service() {
         Log.d(TAG, "Service destroyed")
     }
 
-    private fun handleReceivedMessage(message: String) {
+    private fun handleReceivedMessage(packet: DatagramPacket) {
+        val inMessage = String(packet.data, 0, packet.length)
+
         sendBroadcast(Intent().apply {
             action = Constants.ACTION_NETWORK_RECEIVE
-            putExtra("message", message)
+            putExtra("message", "$inMessage from ${packet.address}")
         })
     }
 }
