@@ -56,23 +56,23 @@
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/room_2"
-        android:layout_width="22dp"
-        android:layout_height="30dp"
-        android:theme="@style/ResidentPinStyle"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:theme="@style/MyPinStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.196"
+        app:layout_constraintHorizontal_bias="0.165"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.377" />
+        app:layout_constraintVertical_bias="0.374" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/charge_station"
-        android:layout_width="52dp"
-        android:layout_height="55dp"
-        android:theme="@style/ResidentPinStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/baseline_ev_station_black_48"
-        android:tint="@color/color5"
+        android:theme="@style/MyPinStyle"
+        android:tint="@color/colorPrimaryGreen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.538"
@@ -82,50 +82,50 @@
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/room_1"
-        android:layout_width="22dp"
-        android:layout_height="30dp"
-        android:theme="@style/ResidentPinStyle"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:theme="@style/MyPinStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.196"
+        app:layout_constraintHorizontal_bias="0.165"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.611" />
+        app:layout_constraintVertical_bias="0.634" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/room_3"
-        android:layout_width="22dp"
-        android:layout_height="30dp"
-        android:theme="@style/ResidentPinStyle"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:theme="@style/MyPinStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.196"
+        app:layout_constraintHorizontal_bias="0.165"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.184" />
+        app:layout_constraintVertical_bias="0.181" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/room_4"
-        android:layout_width="22dp"
-        android:layout_height="30dp"
-        android:theme="@style/ResidentPinStyle"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:theme="@style/MyPinStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.829"
+        app:layout_constraintHorizontal_bias="0.863"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.255" />
+        app:layout_constraintVertical_bias="0.256" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/room_5"
-        android:layout_width="22dp"
-        android:layout_height="30dp"
-        android:theme="@style/ResidentPinStyle"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:theme="@style/MyPinStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.829"
+        app:layout_constraintHorizontal_bias="0.863"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.611" />
+        app:layout_constraintVertical_bias="0.605" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

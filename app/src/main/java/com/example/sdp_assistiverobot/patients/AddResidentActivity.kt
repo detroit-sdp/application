@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sdp_assistiverobot.R
+import com.example.sdp_assistiverobot.util.Constants.currentUser
+import com.example.sdp_assistiverobot.util.DatabaseManager
 import com.example.sdp_assistiverobot.util.Resident
 import com.example.sdp_assistiverobot.util.Util
 import com.google.firebase.firestore.FirebaseFirestore
@@ -19,6 +21,7 @@ class AddResidentActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
 
     private var state: String? = null
     private lateinit var db : FirebaseFirestore
+    private lateinit var mLocation: String
 
     private val TAG = "AddPatientActivity"
 
@@ -31,15 +34,15 @@ class AddResidentActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
 
         // Set functionalities to each components
         val states = this.resources.getStringArray(R.array.priorities)
-        priority.adapter = SpinnerArrayAdapter<String>(
+        priorityText.adapter = SpinnerArrayAdapter<String>(
             this,
             android.R.layout.simple_spinner_item,
             states.toList()
         )
             .apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
-        priority.onItemSelectedListener = this
+        priorityText.onItemSelectedListener = this
 
-
+        mLocation = intent.getIntExtra("location", 0).toString()
 //        birthday.setOnClickListener{
 //            createDatePickerDialog()
 //        }
@@ -106,14 +109,13 @@ class AddResidentActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
      * For Test
      */
     private fun createsTestUsers() {
-        for (x in 0..99) {
+        for (x in 0..4) {
             val patient = Resident(
-                "Test", "User$x", "Medium", "Bed 1 Room 315"
+                "${currentUser!!.email}","Test", "User$x", "Medium", "Room ${x+1}"
             )
-            db.collection("Residents").document().set(patient)
+            db.collection("Residents").document("$x").set(patient)
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully written!")
-//                    finish()
                 }
                 .addOnFailureListener { e ->
                     Log.w(TAG, "Error adding document", e)
@@ -131,13 +133,15 @@ class AddResidentActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         }
 
         val resident = Resident(
+            currentUser!!.email!!,
             firstText.text.toString(),
             lastText.text.toString(),
             state!!,
-            locationText.text.toString()
+            mLocation
+//            locationText.text.toString()
         )
 
-        db.collection("Residents").document().set(resident)
+        db.collection("Residents").document("${DatabaseManager.getResidents().size}").set(resident)
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully written!")
                 finish()
@@ -151,7 +155,7 @@ class AddResidentActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     private fun isEnable(enable: Boolean) {
         firstText.isEnabled = enable
         lastText.isEnabled = enable
-        location.isEnabled = enable
+//        location.isEnabled = enable
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

@@ -8,17 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="MyEditTextStyle" parent="Widget.AppCompat.EditText">
+    <style name="MyTextLayout" parent="Widget.Design.TextInputLayout">
         <item name="colorControlActivated">@color/colorPrimary</item>
-        <item name="colorControlNormal">@color/colorAccent</item>
+        <item name="colorControlHighlight">@color/colorPrimary</item>
     </style>
 
-    <style name="ResidentPinStyle" parent="Widget.AppCompat.ImageButton">
-        <item name="android:tint">@color/colorPrimary</item>
+
+    <style name="MyPinStyle" parent="Widget.AppCompat.ImageButton">
+        <item name="android:tint">@color/colorPrimaryGreen</item>
         <item name="android:backgroundTint">@color/colorTrans</item>
-        <item name="android:src">@drawable/baseline_person_pin_circle_black_36</item>
-        <item name="android:layout_gravity">center</item>
         <item name="android:colorControlHighlight">@color/colorTrans</item>
+        <item name="android:src">@drawable/baseline_add_location_black_36</item>
     </style>
 
+    <style name="MyButtonStyle" parent="Widget.MaterialComponents.Button">
+
+    </style>
 </resources>

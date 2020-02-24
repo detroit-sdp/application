@@ -42,7 +42,7 @@ class ClickDialogFragment : DialogFragment() {
         super.onStart()
         val dialog = dialog as AlertDialog
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.colorPrimaryRed))
-        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color20))
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.colorPrimaryDark))
     }
 
     interface NoticeDialogListener {

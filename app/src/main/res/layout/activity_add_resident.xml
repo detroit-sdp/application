@@ -26,49 +26,70 @@
             android:layout_gravity="center"/>
     </androidx.appcompat.widget.Toolbar>
 
-    <Spinner
-        android:id="@+id/priority"
-        style="@style/Widget.AppCompat.Spinner.DropDown.ActionBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/first" />
+<!--    <Spinner-->
+<!--        android:id="@+id/priority"-->
+<!--        style="@style/Widget.AppCompat.Spinner.Underlined"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="24dp"-->
+<!--        android:layout_marginTop="26dp"-->
+<!--        android:layout_marginEnd="24dp"-->
+<!--        android:spinnerMode="dropdown"-->
+<!--        android:textAlignment="viewStart"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/first" />-->
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/location"
+        android:id="@+id/priority"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="26dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:hint="Patient's Location"
-        app:layout_constraintTop_toBottomOf="@+id/priority">
+        android:theme="@style/MyTextLayout"
+        app:layout_constraintTop_toBottomOf="@+id/first">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/priorityText"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/MyEditTextStyle"
-            android:id="@+id/locationText"/>
+            android:layout_height="match_parent" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/location"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="24dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginEnd="24dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:theme="@style/MyTextLayout"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/priority">-->
+
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="Patient's Location"-->
+<!--            android:id="@+id/locationText"-->
+<!--            android:singleLine="true"/>-->
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginStart="32dp"
         android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/location" />
+        app:layout_constraintTop_toBottomOf="@+id/priority" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/first"
@@ -76,6 +97,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
+        android:theme="@style/MyTextLayout"
         app:layout_constraintTop_toBottomOf="@+id/add_patient_toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/last">
@@ -93,6 +115,7 @@
         android:layout_width="0dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="8dp"
+        android:theme="@style/MyTextLayout"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/first"
         app:layout_constraintTop_toBottomOf="@+id/add_patient_toolbar"

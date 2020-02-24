@@ -11,18 +11,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.sdp_assistiverobot.MainActivity
 import com.example.sdp_assistiverobot.R
+import com.example.sdp_assistiverobot.patients.AddResidentActivity
 import com.example.sdp_assistiverobot.util.Constants
 import com.example.sdp_assistiverobot.util.Constants.CHANNEL_ID
+import com.example.sdp_assistiverobot.util.DatabaseManager
 import kotlinx.android.synthetic.main.fragment_map.*
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.LinkedBlockingQueue
@@ -52,6 +51,10 @@ class MapFragment : Fragment(), ClickDialogFragment.NoticeDialogListener {
 
     private lateinit var br: NetworkBroadcastReceiver
 
+    private val LOCATION_TO_COMM: HashMap<Int, String> = hashMapOf(R.id.room_1 to "GOTO 1"
+        , R.id.room_2 to "GOTO 2", R.id.room_3 to "GOTO 3", R.id.room_4 to "GOTO 4"
+        , R.id.room_5 to "GOTO 5", R.id.charge_station to "Charging Station")
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -78,29 +81,52 @@ class MapFragment : Fragment(), ClickDialogFragment.NoticeDialogListener {
     }
 
     private fun initialiseButtons() {
-        onClick(room_1)
-        onClick(room_2)
-        onClick(room_3)
-        onClick(room_4)
-        onClick(room_5)
-        onClick(charge_station)
+        setOnClick(room_1)
+        setOnClick(room_2)
+        setOnClick(room_3)
+        setOnClick(room_4)
+        setOnClick(room_5)
+        setOnClick(charge_station)
     }
 
-    private fun onClick(button: ImageButton) {
-        button.setOnClickListener {
-            // Pop up dialog fragment
-            // Change image button size.
-            if (button.imageTintList == ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
-                || button.imageTintList == ContextCompat.getColorStateList(context!!, R.color.color5)) {
-                button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryYellow)
-                showDialog(Constants.DEMO_MAP[button.id]!!)
-            } else {
-                if (button.id == charge_station.id) {
-                    button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.color5)
-                } else {
+    private fun setOnClick(button: ImageButton) {
+
+        if (button.id != charge_station.id) {
+            val residents = DatabaseManager.getResidents()
+            for (resident in residents) {
+                if (button.id.toString() == resident.location) {
+                    button.setImageResource(R.drawable.baseline_person_pin_circle_black_36)
                     button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
+                    button.setOnClickListener {
+                        if (button.imageTintList == ContextCompat.getColorStateList(context!!, R.color.colorPrimary)) {
+                            button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryYellow)
+                            button.setImageResource(R.drawable.baseline_person_pin_circle_black_48)
+                            showDialog(LOCATION_TO_COMM[button.id]!!)
+                        } else {
+                            button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
+                            button.setImageResource(R.drawable.baseline_person_pin_circle_black_36)
+                        }
+                    }
+                    return
                 }
             }
+
+            button.setOnClickListener {
+                button.setImageResource(R.drawable.baseline_add_location_black_48)
+                startActivity(Intent(context, AddResidentActivity::class.java).apply {
+                    putExtra("location", button.id)
+                })
+            }
+        } else {
+            button.setOnClickListener {
+                if (button.imageTintList == ContextCompat.getColorStateList(context!!, R.color.colorPrimaryGreen)) {
+                    button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryYellow)
+                    showDialog(LOCATION_TO_COMM[button.id]!!)
+                } else {
+                    button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryGreen)
+                }
+            }
+
         }
     }
 
@@ -150,8 +176,9 @@ class MapFragment : Fragment(), ClickDialogFragment.NoticeDialogListener {
                     val builder = buildNotification(intent.getStringExtra("message"))
                     with(NotificationManagerCompat.from(context)) {
                         // notificationId is a unique int for each notification that you must define
-                        notify(Constants.NOTIFICATION_ID++, builder.build())
+                        notify(Constants.NOTIFICATION_ID, builder.build())
                     }
+
                 }
             }
         }

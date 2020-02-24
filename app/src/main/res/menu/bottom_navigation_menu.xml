@@ -3,26 +3,26 @@
 
     <item
         android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/dashboard_icon"
+        android:icon="@drawable/baseline_bar_chart_black_24"
         android:title="Dashboard"/>
 
     <item
-        android:id="@+id/navigation_patients"
-        android:icon="@drawable/patient_icon"
-        android:title="Residents"></item>
-
-    <item
-        android:id="@+id/navigation_calendar"
-        android:icon="@drawable/calendar_icon"
-        android:title="Calendar"></item>
-
-    <item
         android:id="@+id/navigation_map"
-        android:icon="@drawable/map_icon"
+        android:icon="@drawable/baseline_place_black_24"
         android:title="Map"></item>
 
     <item
+        android:id="@+id/navigation_calendar"
+        android:icon="@drawable/baseline_event_black_24"
+        android:title="Calendar"></item>
+
+<!--    <item-->
+<!--        android:id="@+id/navigation_patients"-->
+<!--        android:icon="@drawable/baseline_people_black_24"-->
+<!--        android:title="Residents"></item>-->
+
+    <item
         android:id="@+id/navigation_me"
-        android:icon="@drawable/settings_icon"
+        android:icon="@drawable/round_person_24"
         android:title="Me"></item>
 </menu>

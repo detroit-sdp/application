@@ -39,16 +39,5 @@ class ResidentViewActivity : AppCompatActivity() {
         //TODO: send request to Tadashi
         Toast.makeText(getApplicationContext(), "Tadashi is on the way!", Toast.LENGTH_SHORT).show()
         finish()
-//        val dashboardFragment= DashboardFragment()
-//        val fragmentManager: FragmentManager? = fragmentManager
-//        val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
-//        fragmentTransaction.replace(R.id.container, patientsFragment)
-//        fragmentTransaction.addToBackStack(null)
-//        fragmentTransaction.commit()
     }
-
-    /**
-     * Search bar on top: filter to specify the attribute for search / use special format (attribute:query) as filter
-     * Update User Info
-     */
 }
