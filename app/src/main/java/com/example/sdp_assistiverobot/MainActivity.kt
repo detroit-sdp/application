@@ -16,6 +16,9 @@ import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import com.example.sdp_assistiverobot.calendar.CalendarFragment
 import com.example.sdp_assistiverobot.dashboard.DashboardFragment
+import com.example.sdp_assistiverobot.dashboard.DashboardPrototype1Fragment
+import com.example.sdp_assistiverobot.dashboard.DashboardPrototype2Fragment
+import com.example.sdp_assistiverobot.dashboard.DashboardPrototype3Fragment
 import com.example.sdp_assistiverobot.map.MapFragment
 import com.example.sdp_assistiverobot.patients.PatientsFragment
 import com.example.sdp_assistiverobot.userpage.UserFragment
@@ -64,6 +67,9 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_dashboard -> {
                 toolbar_title.text = "Dashboard"
                 openFragment(DashboardFragment())
+//                openFragment(DashboardPrototype1Fragment())
+//                openFragment(DashboardPrototype2Fragment())
+//                openFragment(DashboardPrototype3Fragment())
             }
             R.id.navigation_patients -> {
                 toolbar_title.text = "Residents"
