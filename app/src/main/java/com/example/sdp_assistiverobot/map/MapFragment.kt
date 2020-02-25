@@ -106,7 +106,7 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
         setOnClick(room_3)
 //        setOnClick(room_4)
 //        setOnClick(room_5)
-        setOnClick(charge_station)
+//        setOnClick(charge_station)
     }
 
     private fun setOnClick(button: ImageButton) {
@@ -153,11 +153,6 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
         bundle.putString("location", location)
         dialogFragment.arguments = bundle
         dialogFragment.show(fragmentManager?.beginTransaction(), "dialog")
-    }
-
-    override fun onDialogPositiveClick(dialog: DialogFragment) {
-        val location = dialog.arguments?.getString("location") as String
-        mNetworkManager.sendCommand(location)
     }
 
     override fun onDialogNegativeClick(dialog: DialogFragment) {

@@ -31,7 +31,6 @@ class ConfirmDialogFragment : DialogFragment() {
                 .setPositiveButton("CONFIRM",
                     DialogInterface.OnClickListener { _, _ ->
                         mNetworkManager.sendCommand(location)
-                        mHost.onDialogPositiveClick(this)
                     })
                 .setNegativeButton("CANCEL",
                     DialogInterface.OnClickListener { dialog, _ ->
@@ -51,7 +50,6 @@ class ConfirmDialogFragment : DialogFragment() {
     }
 
     interface ConfirmDialogListener {
-        fun onDialogPositiveClick(dialog: DialogFragment)
         fun onDialogNegativeClick(dialog: DialogFragment)
     }
 
