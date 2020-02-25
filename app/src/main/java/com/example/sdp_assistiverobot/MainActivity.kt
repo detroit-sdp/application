@@ -84,10 +84,10 @@ class MainActivity : AppCompatActivity() {
         when (selectedId) {
             R.id.navigation_dashboard -> {
                 toolbar_title.text = "Dashboard"
-                openFragment(DashboardFragment())
+//                openFragment(DashboardFragment())
 //                openFragment(DashboardPrototype1Fragment())
 //                openFragment(DashboardPrototype2Fragment())
-//                openFragment(DashboardPrototype3Fragment())
+                openFragment(DashboardPrototype3Fragment())
             }
 //            R.id.navigation_patients -> {
 //                toolbar_title.text = "Residents"

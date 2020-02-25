@@ -11,14 +11,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.Resident
-import com.example.sdp_assistiverobot.patients.PatientViewActivity
+//import com.example.sdp_assistiverobot.Resident
+//import com.example.sdp_assistiverobot.patients.PatientViewActivity
 import com.example.sdp_assistiverobot.patients.ResidentViewActivity
 import com.example.sdp_assistiverobot.util.Resident
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_choose_patient.*
-import kotlinx.android.synthetic.main.fragment_patients.*
+//import kotlinx.android.synthetic.main.fragment_patients.*
 
 class ChooseResidentActivity : AppCompatActivity() {
 
@@ -114,7 +114,7 @@ class ChooseResidentActivity : AppCompatActivity() {
                                         viewType: Int): MyViewHolder {
             // create a new view
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.patients_list_row, parent, false)
+                .inflate(R.layout.residents_list_row, parent, false)
             // set the view's size, margins, paddings and layout parameters
             // ...
             return MyViewHolder(view)

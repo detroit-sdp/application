@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.Resident
+//import com.example.sdp_assistiverobot.Resident
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -36,9 +36,9 @@ class DashboardPrototype2Fragment : Fragment() {
     private lateinit var viewPager: ViewPager
 
     private lateinit var db: FirebaseFirestore
-    private val lowPriorResidents: ArrayList<Resident> = ArrayList()
-    private val medPriorResidents: ArrayList<Resident> = ArrayList()
-    private val highPriorResidents: ArrayList<Resident> = ArrayList()
+//    private val lowPriorResidents: ArrayList<Resident> = ArrayList()
+//    private val medPriorResidents: ArrayList<Resident> = ArrayList()
+//    private val highPriorResidents: ArrayList<Resident> = ArrayList()
 
     private var dailyVisits: IntArray = intArrayOf(0,1,5,8,3,2)
 
@@ -69,61 +69,61 @@ class DashboardPrototype2Fragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        getResidents()
+//        getResidents()
         Log.d(TAG, "Getting residents data")
         setFoodChart()
         setWaterChart()
     }
-    private fun getResidents(){
-        db = FirebaseFirestore.getInstance()
-        Log.d(TAG, "getResidents")
-        val docRef = db.collection("Residents")
-        docRef.get()
-            .addOnSuccessListener { results ->
-                for (document in results) {
-//                    Log.d(TAG, "${document.id} => ${document.data}")
-                    var first: String
-                    var last: String
-                    var priority: String
-                    var location: String
-                    document.apply {
-                        first = get("first").toString()
-                        last = get("last").toString()
-                        priority = get("priority").toString()
-                        location = get("location").toString()
-                    }
-                    val resident = Resident(
-                        first,
-                        last,
-                        priority,
-                        location
-                    )
-                    if (!isPause && pieChart1 != null) {
-                        if (resident.priority == "Low"){
-                            lowPriorResidents.add(resident)
-                            Log.d(TAG, "added low")
-                        }
-                        else if(resident.priority == "Medium"){
-                            medPriorResidents.add(resident)
-                            Log.d(TAG, "added med")
-                        }
-                        else{
-                            highPriorResidents.add(resident)
-                            Log.d(TAG, "added high")
-                        }
-                        val highPriorNum = highPriorResidents.size.toFloat()
-                        val medPriorNum = medPriorResidents.size.toFloat()
-                        val lowPriorNum = lowPriorResidents.size.toFloat()
-
-                        val residentTypesNum = arrayOf(highPriorNum, medPriorNum, lowPriorNum)
-                        pieChart1.notifyDataSetChanged()
-                    }
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "get failed with ", exception)
-            }
-    }
+//    private fun getResidents(){
+//        db = FirebaseFirestore.getInstance()
+//        Log.d(TAG, "getResidents")
+//        val docRef = db.collection("Residents")
+//        docRef.get()
+//            .addOnSuccessListener { results ->
+//                for (document in results) {
+////                    Log.d(TAG, "${document.id} => ${document.data}")
+//                    var first: String
+//                    var last: String
+//                    var priority: String
+//                    var location: String
+//                    document.apply {
+//                        first = get("first").toString()
+//                        last = get("last").toString()
+//                        priority = get("priority").toString()
+//                        location = get("location").toString()
+//                    }
+//                    val resident = Resident(
+//                        first,
+//                        last,
+//                        priority,
+//                        location
+//                    )
+//                    if (!isPause && pieChart1 != null) {
+//                        if (resident.priority == "Low"){
+//                            lowPriorResidents.add(resident)
+//                            Log.d(TAG, "added low")
+//                        }
+//                        else if(resident.priority == "Medium"){
+//                            medPriorResidents.add(resident)
+//                            Log.d(TAG, "added med")
+//                        }
+//                        else{
+//                            highPriorResidents.add(resident)
+//                            Log.d(TAG, "added high")
+//                        }
+//                        val highPriorNum = highPriorResidents.size.toFloat()
+//                        val medPriorNum = medPriorResidents.size.toFloat()
+//                        val lowPriorNum = lowPriorResidents.size.toFloat()
+//
+//                        val residentTypesNum = arrayOf(highPriorNum, medPriorNum, lowPriorNum)
+//                        pieChart1.notifyDataSetChanged()
+//                    }
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.d(TAG, "get failed with ", exception)
+//            }
+//    }
 
     private fun dailyVisitsChart(residentTypesNum: Array<Float>) {
         Log.d(TAG, "DailyVisits")
