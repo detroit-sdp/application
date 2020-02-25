@@ -24,7 +24,6 @@ class NetworkCommService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Thread(Runnable {
-            android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND)
             if (openPort()) {
                 startListen()
             }

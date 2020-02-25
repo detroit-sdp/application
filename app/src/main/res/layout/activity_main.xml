@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Dashboard"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
             tools:layout_editor_absoluteX="157dp"

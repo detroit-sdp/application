@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.util.Resident
-import com.example.sdp_assistiverobot.patients.ResidentViewActivity
+import com.example.sdp_assistiverobot.residents.ResidentViewActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_residents.*

@@ -38,10 +38,10 @@
             android:exported="true" />
 
         <activity
-            android:name=".patients.ResidentViewActivity"
+            android:name=".residents.ResidentViewActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".patients.AddResidentActivity"
+            android:name=".residents.AddResidentActivity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".login.SignupActivity"

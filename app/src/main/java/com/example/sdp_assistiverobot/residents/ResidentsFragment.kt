@@ -1,4 +1,4 @@
-package com.example.sdp_assistiverobot.patients
+package com.example.sdp_assistiverobot.residents
 
 import android.content.Intent
 import android.os.Bundle

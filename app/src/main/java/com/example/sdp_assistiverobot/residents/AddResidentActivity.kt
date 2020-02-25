@@ -1,4 +1,4 @@
-package com.example.sdp_assistiverobot.patients
+package com.example.sdp_assistiverobot.residents
 
 import android.content.Context
 import android.graphics.Color
@@ -10,18 +10,17 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.util.Constants.currentUser
-import com.example.sdp_assistiverobot.util.DatabaseManager
 import com.example.sdp_assistiverobot.util.Resident
 import com.example.sdp_assistiverobot.util.Util
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_add_resident.*
 
 
-class AddResidentActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+class AddResidentActivity : AppCompatActivity() {
 
     private var state: String? = null
+    private var location: String? = null
     private lateinit var db : FirebaseFirestore
-    private lateinit var mLocation: String
 
     private val TAG = "AddPatientActivity"
 
@@ -32,20 +31,26 @@ class AddResidentActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        // Set functionalities to each components
-        val states = this.resources.getStringArray(R.array.priorities)
+        location = intent.getStringExtra("location")
+
+        val states = resources.getStringArray(R.array.priorities)
         priorityText.adapter = SpinnerArrayAdapter<String>(
             this,
             android.R.layout.simple_spinner_item,
             states.toList()
         )
             .apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
-        priorityText.onItemSelectedListener = this
-
-        mLocation = intent.getIntExtra("location", 0).toString()
-//        birthday.setOnClickListener{
-//            createDatePickerDialog()
-//        }
+        priorityText.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                state = parent?.getItemAtPosition(position) as String
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
 
         button_save.setOnClickListener {
             uploadNewPatient()
@@ -54,28 +59,6 @@ class AddResidentActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
 
         db = FirebaseFirestore.getInstance()
     }
-
-//    private fun createDatePickerDialog() {
-//        birthday.inputType = InputType.TYPE_NULL
-//        val calendar = Calendar.getInstance()
-//        var curDay = calendar.get(Calendar.DAY_OF_MONTH)
-//        var curMonth = calendar.get(Calendar.MONTH)
-//        var curYear = calendar.get(Calendar.YEAR)
-//        DatePickerDialog(this,
-//            android.R.style.Theme_Holo_Light_Dialog,
-//            DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-//                val padMonth = "$month".padStart(2,'0')
-//                val padDay = "$dayOfMonth".padStart(2,'0')
-//                birthday.text = "$padDay/$padMonth/$year"
-//                curDay = dayOfMonth
-//                curMonth = month
-//                curYear = year
-//            }, curYear, curMonth, curDay).apply {
-//            show()
-//            this.datePicker.maxDate = System.currentTimeMillis()-1000
-//            this.datePicker.updateDate(curYear, curMonth, curDay)
-//        }
-//    }
 
     private fun validate(): Boolean {
         if (firstText.text.toString().isEmpty()) {
@@ -134,14 +117,14 @@ class AddResidentActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
 
         val resident = Resident(
             currentUser!!.email!!,
-            firstText.text.toString(),
-            lastText.text.toString(),
+            formatName(firstText.text.toString()),
+            formatName(lastText.text.toString()),
             state!!,
-            mLocation
+            location!!
 //            locationText.text.toString()
         )
 
-        db.collection("Residents").document("${DatabaseManager.getResidents().size}").set(resident)
+        db.collection("Residents").document().set(resident)
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully written!")
                 finish()
@@ -152,18 +135,14 @@ class AddResidentActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
             }
     }
 
+    private fun formatName(string: String): String {
+        return string[0].toUpperCase()+string.substring(1).toLowerCase()
+    }
+
     private fun isEnable(enable: Boolean) {
         firstText.isEnabled = enable
         lastText.isEnabled = enable
 //        location.isEnabled = enable
-    }
-
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        state = parent?.getItemAtPosition(position) as String
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-
     }
 
     // Customized spinner adapter for medical states
@@ -186,5 +165,4 @@ class AddResidentActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
             return view
         }
     }
-
 }

@@ -12,26 +12,31 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 
 import com.example.sdp_assistiverobot.R
+import com.example.sdp_assistiverobot.util.Resident
 
-class ClickDialogFragment : DialogFragment() {
+class ConfirmDialogFragment : DialogFragment() {
+
+    private val mNetworkManager = NetworkManager.getInstance()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             // Use the Builder class for convenient dialog construction
             val builder = AlertDialog.Builder(this.context!!)
             val bundle = arguments
-
+            val name = bundle?.getString("name") as String
+            val location = bundle.getString("location") as String
             val mHost = targetFragment as MapFragment
 
-            builder.setMessage("r u sure ${bundle?.getString("command")}?")
-                .setTitle("Confirmation")
+            builder.setTitle("Moving to $name?")
                 .setPositiveButton("CONFIRM",
                     DialogInterface.OnClickListener { _, _ ->
+                        mNetworkManager.sendCommand(location)
                         mHost.onDialogPositiveClick(this)
                     })
                 .setNegativeButton("CANCEL",
                     DialogInterface.OnClickListener { dialog, _ ->
-                        dialog.cancel()
+                        mHost.onDialogNegativeClick(this)
+                        dialog.dismiss()
                     })
             // Create the AlertDialog object and return it
             builder.create()
@@ -45,8 +50,9 @@ class ClickDialogFragment : DialogFragment() {
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.colorPrimaryDark))
     }
 
-    interface NoticeDialogListener {
+    interface ConfirmDialogListener {
         fun onDialogPositiveClick(dialog: DialogFragment)
+        fun onDialogNegativeClick(dialog: DialogFragment)
     }
 
 }

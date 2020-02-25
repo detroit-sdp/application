@@ -16,7 +16,6 @@ import com.example.sdp_assistiverobot.calendar.CalendarFragment
 import com.example.sdp_assistiverobot.dashboard.DashboardFragment
 import com.example.sdp_assistiverobot.map.MapFragment
 import com.example.sdp_assistiverobot.map.NetworkCommService
-import com.example.sdp_assistiverobot.patients.PatientsFragment
 import com.example.sdp_assistiverobot.userpage.UserFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
