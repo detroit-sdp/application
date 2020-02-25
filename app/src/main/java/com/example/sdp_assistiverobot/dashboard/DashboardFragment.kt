@@ -16,10 +16,6 @@ import com.github.mikephil.charting.data.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
-
-/**
- * A simple [Fragment] subclass.
- */
 class DashboardFragment : Fragment() {
 
     val TAG = "Dashboard Fragment"
