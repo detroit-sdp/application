@@ -21,7 +21,7 @@ class ResidentViewActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        setPatientInfo()
+        setResidentInfo()
 
         edit_name.setOnClickListener {
 
@@ -44,7 +44,7 @@ class ResidentViewActivity : AppCompatActivity() {
         }
     }
 
-    private fun setPatientInfo() {
+    private fun setResidentInfo() {
         location.text = "Location: ${resident.location}"
         priority.text = "Priority: ${resident.priority}"
     }

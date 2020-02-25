@@ -14,6 +14,9 @@ import com.example.sdp_assistiverobot.util.Constants
 import com.example.sdp_assistiverobot.util.DatabaseManager
 import com.example.sdp_assistiverobot.calendar.CalendarFragment
 import com.example.sdp_assistiverobot.dashboard.DashboardFragment
+import com.example.sdp_assistiverobot.dashboard.DashboardPrototype1Fragment
+import com.example.sdp_assistiverobot.dashboard.DashboardPrototype2Fragment
+import com.example.sdp_assistiverobot.dashboard.DashboardPrototype3Fragment
 import com.example.sdp_assistiverobot.map.MapFragment
 import com.example.sdp_assistiverobot.map.NetworkCommService
 import com.example.sdp_assistiverobot.userpage.UserFragment
@@ -80,7 +83,10 @@ class MainActivity : AppCompatActivity() {
         when (selectedId) {
             R.id.navigation_dashboard -> {
                 toolbar_title.text = "Dashboard"
-                openFragment(DashboardFragment())
+//                openFragment(DashboardFragment())
+//                openFragment(DashboardPrototype1Fragment())
+//                openFragment(DashboardPrototype2Fragment())
+                openFragment(DashboardPrototype3Fragment())
             }
 //            R.id.navigation_patients -> {
 //                toolbar_title.text = "Residents"

@@ -11,13 +11,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sdp_assistiverobot.R
+import com.example.sdp_assistiverobot.patients.ResidentViewActivity
 import com.example.sdp_assistiverobot.util.Resident
-import com.example.sdp_assistiverobot.residents.ResidentViewActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.fragment_residents.*
+import kotlinx.android.synthetic.main.activity_choose_patient.*
 
-class ChoosePatientActivity : AppCompatActivity() {
+class ChooseResidentActivity : AppCompatActivity() {
 
     val TAG = "Choose Resident"
     private lateinit var auth: FirebaseAuth
@@ -33,13 +33,13 @@ class ChoosePatientActivity : AppCompatActivity() {
         val currentUser = auth.currentUser
         var user_name = currentUser?.displayName
 
-        getPatients(user_name)
+        getResidents(user_name)
     }
 
-    private fun getPatients(user: String?){
+    private fun getResidents(user: String?){
         Log.d(TAG, user)
         db = FirebaseFirestore.getInstance()
-        db.collection("Patients")
+        db.collection("Residents")
             .whereEqualTo("carer", user)
             .get()
             .addOnSuccessListener { documents ->
@@ -48,31 +48,31 @@ class ChoosePatientActivity : AppCompatActivity() {
                     Log.d(TAG, "${document.id} => ${document.data}")
                     var first: String
                     var last: String
-                    var medicalState: String
+                    var priority: String
                     var location: String
                     document.apply {
                         first = get("first").toString()
                         last = get("last").toString()
-                        medicalState = get("medicalState").toString()
+                        priority = get("priority").toString()
                         location = get("location").toString()
                     }
-                    val patient = Resident(
+                    val resident = Resident(
                         first,
                         last,
-                        medicalState,
+                        priority,
                         location
                     )
-                    residents.add(patient)
+                    residents.add(resident)
                 }
 
                 Log.d(TAG, residents.toString())
 
                 if (!pauseLoad) {
                     val viewManager = LinearLayoutManager(this)
-                    val viewAdapter = MyAdapter(residents) { patient ->
-                        //Toast.makeText(this.context, "click on $patientName", Toast.LENGTH_SHORT).show()
+                    val viewAdapter = MyAdapter(residents) { resident ->
+                        //Toast.makeText(this.context, "click on $residentName", Toast.LENGTH_SHORT).show()
                         Intent(this, ResidentViewActivity::class.java).also {
-                            it.putExtra("patient", patient)
+                            it.putExtra("resident", resident)
                             startActivity(it)
                         }
                     }

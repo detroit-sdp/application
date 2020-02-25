@@ -29,7 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".dashboard.ChoosePatientActivity"
+            android:name=".dashboard.ChooseResidentActivity"
             android:parentActivityName=".MainActivity" />
 
         <service
