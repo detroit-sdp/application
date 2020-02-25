@@ -84,14 +84,11 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_dashboard -> {
                 toolbar_title.text = "Dashboard"
 //                openFragment(DashboardFragment())
-//                openFragment(DashboardPrototype1Fragment())
+                openFragment(DashboardPrototype1Fragment())
 //                openFragment(DashboardPrototype2Fragment())
-                openFragment(DashboardPrototype3Fragment())
+//                openFragment(DashboardPrototype3Fragment())
             }
-//            R.id.navigation_patients -> {
-//                toolbar_title.text = "Residents"
-//                openFragment(PatientsFragment())
-//            }
+
             R.id.navigation_calendar -> {
                 toolbar_title.text = "Calendar"
                 openFragment(CalendarFragment())
