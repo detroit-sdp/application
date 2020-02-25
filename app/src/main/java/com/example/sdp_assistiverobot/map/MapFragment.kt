@@ -1,6 +1,6 @@
 package com.example.sdp_assistiverobot.map
 
-import android.app.Dialog
+import android.app.Activity
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -35,11 +35,15 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
     private lateinit var locationsToButtons: HashMap<String, Int>
     private lateinit var buttonsToLocations: HashMap<Int, String>
 
-    private val mNetworkManager = NetworkManager.getInstance()
+    private val AVAILABLE = 0
+    private val OCCUPIED = 1
+    private val SELECTED = 2
+
+    private val SHOW_RESIDENT_PROFILE = 0
 
     private lateinit var br: NetworkBroadcastReceiver
 
-    private var clicked: Int = 0
+    private var clickedButton: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,8 +72,7 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
 
         if (savedInstanceState != null) {
             val button = view?.findViewById<ImageButton>(savedInstanceState.getInt("clicked"))
-            button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryYellow)
-            button?.setImageResource(R.drawable.baseline_person_pin_circle_black_48)
+            onOccupiedSelected(button)
         }
     }
 
@@ -85,19 +88,16 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
     private fun initialiseButtons() {
         val residents = DatabaseManager.getResidents()
         for (resident in residents) {
-            val button = activity?.findViewById<ImageButton>(locationsToButtons[resident.location]!!)!!
-            button.setImageResource(R.drawable.baseline_person_pin_circle_black_36)
-            button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
-            button.setOnClickListener {
-                if (button.imageTintList == ContextCompat.getColorStateList(context!!, R.color.colorPrimary)) {
-                    button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryYellow)
-                    button.setImageResource(R.drawable.baseline_person_pin_circle_black_48)
+            val button = findButtonByLocation(resident.location)
+            onOccupiedNormal(button)
+            button!!.setOnClickListener {
+                if (button.tag == OCCUPIED) {
+                    onOccupiedSelected(button)
                     showResidentDialog(resident)
                 } else {
-                    button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
-                    button.setImageResource(R.drawable.baseline_person_pin_circle_black_36)
+                    onOccupiedNormal(button)
                 }
-                clicked = button.id
+                clickedButton = button.id
             }
         }
 
@@ -110,27 +110,27 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
     }
 
     private fun setOnClick(button: ImageButton) {
-        if (button.imageTintList == ContextCompat.getColorStateList(context!!, R.color.colorPrimary)) {
+        if (button.tag == OCCUPIED) {
             return
         }
 
         if (button.id != charge_station.id) {
             button.setOnClickListener {
                 button.setImageResource(R.drawable.baseline_add_location_black_48)
-                startActivity(Intent(context, AddResidentActivity::class.java).apply {
+                startActivityForResult(Intent(context, AddResidentActivity::class.java).apply {
                     putExtra("location", buttonsToLocations[button.id])
-                })
-                clicked = button.id
+                },SHOW_RESIDENT_PROFILE)
+                clickedButton = button.id
             }
         } else {
             button.setOnClickListener {
-                if (button.imageTintList == ContextCompat.getColorStateList(context!!, R.color.colorPrimaryGreen)) {
+                if (button.tag == AVAILABLE) {
                     button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryYellow)
                     showAlertDialog("Charging Station", "Charging Station")
                 } else {
                     button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryGreen)
                 }
-                clicked = button.id
+                clickedButton = button.id
             }
         }
     }
@@ -155,6 +155,10 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
         dialogFragment.show(fragmentManager?.beginTransaction(), "dialog")
     }
 
+    override fun onDialogPositiveClick(dialog: DialogFragment) {
+        // Do nothing.
+    }
+
     override fun onDialogNegativeClick(dialog: DialogFragment) {
         val name = dialog.arguments?.getString("name") as String
 
@@ -162,7 +166,7 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
             charge_station.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryGreen)
         } else {
             val location = dialog.arguments?.get("location") as String
-            val button = activity?.findViewById<ImageButton>(locationsToButtons[location]!!)
+            val button = findButtonByLocation(location)
             button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
             button?.performClick()
         }
@@ -170,9 +174,8 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
 
     override fun onCloseClicked(dialog: DialogFragment) {
         val resident = dialog.arguments?.get("resident") as Resident
-        val button = activity?.findViewById<ImageButton>(locationsToButtons[resident.location]!!)
-        button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
-        button?.setImageResource(R.drawable.baseline_person_pin_circle_black_36)
+        val button = findButtonByLocation(resident.location)
+        onOccupiedNormal(button)
     }
 
     override fun onPause() {
@@ -183,9 +186,28 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt("Clicked", clicked)
+        outState.putInt("Clicked", clickedButton)
     }
 
+    private fun onOccupiedSelected(button: ImageButton?) {
+        button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryYellow)
+        button?.setImageResource(R.drawable.baseline_person_pin_circle_black_48)
+        button?.tag = SELECTED
+    }
+
+    private fun onOccupiedNormal(button: ImageButton?) {
+        button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
+        button?.setImageResource(R.drawable.baseline_person_pin_circle_black_36)
+        button?.tag = OCCUPIED
+    }
+
+    private fun findButtonByLocation(location: String?): ImageButton? {
+        return activity?.findViewById(locationsToButtons[location]!!)
+    }
+
+    /**
+     * Notifications Functions
+     */
     private fun buildNotification(message: String): NotificationCompat.Builder {
         // Create an explicit intent for an Activity in your app
         val intent = Intent(this.context, MainActivity::class.java).apply {

@@ -43,7 +43,7 @@ class PatientsFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater!!.inflate(R.menu.patients_toolbar_menu, menu)
+//        inflater!!.inflate(R.menu.patients_toolbar_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 

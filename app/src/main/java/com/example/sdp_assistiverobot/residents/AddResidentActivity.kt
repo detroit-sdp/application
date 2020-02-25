@@ -10,17 +10,20 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.util.Constants.currentUser
+import com.example.sdp_assistiverobot.util.DatabaseManager.DATABASE
 import com.example.sdp_assistiverobot.util.Resident
 import com.example.sdp_assistiverobot.util.Util
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_add_resident.*
+import com.example.sdp_assistiverobot.util.Util.formatName
+import kotlinx.android.synthetic.main.activity_add_resident.button_save
+import kotlinx.android.synthetic.main.activity_add_resident.firstText
+import kotlinx.android.synthetic.main.activity_add_resident.lastText
+import kotlinx.android.synthetic.main.activity_add_resident.priorityText
 
 
 class AddResidentActivity : AppCompatActivity() {
 
     private var state: String? = null
     private var location: String? = null
-    private lateinit var db : FirebaseFirestore
 
     private val TAG = "AddPatientActivity"
 
@@ -53,11 +56,9 @@ class AddResidentActivity : AppCompatActivity() {
         }
 
         button_save.setOnClickListener {
-            uploadNewPatient()
+            uploadNewResident()
 //            createsTestUsers()
         }
-
-        db = FirebaseFirestore.getInstance()
     }
 
     private fun validate(): Boolean {
@@ -96,7 +97,7 @@ class AddResidentActivity : AppCompatActivity() {
             val patient = Resident(
                 "${currentUser!!.email}","Test", "User$x", "Medium", "Room ${x+1}"
             )
-            db.collection("Residents").document("$x").set(patient)
+            DATABASE.collection("Residents").document().set(patient)
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully written!")
                 }
@@ -107,7 +108,7 @@ class AddResidentActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadNewPatient() {
+    private fun uploadNewResident() {
         isEnable(false)
 
         if (!validate()) {
@@ -121,10 +122,9 @@ class AddResidentActivity : AppCompatActivity() {
             formatName(lastText.text.toString()),
             state!!,
             location!!
-//            locationText.text.toString()
         )
 
-        db.collection("Residents").document().set(resident)
+        DATABASE.collection("Residents").document().set(resident)
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully written!")
                 finish()
@@ -135,14 +135,10 @@ class AddResidentActivity : AppCompatActivity() {
             }
     }
 
-    private fun formatName(string: String): String {
-        return string[0].toUpperCase()+string.substring(1).toLowerCase()
-    }
-
     private fun isEnable(enable: Boolean) {
         firstText.isEnabled = enable
         lastText.isEnabled = enable
-//        location.isEnabled = enable
+        priorityText.isEnabled = enable
     }
 
     // Customized spinner adapter for medical states

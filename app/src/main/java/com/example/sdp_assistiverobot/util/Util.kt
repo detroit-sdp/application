@@ -38,4 +38,8 @@ object Util {
         val curYear = "${getYear()}"
         return "${curDay}/${curMonth}/${curYear}"
     }
+
+    fun formatName(string: String): String {
+        return string[0].toUpperCase()+string.substring(1).toLowerCase()
+    }
 }

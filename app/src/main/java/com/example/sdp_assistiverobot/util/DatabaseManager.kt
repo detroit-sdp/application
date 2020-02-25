@@ -10,8 +10,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 object DatabaseManager {
 
     private val TAG = "DatabaseManager"
-    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    val DATABASE: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val residents: ArrayList<Resident> = ArrayList()
+    private val locationToResident = HashMap<String, Resident>()
     private lateinit var residentListener: ListenerRegistration
     private lateinit var deliveryListener: ListenerRegistration
 
@@ -23,6 +24,10 @@ object DatabaseManager {
         return residents
     }
 
+    fun getLocationToResident(): HashMap<String, Resident> {
+        return locationToResident
+    }
+
     fun initializeDB() {
         Log.w(TAG, "Set listener")
 
@@ -30,7 +35,7 @@ object DatabaseManager {
             return
         }
 
-        val query = db.collection("Residents")
+        val query = DATABASE.collection("Residents")
         residentListener = query.addSnapshotListener { snapshots, e ->
             if (e != null) {
                 Log.w(TAG, "listen:error", e)
@@ -46,6 +51,7 @@ object DatabaseManager {
                                 dc.document
                             )
                         residents.add(resident)
+                        locationToResident[resident.location] = resident
                     }
                     DocumentChange.Type.MODIFIED -> {
                         Log.d(TAG, "Modified Resident: ${dc.document.data}")
@@ -53,10 +59,13 @@ object DatabaseManager {
                             newResident(
                                 dc.document
                             )
+                        locationToResident[resident.location] = resident
                         residents[dc.oldIndex] = resident
                     }
                     DocumentChange.Type.REMOVED -> {
                         Log.d(TAG, "Removed Resident: ${dc.document.data}")
+                        val location = dc.document.get("location").toString()
+                        locationToResident.remove(location)
                         residents.removeAt(dc.oldIndex)
                     }
                 }

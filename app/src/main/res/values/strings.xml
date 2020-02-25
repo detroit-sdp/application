@@ -49,6 +49,13 @@
         <item>Low</item>
     </string-array>
 
+    <string-array name="locations">
+        <item>Location</item>
+        <item>Room 1</item>
+        <item>Room 2</item>
+        <item>Room 3</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

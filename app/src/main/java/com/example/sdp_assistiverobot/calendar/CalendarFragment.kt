@@ -40,7 +40,7 @@ class CalendarFragment : Fragment(){
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater!!.inflate(R.menu.calendar_toolbar_menu, menu)
+        inflater!!.inflate(R.menu.toolbar_menu_double, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 

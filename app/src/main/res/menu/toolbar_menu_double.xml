@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_search"
-        android:title="S"
+        android:id="@+id/action1"
+        android:title="F"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 
     <item
-        android:id="@+id/action_add"
-        android:title="A"
+        android:id="@+id/action2"
+        android:title="S"
         app:showAsAction="ifRoom|collapseActionView"/>
 </menu>

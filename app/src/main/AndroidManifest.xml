@@ -31,12 +31,12 @@
         <activity
             android:name=".dashboard.ChooseResidentActivity"
             android:parentActivityName=".MainActivity" />
-
         <service
             android:name=".map.NetworkCommService"
             android:enabled="true"
             android:exported="true" />
-
+        <activity
+            android:name=".residents.EditResidentActivity"/>
         <activity
             android:name=".residents.ResidentViewActivity"
             android:parentActivityName=".MainActivity" />

@@ -52,104 +52,38 @@
             android:id="@+id/container"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:padding="16dp"
             app:layout_constraintTop_toBottomOf="@id/divider">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="10"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="17sp"
-                    android:layout_weight="9"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:text="User Profile" />
+                android:textSize="17sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="User Profile" />
 
-                <ImageButton
-                    android:id="@+id/edit_name"
-                    android:layout_width="0dp"
-                    android:layout_height="21dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/colorTrans"
-                    android:tint="@color/colorPrimary"
-                    app:srcCompat="@drawable/baseline_edit_black_24" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                android:weightSum="10">
+                android:textSize="15sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="TextView" />
 
-                <TextView
-                    android:id="@+id/location"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="9"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:text="TextView" />
-
-                <ImageButton
-                    android:id="@+id/edit_location"
-
-                    android:layout_width="0dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/colorTrans"
-                    android:tint="@color/colorPrimary"
-                    app:srcCompat="@drawable/baseline_edit_black_24" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/priority"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:weightSum="10"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/priority"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="9"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:text="TextView" />
-
-                <ImageButton
-                    android:id="@+id/edit_priority"
-                    android:layout_width="0dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/colorTrans"
-                    android:tint="@color/colorPrimary"
-                    app:srcCompat="@drawable/baseline_edit_black_24" />
-
-            </LinearLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/send_comm"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="  send Tadashi"
-                android:textColor="@color/colorWhite"
-                app:iconTint="@color/colorWhite"
-                android:backgroundTint="@color/colorPrimary"
-                app:icon="@drawable/baseline_near_me_black_24"
-                app:iconGravity="textStart"/>
-
+                android:textSize="15sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="TextView" />
 
             <View
                 android:id="@+id/divider2"
@@ -176,19 +110,6 @@
                 android:textSize="15sp"
                 android:textColor="@color/colorPrimaryDark"
                 android:text="TextView" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/delete"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="@color/colorPrimaryRed"
-                app:iconTint="@color/colorWhite"
-                app:icon="@drawable/baseline_delete_forever_black_24"
-                app:iconGravity="textStart"
-                android:textColor="@color/colorWhite"
-                android:text="  Delete"/>
         </LinearLayout>
     </ScrollView>
 
