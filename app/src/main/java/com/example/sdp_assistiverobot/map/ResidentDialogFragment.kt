@@ -21,6 +21,7 @@ class ResidentDialogFragment : BottomSheetDialogFragment() {
 
     private lateinit var mResident: Resident
     private lateinit var mHost: MapFragment
+    private var sendClicked: Boolean = false
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -58,6 +59,7 @@ class ResidentDialogFragment : BottomSheetDialogFragment() {
 
         send_comm.setOnClickListener {
             mHost.showAlertDialog("${mResident.first} ${mResident.last}", mResident.location)
+            sendClicked = true
             dismiss()
         }
     }
@@ -68,7 +70,9 @@ class ResidentDialogFragment : BottomSheetDialogFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        mHost.onCloseClicked(this)
+        if (!sendClicked) {
+            mHost.onCloseClicked(this)
+        }
         Log.d("Dialog", "onDetach")
     }
 

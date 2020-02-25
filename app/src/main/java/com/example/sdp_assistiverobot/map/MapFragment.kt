@@ -146,10 +146,6 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
     }
 
     fun showAlertDialog(name: String, location: String) {
-        val button = activity?.findViewById<ImageButton>(locationsToButtons[location]!!)
-        button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryYellow)
-        button?.setImageResource(R.drawable.baseline_person_pin_circle_black_48)
-
         val dialogFragment = ConfirmDialogFragment()
         dialogFragment.setTargetFragment(this, 0)
         val bundle = Bundle()
@@ -161,9 +157,6 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
 
     override fun onDialogPositiveClick(dialog: DialogFragment) {
         val location = dialog.arguments?.getString("location") as String
-        val button = activity?.findViewById<ImageButton>(locationsToButtons[location]!!)
-        button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryYellow)
-        button?.setImageResource(R.drawable.baseline_person_pin_circle_black_48)
         mNetworkManager.sendCommand(location)
     }
 
@@ -173,7 +166,7 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
         if (name == "Charging Station") {
             charge_station.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryGreen)
         } else {
-            val location = dialog.arguments?.getString("location") as String
+            val location = dialog.arguments?.get("location") as String
             val button = activity?.findViewById<ImageButton>(locationsToButtons[location]!!)
             button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
             button?.performClick()
