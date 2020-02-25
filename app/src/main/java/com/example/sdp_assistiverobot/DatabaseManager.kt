@@ -2,6 +2,7 @@ package com.example.sdp_assistiverobot
 
 import android.util.Log
 import android.view.View
+import com.example.sdp_assistiverobot.util.Resident
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration

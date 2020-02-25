@@ -4,17 +4,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.Resident
-import kotlinx.android.synthetic.main.activity_patient_view.*
+import com.example.sdp_assistiverobot.util.Resident
+import kotlinx.android.synthetic.main.activity_resident_view.*
 
-class PatientViewActivity : AppCompatActivity() {
+class ResidentViewActivity : AppCompatActivity() {
 
     lateinit var resident: Resident
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_patient_view)
+        setContentView(R.layout.activity_resident_view)
 
         resident = intent.getSerializableExtra("resident") as Resident
         toolbar_title.text = "${resident.first} ${resident.last}"
@@ -40,9 +40,4 @@ class PatientViewActivity : AppCompatActivity() {
         Toast.makeText(getApplicationContext(), "Tadashi is on the way!", Toast.LENGTH_SHORT).show()
         finish()
     }
-
-    /**
-     * Search bar on top: filter to specify the attribute for search / use special format (attribute:query) as filter
-     * Update User Info
-     */
 }

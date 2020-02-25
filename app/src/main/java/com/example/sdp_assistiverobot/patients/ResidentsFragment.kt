@@ -8,11 +8,10 @@ import androidx.fragment.app.Fragment
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sdp_assistiverobot.DatabaseManager
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.fragment_patients.*
+import com.example.sdp_assistiverobot.util.DatabaseManager
+import kotlinx.android.synthetic.main.fragment_residents.*
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.Resident
+import com.example.sdp_assistiverobot.util.Resident
 
 class PatientsFragment : Fragment() {
 
@@ -28,7 +27,7 @@ class PatientsFragment : Fragment() {
         // Inflate the layout for this fragment
         mInflater = inflater
         setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.fragment_patients, container, false)
+        return inflater.inflate(R.layout.fragment_residents, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -36,7 +35,7 @@ class PatientsFragment : Fragment() {
 
         addPatient.setOnClickListener {
             // Start add patient activity
-            Intent(this.context, AddPatientActivity::class.java).also {
+            Intent(this.context, AddResidentActivity::class.java).also {
                 startActivity((it))
             }
         }
@@ -53,7 +52,7 @@ class PatientsFragment : Fragment() {
         val db = DatabaseManager.getInstance()
         val viewManager = LinearLayoutManager(this.context)
         val viewAdapter = MyAdapter(db.getResidents()) { resident ->
-            Intent(this.context, PatientViewActivity::class.java).also {
+            Intent(this.context, ResidentViewActivity::class.java).also {
                 it.putExtra("resident", resident)
                 startActivity(it)
             }
@@ -91,7 +90,7 @@ class PatientsFragment : Fragment() {
                                         viewType: Int): MyViewHolder {
             // create a new view
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.patients_list_row, parent, false)
+                .inflate(R.layout.residents_list_row, parent, false)
             // set the view's size, margins, paddings and layout parameters
             // ...
             return MyViewHolder(view)

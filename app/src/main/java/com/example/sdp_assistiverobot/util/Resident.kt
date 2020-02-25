@@ -1,9 +1,9 @@
-package com.example.sdp_assistiverobot
+package com.example.sdp_assistiverobot.util
 
 import java.io.Serializable
-import java.util.*
 
-data class Resident(val first: String,
+data class Resident(val carer: String,
+                    val first: String,
                     val last: String,
                     val priority: String,
                     val location: String = ""): Serializable {
@@ -20,6 +20,5 @@ data class Resident(val first: String,
 //
 //        return age
 //    }
-
 }
 

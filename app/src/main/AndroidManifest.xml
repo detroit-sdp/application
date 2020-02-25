@@ -31,10 +31,6 @@
         <activity
             android:name=".dashboard.ChooseResidentActivity"
             android:parentActivityName=".MainActivity" />
-        <receiver
-            android:name=".map.NetworkBroadcastReceiver"
-            android:enabled="true"
-            android:exported="true"></receiver>
 
         <service
             android:name=".map.NetworkCommService"
@@ -42,10 +38,10 @@
             android:exported="true" />
 
         <activity
-            android:name=".patients.PatientViewActivity"
+            android:name=".patients.ResidentViewActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".patients.AddPatientActivity"
+            android:name=".patients.AddResidentActivity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".login.SignupActivity"
@@ -53,7 +49,6 @@
         <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -68,6 +63,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAA5XtDe4d03DYxH1GNEWljOuwdWXsEE5Y" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

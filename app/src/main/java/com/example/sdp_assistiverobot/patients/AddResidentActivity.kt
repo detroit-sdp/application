@@ -1,48 +1,48 @@
 package com.example.sdp_assistiverobot.patients
 
-import android.app.DatePickerDialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.Resident
-import com.example.sdp_assistiverobot.Util
+import com.example.sdp_assistiverobot.util.Constants.currentUser
+import com.example.sdp_assistiverobot.util.DatabaseManager
+import com.example.sdp_assistiverobot.util.Resident
+import com.example.sdp_assistiverobot.util.Util
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_add_patient.*
-import java.util.*
+import kotlinx.android.synthetic.main.activity_add_resident.*
 
 
-class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+class AddResidentActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private var state: String? = null
     private lateinit var db : FirebaseFirestore
+    private lateinit var mLocation: String
 
     private val TAG = "AddPatientActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_patient)
+        setContentView(R.layout.activity_add_resident)
         setSupportActionBar(findViewById(R.id.add_patient_toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         // Set functionalities to each components
         val states = this.resources.getStringArray(R.array.priorities)
-        priority.adapter = SpinnerArrayAdapter<String>(
+        priorityText.adapter = SpinnerArrayAdapter<String>(
             this,
             android.R.layout.simple_spinner_item,
             states.toList()
         )
             .apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
-        priority.onItemSelectedListener = this
+        priorityText.onItemSelectedListener = this
 
-
+        mLocation = intent.getIntExtra("location", 0).toString()
 //        birthday.setOnClickListener{
 //            createDatePickerDialog()
 //        }
@@ -109,14 +109,13 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
      * For Test
      */
     private fun createsTestUsers() {
-        for (x in 0..99) {
+        for (x in 0..4) {
             val patient = Resident(
-                "Test", "User$x","Medium", "Bed 1 Room 315"
+                "${currentUser!!.email}","Test", "User$x", "Medium", "Room ${x+1}"
             )
-            db.collection("Patients").document().set(patient)
+            db.collection("Residents").document("$x").set(patient)
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully written!")
-//                    finish()
                 }
                 .addOnFailureListener { e ->
                     Log.w(TAG, "Error adding document", e)
@@ -134,13 +133,15 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
         }
 
         val resident = Resident(
+            currentUser!!.email!!,
             firstText.text.toString(),
             lastText.text.toString(),
             state!!,
-            locationText.text.toString()
+            mLocation
+//            locationText.text.toString()
         )
 
-        db.collection("Patients").document().set(resident)
+        db.collection("Residents").document("${DatabaseManager.getResidents().size}").set(resident)
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully written!")
                 finish()
@@ -154,7 +155,7 @@ class AddPatientActivity : AppCompatActivity(), AdapterView.OnItemSelectedListen
     private fun isEnable(enable: Boolean) {
         firstText.isEnabled = enable
         lastText.isEnabled = enable
-        location.isEnabled = enable
+//        location.isEnabled = enable
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

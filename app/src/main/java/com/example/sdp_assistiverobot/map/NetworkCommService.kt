@@ -1,20 +1,14 @@
 package com.example.sdp_assistiverobot.map
 
 import android.app.Service
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.IBinder
 import android.util.Log
-import kotlinx.android.synthetic.main.fragment_map.*
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.PrintWriter
-import java.lang.StringBuilder
+import com.example.sdp_assistiverobot.util.Constants
 import java.net.DatagramPacket
 import java.net.DatagramSocket
-import java.net.Socket
+import java.net.InetAddress
+
 
 class NetworkCommService : Service() {
 
@@ -29,55 +23,67 @@ class NetworkCommService : Service() {
     private lateinit var mSocket: DatagramSocket
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-
-        Log.d(TAG, "Connecting")
-
-        Thread {
-            openPort()
-            startListen()
-        }.start()
-
+        Thread(Runnable {
+            android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND)
+            if (openPort()) {
+                startListen()
+            }
+            Thread.currentThread().interrupt()
+        }).start()
         return START_STICKY
     }
 
-    private fun openPort() {
+    private fun openPort(): Boolean {
+        Log.d(TAG, "Opening port...")
         try{
             mSocket = DatagramSocket(LISTENER_PORT).also {
                 it.broadcast = true
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.d(TAG, "Port is in use")
+            return false
         }
 
+        return true
     }
 
     private fun startListen() {
-        Log.d("ListenerRunnable", "Start Listening...")
+        Log.d(TAG, "Start Listening...")
 
         val buffer = ByteArray(1024)
         val packet = DatagramPacket(buffer, buffer.size)
         while (true) {
             try {
-                if(Thread.interrupted()) {
+                if(Thread.interrupted() && !mSocket.isClosed) {
+                    Log.d(TAG, "Listener thread interrupted")
                     mSocket.close()
                     return
                 }
                 mSocket.receive(packet)
+
                 if (packet.data != null) {
-//                    mTask.setInBuffer(buffer.data)
-                    val inMessage = String(packet.data, 0, packet.length)
-                    Log.d(TAG, inMessage)
-                    sendBroadcast(Intent().apply {
-                        action = "com.example.sdp_assistiverobot.getMessage"
-                        putExtra("message", inMessage)
-                    })
-//                    mTask.handleReceiveState(DATA_RECEIVED)
+                    handleReceivedMessage(packet)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-//                mTask.handleReceiveState(LISTEN_FAILURE)
+                mSocket.close()
+                return
             }
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mSocket.close()
+        Log.d(TAG, "Service destroyed")
+    }
+
+    private fun handleReceivedMessage(packet: DatagramPacket) {
+        val inMessage = String(packet.data, 0, packet.length)
+
+        sendBroadcast(Intent().apply {
+            action = Constants.ACTION_NETWORK_RECEIVE
+            putExtra("message", "$inMessage from ${packet.address}")
+        })
+    }
 }

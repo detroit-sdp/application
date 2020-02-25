@@ -13,8 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.Resident
 import com.example.sdp_assistiverobot.patients.PatientViewActivity
+import com.example.sdp_assistiverobot.patients.ResidentViewActivity
+import com.example.sdp_assistiverobot.util.Resident
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_choose_patient.*
 import kotlinx.android.synthetic.main.fragment_patients.*
 
 class ChooseResidentActivity : AppCompatActivity() {
@@ -71,7 +74,7 @@ class ChooseResidentActivity : AppCompatActivity() {
                     val viewManager = LinearLayoutManager(this)
                     val viewAdapter = MyAdapter(residents) { resident ->
                         //Toast.makeText(this.context, "click on $residentName", Toast.LENGTH_SHORT).show()
-                        Intent(this, PatientViewActivity::class.java).also {
+                        Intent(this, ResidentViewActivity::class.java).also {
                             it.putExtra("resident", resident)
                             startActivity(it)
                         }

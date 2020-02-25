@@ -1,56 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
-    xmlns:tools = "http://schemas.android.com/tools"
-    android:layout_width = "match_parent"
-    android:layout_height = "match_parent"
-    android:layout_margin = "16dp"
-    android:background="@drawable/map_demo_room"
-    tools:context = ".MainActivity">
-    <EditText
-        android:id = "@+id/etIP"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:hint = "IP-Address"
-        android:inputType = "text" />
-    <Button
-        android:id = "@+id/btnConnect"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:layout_below = "@+id/etIP"
-        android:layout_gravity = "center"
-        android:layout_marginTop = "16dp"
-        android:text = "Connect To Server" />
-    <TextView
-        android:id = "@+id/tvMessages"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:layout_above = "@+id/etMessage"
-        android:layout_below = "@+id/btnConnect"
-        android:inputType = "textMultiLine"
-        android:textAppearance = "@style/Base.TextAppearance.AppCompat.Medium" />
-    <EditText
-        android:id = "@+id/etMessage"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:layout_above = "@+id/btnSend"
-        android:hint = "Enter Message"
-        android:inputType = "text" />
-    <Button
-        android:id = "@+id/btnSend"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:layout_alignParentBottom = "true"
-        android:text = "SEND" />
-</RelativeLayout>
-
-<!--<androidx.constraintlayout.widget.ConstraintLayout-->
-<!--    xmlns:android = "http://schemas.android.com/apk/res/android"-->
+<!--<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"-->
 <!--    xmlns:tools = "http://schemas.android.com/tools"-->
 <!--    android:layout_width = "match_parent"-->
 <!--    android:layout_height = "match_parent"-->
-
+<!--    android:layout_margin = "16dp"-->
 <!--    android:background="@drawable/map_demo_room"-->
 <!--    tools:context = ".MainActivity">-->
+<!--    <EditText-->
+<!--        android:id = "@+id/etIP"-->
+<!--        android:layout_width = "match_parent"-->
+<!--        android:layout_height = "wrap_content"-->
+<!--        android:hint = "IP-Address"-->
+<!--        android:inputType = "text" />-->
+<!--    <Button-->
+<!--        android:id = "@+id/btnConnect"-->
+<!--        android:layout_width = "match_parent"-->
+<!--        android:layout_height = "wrap_content"-->
+<!--        android:layout_below = "@+id/etIP"-->
+<!--        android:layout_gravity = "center"-->
+<!--        android:layout_marginTop = "16dp"-->
+<!--        android:text = "Connect To Server" />-->
+<!--    <TextView-->
+<!--        android:id = "@+id/tvMessages"-->
+<!--        android:layout_width = "match_parent"-->
+<!--        android:layout_height = "wrap_content"-->
+<!--        android:layout_above = "@+id/etMessage"-->
+<!--        android:layout_below = "@+id/btnConnect"-->
+<!--        android:inputType = "textMultiLine"-->
+<!--        android:textAppearance = "@style/Base.TextAppearance.AppCompat.Medium" />-->
+<!--    <EditText-->
+<!--        android:id = "@+id/etMessage"-->
+<!--        android:layout_width = "match_parent"-->
+<!--        android:layout_height = "wrap_content"-->
+<!--        android:layout_above = "@+id/btnSend"-->
+<!--        android:hint = "Enter Message"-->
+<!--        android:inputType = "text" />-->
+<!--    <Button-->
+<!--        android:id = "@+id/btnSend"-->
+<!--        android:layout_width = "match_parent"-->
+<!--        android:layout_height = "wrap_content"-->
+<!--        android:layout_alignParentBottom = "true"-->
+<!--        android:text = "SEND" />-->
+<!--</RelativeLayout>-->
 
-<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+<!-- Use icons to create a un-interactive map -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android = "http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools = "http://schemas.android.com/tools"
+    android:layout_width = "match_parent"
+    android:layout_height = "match_parent"
+    android:background="@drawable/map_demo_room"
+    tools:context = ".MainActivity">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/room_2"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:theme="@style/MyPinStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.165"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.374" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/charge_station"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_ev_station_black_48"
+        android:theme="@style/MyPinStyle"
+        android:tint="@color/colorPrimaryGreen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.538"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.951" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/room_1"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:theme="@style/MyPinStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.165"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.634" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/room_3"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:theme="@style/MyPinStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.165"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.181" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/room_4"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:theme="@style/MyPinStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.863"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.256" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/room_5"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:theme="@style/MyPinStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.863"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.605" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
