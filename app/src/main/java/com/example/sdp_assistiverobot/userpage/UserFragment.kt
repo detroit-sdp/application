@@ -35,6 +35,12 @@ class UserFragment : Fragment() {
         user_email.text = currentUser?.email
         user_phone.text = currentUser?.phoneNumber
 
+        user_name.setOnClickListener {
+//            Intent(this.context, ChangeNameActivity::class.java).also {
+//                startActivity((it))
+//            }
+            updateName()
+        }
         user_email.setOnClickListener {
             updateEmail()
         }
@@ -45,7 +51,21 @@ class UserFragment : Fragment() {
             signOut()
         }
     }
-    
+
+    private fun updateName() {
+        val user = FirebaseAuth.getInstance().currentUser
+
+        val profileUpdates = UserProfileChangeRequest.Builder()
+            .setDisplayName("Test User")
+            .build()
+
+        user?.updateProfile(profileUpdates)
+            ?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this.context, "Name updated", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
     private fun updateEmail() {
         // TODO
     }
