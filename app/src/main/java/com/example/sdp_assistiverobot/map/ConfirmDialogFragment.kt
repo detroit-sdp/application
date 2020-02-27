@@ -25,19 +25,16 @@ class ConfirmDialogFragment : DialogFragment() {
             val bundle = arguments
             val name = bundle?.getString("name") as String
             val location = bundle.getString("location") as String
-            val mHost = targetFragment as MapFragment?
+            val mHost = targetFragment as MapFragment
 
             builder.setTitle("Moving to $name?")
                 .setPositiveButton("CONFIRM",
                     DialogInterface.OnClickListener { _, _ ->
                         mNetworkManager.sendCommand(location)
-                        if (mHost == null) {
-                            listener.onDialogPositiveClick(this)
-                        }
                     })
                 .setNegativeButton("CANCEL",
                     DialogInterface.OnClickListener { dialog, _ ->
-                        mHost?.onDialogNegativeClick(this)
+                        mHost.onDialogNegativeClick(this)
                         dialog.dismiss()
                     })
             // Create the AlertDialog object and return it
@@ -57,16 +54,16 @@ class ConfirmDialogFragment : DialogFragment() {
         fun onDialogNegativeClick(dialog: DialogFragment)
     }
 
-    internal lateinit var listener: ConfirmDialogListener
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        // Verify that the host activity implements the callback interface
-        try {
-            // Instantiate the NoticeDialogListener so we can send events to the host
-            listener = context as ConfirmDialogListener
-        } catch (e: ClassCastException) {
-            // Drop it silently because it is also called by fragment
-        }
-    }
+//    internal lateinit var listener: ConfirmDialogListener
+//    override fun onAttach(context: Context?) {
+//        super.onAttach(context)
+//        // Verify that the host activity implements the callback interface
+//        try {
+//            // Instantiate the NoticeDialogListener so we can send events to the host
+//            listener = context as ConfirmDialogListener
+//        } catch (e: ClassCastException) {
+//            // Drop it silently because it is also called by fragment
+//        }
+//    }
 
 }

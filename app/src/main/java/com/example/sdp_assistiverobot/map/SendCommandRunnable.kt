@@ -1,8 +1,9 @@
 package com.example.sdp_assistiverobot.map
 
+import android.content.Intent
 import android.os.Process.THREAD_PRIORITY_BACKGROUND
-import android.provider.ContactsContract
 import android.util.Log
+import com.example.sdp_assistiverobot.util.Constants
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -37,7 +38,7 @@ class SendCommandRunnable(private val message: String): Runnable {
             socket.send(outPackage)
             socket.close()
             Log.d(TAG, "Send success")
-//            mTask.handleSendState(SEND_SUCCEED)
+
         } catch (e: Exception) {
             e.printStackTrace()
 //            mTask.handleSendState(SEND_FAILURE)

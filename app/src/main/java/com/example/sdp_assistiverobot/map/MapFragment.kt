@@ -90,6 +90,10 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
         for (resident in residents) {
             val button = findButtonByLocation(resident.location)
             onOccupiedNormal(button)
+            if (button?.tag == SELECTED) {
+                onOccupiedSelected(button)
+            }
+
             button!!.setOnClickListener {
                 if (button.tag == OCCUPIED) {
                     onOccupiedSelected(button)
@@ -232,6 +236,14 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
                     // Push message to chat frame
                     Log.d(TAG, "Income Message: ${intent.getStringExtra("message")}")
 
+                    val builder = buildNotification(intent.getStringExtra("message"))
+                    with(NotificationManagerCompat.from(context)) {
+                        // notificationId is a unique int for each notification that you must define
+                        notify(Constants.NOTIFICATION_ID, builder.build())
+                    }
+                }
+                Constants.ACTION_NETWORK_SEND_SUCCESS -> {
+                    // Push message to chat frame
                     val builder = buildNotification(intent.getStringExtra("message"))
                     with(NotificationManagerCompat.from(context)) {
                         // notificationId is a unique int for each notification that you must define

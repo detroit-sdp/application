@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.example.sdp_assistiverobot.R
@@ -46,9 +47,9 @@ class ResidentViewActivity : AppCompatActivity(), ConfirmDialogFragment.ConfirmD
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action0 -> {
-                startActivityForResult(Intent(this, EditResidentActivity::class.java).apply {
-                    putExtra("resident", resident)
-                }, EDIT_PROFILE)
+//                startActivityForResult(Intent(this, EditResidentActivity::class.java).apply {
+//                    putExtra("resident", resident)
+//                }, EDIT_PROFILE)
                 true
             }
             else -> super.onOptionsItemSelected(item)
