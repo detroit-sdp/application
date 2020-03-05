@@ -116,7 +116,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_weight="1"
         android:layout_gravity="center"
-        android:foregroundTint="@color/colorPrimary"/>
+        android:defaultFocusHighlightEnabled="true" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/events_container"

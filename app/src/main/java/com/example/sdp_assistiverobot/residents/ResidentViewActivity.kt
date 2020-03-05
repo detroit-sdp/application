@@ -1,21 +1,16 @@
 package com.example.sdp_assistiverobot.residents
 
 import android.app.Activity
-import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.map.ConfirmDialogFragment
-import com.example.sdp_assistiverobot.map.NetworkManager
-import com.example.sdp_assistiverobot.map.SendCommandRunnable
-import com.example.sdp_assistiverobot.util.Resident
 import kotlinx.android.synthetic.main.activity_resident_view.*
 
 class ResidentViewActivity : AppCompatActivity(), ConfirmDialogFragment.ConfirmDialogListener {
@@ -74,7 +69,7 @@ class ResidentViewActivity : AppCompatActivity(), ConfirmDialogFragment.ConfirmD
         priority.text = "Priority: ${resident.priority}"
     }
 
-    override fun onDialogPositiveClick(dialog: DialogFragment) {
+    override fun onDialogPositiveClick(location: String) {
         Log.d(TAG, "activity result received")
         setResult(Activity.RESULT_OK, Intent().putExtra("location", resident.location))
         finish()

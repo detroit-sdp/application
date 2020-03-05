@@ -15,12 +15,10 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.util.Constants.currentUser
 import com.example.sdp_assistiverobot.util.DatabaseManager
 import com.example.sdp_assistiverobot.util.DatabaseManager.DATABASE
-import com.example.sdp_assistiverobot.util.Resident
 import com.example.sdp_assistiverobot.util.Util
 import com.example.sdp_assistiverobot.util.Util.formatName
 import kotlinx.android.synthetic.main.activity_edit_resident.*

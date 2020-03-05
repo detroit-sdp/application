@@ -1,17 +1,20 @@
 package com.example.sdp_assistiverobot.map
 
-import android.app.Activity
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageButton
+import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -23,8 +26,15 @@ import com.example.sdp_assistiverobot.residents.AddResidentActivity
 import com.example.sdp_assistiverobot.util.Constants
 import com.example.sdp_assistiverobot.util.Constants.CHANNEL_ID
 import com.example.sdp_assistiverobot.util.DatabaseManager
-import com.example.sdp_assistiverobot.util.Resident
+import com.example.sdp_assistiverobot.residents.Resident
 import kotlinx.android.synthetic.main.fragment_map.*
+import java.net.DatagramPacket
+import java.net.DatagramSocket
+import java.net.InetAddress
+import java.util.concurrent.BlockingQueue
+import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 
 
 class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
@@ -74,6 +84,8 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
             val button = view?.findViewById<ImageButton>(savedInstanceState.getInt("clicked"))
             onOccupiedSelected(button)
         }
+
+        progressBar.visibility = ProgressBar.GONE
     }
 
     override fun onResume() {
@@ -139,9 +151,8 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
         }
     }
 
-    private lateinit var residentDialogFragment: DialogFragment
     private fun showResidentDialog(resident: Resident) {
-        residentDialogFragment = ResidentDialogFragment()
+        val residentDialogFragment = ResidentDialogFragment()
         residentDialogFragment.setTargetFragment(this, 0)
         val bundle = Bundle()
         bundle.putSerializable("resident", resident)
@@ -159,8 +170,10 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
         dialogFragment.show(fragmentManager?.beginTransaction(), "dialog")
     }
 
-    override fun onDialogPositiveClick(dialog: DialogFragment) {
-        // Do nothing.
+    override fun onDialogPositiveClick(location: String) {
+//        NetworkManager.sendCommand(location, progressBar, findButtonByLocation(location))
+        val task = NetworkAsyncTask()
+        task.executeOnExecutor(networkThreadPool, location)
     }
 
     override fun onDialogNegativeClick(dialog: DialogFragment) {
@@ -249,6 +262,93 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
                         // notificationId is a unique int for each notification that you must define
                         notify(Constants.NOTIFICATION_ID, builder.build())
                     }
+                }
+            }
+        }
+    }
+
+
+    /**
+     * AsyncTask class
+     */
+    private val networkWorkQueue: BlockingQueue<Runnable> = LinkedBlockingQueue<Runnable>()
+    // Check how many processors on the machine
+    private val NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors()
+    // Sets the amount of time an idle thread waits before terminating
+    private val KEEP_ALIVE_TIME = 1L
+    // Sets the Time Unit to seconds
+    private val KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS
+    // Creates a thread pool manager
+    private val networkThreadPool: ThreadPoolExecutor = ThreadPoolExecutor(
+        NUMBER_OF_CORES,       // Initial pool size
+        NUMBER_OF_CORES,       // Max pool size
+        KEEP_ALIVE_TIME,
+        KEEP_ALIVE_TIME_UNIT,
+        networkWorkQueue
+    )
+
+    inner class NetworkAsyncTask: AsyncTask<String, Void, Int>() {
+        private val TAG = "SendMessageRunnable"
+        private val IP_ADDRESS = "172.21.3.60"
+        private val PORT = 20001
+
+        private val SEND_SUCCESS = 0
+        private val SEND_FAIL = -1
+        private lateinit var location: String
+
+        private val locationToComms: HashMap<String, String> = hashMapOf(
+            "Room 1" to "GOTO 3",
+            "Room 2" to "GOTO 3",
+            "Room 3" to "GOTO 3")
+
+        private val LIFT_UP = 0
+        private val LIFT_DOWN = 1
+
+        override fun doInBackground(vararg params: String): Int {
+            val socket: DatagramSocket
+            location = params[0]
+            val message = locationToComms[location]
+            try {
+                Log.d(TAG, "Sending $message to $IP_ADDRESS:$PORT")
+
+                if(Thread.interrupted()) {
+                    return SEND_FAIL
+                }
+                socket = DatagramSocket().also {
+                    it.broadcast = true
+                }
+
+                val out = message!!.toByteArray()
+                val outPackage = DatagramPacket(out, out.size, InetAddress.getByName(IP_ADDRESS), PORT)
+                if(Thread.interrupted()){
+                    return SEND_FAIL
+                }
+                socket.send(outPackage)
+                socket.close()
+                Log.d(TAG, "Send success")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return SEND_FAIL
+            }
+            return SEND_SUCCESS
+        }
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+            progressBar.visibility = ProgressBar.VISIBLE
+            activity?.window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        }
+
+        override fun onPostExecute(result: Int) {
+            super.onPostExecute(result)
+            progressBar.visibility = ProgressBar.GONE
+            activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            when (result) {
+                SEND_FAIL -> {
+                    val button = findButtonByLocation(location)
+                    onOccupiedNormal(button)
+                    Toast.makeText(context, "Send failed", Toast.LENGTH_LONG).show()
                 }
             }
         }

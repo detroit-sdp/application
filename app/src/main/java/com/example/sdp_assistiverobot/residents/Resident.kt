@@ -1,4 +1,4 @@
-package com.example.sdp_assistiverobot.util
+package com.example.sdp_assistiverobot.residents
 
 import java.io.Serializable
 

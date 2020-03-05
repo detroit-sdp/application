@@ -12,7 +12,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.util.Resident
 
 class ConfirmDialogFragment : DialogFragment() {
 
@@ -30,7 +29,7 @@ class ConfirmDialogFragment : DialogFragment() {
             builder.setTitle("Moving to $name?")
                 .setPositiveButton("CONFIRM",
                     DialogInterface.OnClickListener { _, _ ->
-                        mNetworkManager.sendCommand(location)
+                        mHost.onDialogPositiveClick(location)
                     })
                 .setNegativeButton("CANCEL",
                     DialogInterface.OnClickListener { dialog, _ ->
@@ -50,7 +49,7 @@ class ConfirmDialogFragment : DialogFragment() {
     }
 
     interface ConfirmDialogListener {
-        fun onDialogPositiveClick(dialog: DialogFragment)
+        fun onDialogPositiveClick(location: String)
         fun onDialogNegativeClick(dialog: DialogFragment)
     }
 

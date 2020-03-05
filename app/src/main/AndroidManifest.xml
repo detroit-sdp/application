@@ -28,15 +28,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".calendar.AddEventActivity"></activity>
         <activity
             android:name=".dashboard.ChooseResidentActivity"
             android:parentActivityName=".MainActivity" />
+
         <service
             android:name=".map.NetworkCommService"
             android:enabled="true"
             android:exported="true" />
-        <activity
-            android:name=".residents.EditResidentActivity"/>
+
+        <activity android:name=".residents.EditResidentActivity" />
         <activity
             android:name=".residents.ResidentViewActivity"
             android:parentActivityName=".MainActivity" />
@@ -49,6 +51,7 @@
         <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

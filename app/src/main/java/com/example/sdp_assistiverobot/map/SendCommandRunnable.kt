@@ -1,19 +1,22 @@
 package com.example.sdp_assistiverobot.map
 
-import android.content.Intent
+import android.os.Handler
 import android.os.Process.THREAD_PRIORITY_BACKGROUND
 import android.util.Log
-import com.example.sdp_assistiverobot.util.Constants
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 
-class SendCommandRunnable(private val message: String): Runnable {
+class SendCommandRunnable(private val mHandler: Handler, private val message: String): Runnable {
 
     private val TAG = "SendMessageRunnable"
     lateinit var mThread: Thread
     private val IP_ADDRESS = "192.168.105.172"
     private val PORT = 20001
+
+    private val SEND_START = 0
+    private val SEND_SUCCESS = 1
+    private val SEND_FAIL = -1
 
     override fun run() {
         android.os.Process.setThreadPriority(THREAD_PRIORITY_BACKGROUND)
@@ -22,8 +25,10 @@ class SendCommandRunnable(private val message: String): Runnable {
         val socket: DatagramSocket
         try {
             Log.d(TAG, "Sending $message to $IP_ADDRESS:$PORT")
+            NetworkManager.handleState(SEND_START)
 
             if(Thread.interrupted()) {
+                NetworkManager.handleState(SEND_FAIL)
                 return
             }
             socket = DatagramSocket().also {
@@ -33,15 +38,16 @@ class SendCommandRunnable(private val message: String): Runnable {
             val out = message.toByteArray()
             val outPackage = DatagramPacket(out, out.size, InetAddress.getByName(IP_ADDRESS), PORT)
             if(Thread.interrupted()){
+                NetworkManager.handleState(SEND_FAIL)
                 return
             }
             socket.send(outPackage)
             socket.close()
             Log.d(TAG, "Send success")
-
+            NetworkManager.handleState(SEND_SUCCESS)
         } catch (e: Exception) {
             e.printStackTrace()
-//            mTask.handleSendState(SEND_FAILURE)
+            NetworkManager.handleState(SEND_FAIL)
         }
     }
 }

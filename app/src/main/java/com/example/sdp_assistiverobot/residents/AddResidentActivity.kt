@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.util.Constants.currentUser
 import com.example.sdp_assistiverobot.util.DatabaseManager.DATABASE
-import com.example.sdp_assistiverobot.util.Resident
 import com.example.sdp_assistiverobot.util.Util
 import com.example.sdp_assistiverobot.util.Util.formatName
 import kotlinx.android.synthetic.main.activity_add_resident.button_save
@@ -95,7 +94,7 @@ class AddResidentActivity : AppCompatActivity() {
     private fun createsTestUsers() {
         for (x in 0..4) {
             val patient = Resident(
-                "${currentUser!!.email}","Test", "User$x", "Medium", "Room ${x+1}"
+                "${currentUser!!.email}", "Test", "User$x", "Medium", "Room ${x + 1}"
             )
             DATABASE.collection("Residents").document().set(patient)
                 .addOnSuccessListener {

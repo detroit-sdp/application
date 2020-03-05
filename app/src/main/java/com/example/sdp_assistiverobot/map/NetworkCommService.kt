@@ -16,6 +16,12 @@ class NetworkCommService : Service() {
 
     private val LISTENER_PORT = 20002
 
+    private val IN_ROOM = 0
+    private val MOVING = 1
+    private val DELIVERED = 2
+    private val STUCK = 3
+    private val LOW_BATTERY = 4
+
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }

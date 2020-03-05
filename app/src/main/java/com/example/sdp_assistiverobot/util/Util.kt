@@ -3,6 +3,7 @@ package com.example.sdp_assistiverobot.util
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import java.text.SimpleDateFormat
 import java.util.*
 
 object Util {
@@ -41,5 +42,16 @@ object Util {
 
     fun formatName(string: String): String {
         return string[0].toUpperCase()+string.substring(1).toLowerCase()
+    }
+
+    fun convertDateToLong(time: String): Long {
+        val df = SimpleDateFormat("yyyy.MM.dd")
+        return df.parse(time).time
+    }
+
+    fun convertLongToDate(time: Long): String {
+        val date = Date(time)
+        val format = SimpleDateFormat("yyyy.MM.dd")
+        return format.format(date)
     }
 }

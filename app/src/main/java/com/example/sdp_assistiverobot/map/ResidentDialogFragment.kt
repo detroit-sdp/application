@@ -9,12 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.ImageButton
 import androidx.fragment.app.DialogFragment
 
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.residents.ResidentViewActivity
-import com.example.sdp_assistiverobot.util.Resident
+import com.example.sdp_assistiverobot.residents.Resident
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_resident_dialog.*
 
