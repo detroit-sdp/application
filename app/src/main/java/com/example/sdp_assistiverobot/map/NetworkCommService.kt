@@ -1,8 +1,13 @@
 package com.example.sdp_assistiverobot.map
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
+import android.net.wifi.WifiManager
 import android.os.IBinder
+import android.os.SystemClock
 import android.util.Log
 import com.example.sdp_assistiverobot.util.Constants
 import java.net.DatagramPacket
@@ -77,12 +82,6 @@ class NetworkCommService : Service() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mSocket.close()
-        Log.d(TAG, "Service destroyed")
-    }
-
     private fun handleReceivedMessage(packet: DatagramPacket) {
         val inMessage = String(packet.data, 0, packet.length)
 
@@ -90,5 +89,20 @@ class NetworkCommService : Service() {
             action = Constants.ACTION_NETWORK_RECEIVE
             putExtra("message", "$inMessage from ${packet.address}")
         })
+    }
+
+    override fun onDestroy() {
+        onTaskRemoved(null)
+        super.onDestroy()
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        val restartIntent = Intent(applicationContext, this.javaClass)
+        val restartServicePI = PendingIntent.getService(applicationContext, 1
+            , restartIntent, PendingIntent.FLAG_ONE_SHOT)
+
+        val alarmService = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), restartServicePI)
+        super.onTaskRemoved(rootIntent)
     }
 }

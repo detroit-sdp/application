@@ -56,7 +56,7 @@ class CalendarFragment : Fragment(){
         return when (item?.itemId) {
             R.id.action2 -> {
                 activity?.startActivity(Intent(this.context, AddEventActivity::class.java).apply {
-                    putExtra("date","$selectedYear.${selectedMonth + 1}.$selectedDay")
+                    putExtra("date","$selectedYear.${selectedMonth}.$selectedDay")
                 })
                 true
             }
@@ -71,11 +71,6 @@ class CalendarFragment : Fragment(){
 
     }
 
-    private fun createEvents(): Boolean {
-        Toast.makeText(this.context, "Creating events", Toast.LENGTH_SHORT).show()
-        return true
-    }
-
     private class MyAdapter constructor(val myDataset: ArrayList<Event>, val clickListener: (Event) -> Unit) :
         RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
@@ -85,7 +80,6 @@ class CalendarFragment : Fragment(){
         // Each data item is just a string in this case that is shown in a TextView.
         class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val name: TextView = view.findViewById(R.id.line_view)
-
         }
 
         // Create new views (invoked by the layout manager)

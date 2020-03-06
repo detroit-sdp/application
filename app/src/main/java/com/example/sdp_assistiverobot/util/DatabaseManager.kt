@@ -12,11 +12,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 object DatabaseManager {
 
     private val TAG = "DatabaseManager"
+
     val DATABASE: FirebaseFirestore = FirebaseFirestore.getInstance()
-    val AuthUser = FirebaseAuth.getInstance().currentUser
-    private val residents: ArrayList<Resident> = ArrayList()
+    val AuthUser = FirebaseAuth.getInstance().currentUser!!
+    val residentsRef = DATABASE.collection("Residents")
+    val eventsRef = DATABASE.collection("Users").document(AuthUser.email!!).collection("Events")
+
+    private val residents = ArrayList<Resident>()
     private val events = ArrayList<Event>()
-    private val locationToResident = HashMap<String, Resident>()
     private lateinit var residentListener: ListenerRegistration
     private lateinit var eventsListener: ListenerRegistration
 
@@ -35,8 +38,7 @@ object DatabaseManager {
             return
         }
 
-        val residentRf = DATABASE.collection("Residents")
-        residentListener = residentRf.addSnapshotListener { snapshots, e ->
+        residentListener = residentsRef.addSnapshotListener { snapshots, e ->
             if (e != null) {
                 Log.w(TAG, "listen:error", e)
                 return@addSnapshotListener
@@ -51,7 +53,6 @@ object DatabaseManager {
                                 dc.document
                             )
                         residents.add(resident)
-                        locationToResident[resident.location] = resident
                     }
                     DocumentChange.Type.MODIFIED -> {
                         Log.d(TAG, "Modified Resident: ${dc.document.data}")
@@ -59,20 +60,18 @@ object DatabaseManager {
                             newResident(
                                 dc.document
                             )
-                        locationToResident[resident.location] = resident
                         residents[dc.oldIndex] = resident
                     }
                     DocumentChange.Type.REMOVED -> {
                         Log.d(TAG, "Removed Resident: ${dc.document.data}")
                         val location = dc.document.get("location").toString()
-                        locationToResident.remove(location)
                         residents.removeAt(dc.oldIndex)
                     }
                 }
             }
         }
 
-        val eventQuery = DATABASE.collection("Events").whereEqualTo(AuthUser!!.email.toString(),true)
+        val eventQuery = DATABASE.collection("Events").whereEqualTo(AuthUser.email.toString(),true)
         eventsListener = eventQuery.addSnapshotListener{ snapshots, e ->
             if (e != null) {
                 Log.w(TAG, "listen:error", e)
@@ -95,7 +94,6 @@ object DatabaseManager {
                             newResident(
                                 dc.document
                             )
-                        locationToResident[resident.location] = resident
                         residents[dc.oldIndex] = resident
                     }
                     DocumentChange.Type.REMOVED -> {
@@ -107,8 +105,9 @@ object DatabaseManager {
         }
     }
 
-    fun detachListener() {
+    fun detachListeners() {
         residentListener.remove()
+        eventsListener.remove()
     }
 
     private fun newResident(document: QueryDocumentSnapshot): Resident {
@@ -134,22 +133,22 @@ object DatabaseManager {
     }
 
     private fun newEvent(document: QueryDocumentSnapshot): Event {
-        var date: String
-        var resident: String
+        var date: Long
+        var resident: Resident
         var minute: Int
         val hour: Int
 
         document.apply {
-            date = get("date").toString()
+            date = get("date") as Long
             minute = get("minute") as Int
             hour = get("hour") as Int
-            resident = get("resident").toString()
+            resident = get("resident") as Resident
         }
         return Event(
             date,
             hour,
             minute,
-            locationToResident[resident]!!
+            resident
         )
     }
 

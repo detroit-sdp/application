@@ -5,19 +5,23 @@ import android.content.Context
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.text.Editable
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.util.DatabaseManager
 import com.example.sdp_assistiverobot.residents.Resident
+import com.example.sdp_assistiverobot.util.Util.convertDateToLong
 import kotlinx.android.synthetic.main.activity_add_event.*
 import java.util.*
 import kotlin.collections.ArrayList
 
 class AddEventActivity : AppCompatActivity() {
 
+    private val db = DatabaseManager.DATABASE
     private val residents = DatabaseManager.getResidents()
     private lateinit var resident: Resident
     private lateinit var date: String
@@ -25,22 +29,30 @@ class AddEventActivity : AppCompatActivity() {
     private var mHour = calendar.get(Calendar.HOUR_OF_DAY)
     private var mMinute = calendar.get(Calendar.MINUTE)
 
+    private val TAG = "AddEventActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_event)
+        setSupportActionBar(add_event_toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         isEnable(true)
 
         date = intent.getStringExtra("date")
+        val hourString = "$mHour".padStart(2,'0')
+        timeText.text = "Start Time: $hourString:$mMinute"
 
         initialiseSpinner()
 
-        time.setOnClickListener {
+        timeText.setOnClickListener {
             showTimePicker()
         }
 
         button_save.setOnClickListener {
-
+            isEnable(false)
+            addNewEvent()
         }
     }
 
@@ -68,14 +80,12 @@ class AddEventActivity : AppCompatActivity() {
     }
 
     private fun showTimePicker() {
-
-
-
         val timePickerDialog = TimePickerDialog(this, object: TimePickerDialog.OnTimeSetListener {
             override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
                 mHour = hourOfDay
                 mMinute = minute
-                timeText.text = "$hourOfDay:$minute" as Editable
+                val hourString = "$hourOfDay".padStart(2, '0')
+                timeText.text = "Start Time: $hourString:$minute"
             }
         }, mHour, mMinute, true)
 
@@ -106,20 +116,31 @@ class AddEventActivity : AppCompatActivity() {
             return false
         }
 
-
         return true
     }
 
     private fun addNewEvent() {
         if (!validate()) {
+            isEnable(true)
             return
         }
 
-        val event = Event(date,
+        val event = Event(convertDateToLong(date),
             mHour,
             mMinute,
             resident,
             noteText.text.toString())
+
+        db.collection("Events").document(DatabaseManager.AuthUser!!.email!!)
+            .set(event)
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully written!")
+                finish()
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error writing document", e)
+                isEnable(true)
+            }
     }
 
     private class SpinnerArrayAdapter<String>(context: Context, resource: Int,

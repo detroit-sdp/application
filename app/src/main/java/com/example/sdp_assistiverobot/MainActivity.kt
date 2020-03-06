@@ -13,10 +13,7 @@ import androidx.fragment.app.Fragment
 import com.example.sdp_assistiverobot.util.Constants
 import com.example.sdp_assistiverobot.util.DatabaseManager
 import com.example.sdp_assistiverobot.calendar.CalendarFragment
-import com.example.sdp_assistiverobot.dashboard.DashboardFragment
 import com.example.sdp_assistiverobot.dashboard.DashboardPrototype1Fragment
-import com.example.sdp_assistiverobot.dashboard.DashboardPrototype2Fragment
-import com.example.sdp_assistiverobot.dashboard.DashboardPrototype3Fragment
 import com.example.sdp_assistiverobot.map.MapFragment
 import com.example.sdp_assistiverobot.map.NetworkCommService
 import com.example.sdp_assistiverobot.userpage.UserFragment
@@ -141,7 +138,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        db.detachListener()
+        db.detachListeners()
     }
 
     override fun onResume() {

@@ -9,7 +9,7 @@
     tools:context=".calendar.AddEventActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/add_patient_toolbar"
+        android:id="@+id/add_event_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:elevation="4dp"
@@ -35,16 +35,18 @@
         android:layout_marginEnd="24dp"
         android:layout_marginTop="16dp"
         android:clickable="true"
-        android:focusable="true"
-        android:theme="@style/MyTextLayout">
+        android:focusable="true">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <TextView
             android:id="@+id/timeText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:editable="false"
             android:paddingStart="12dp"
-            android:hint="Time"
+            android:text="Start Time"
+            android:textColor="@color/colorPrimary"
+            android:clickable="true"
+            android:focusable="true"
             android:textSize="16sp"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>

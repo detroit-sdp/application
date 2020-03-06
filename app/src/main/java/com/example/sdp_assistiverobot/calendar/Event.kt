@@ -2,7 +2,7 @@ package com.example.sdp_assistiverobot.calendar
 
 import com.example.sdp_assistiverobot.residents.Resident
 
-data class Event(val date: String,
+data class Event(val date: Long,
                  val hour: Int,
                  val minute: Int,
                  val resident: Resident,
