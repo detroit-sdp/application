@@ -15,13 +15,14 @@ import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.util.DatabaseManager
 import com.example.sdp_assistiverobot.residents.Resident
 import com.example.sdp_assistiverobot.util.Util.convertDateToLong
+import com.example.sdp_assistiverobot.util.Util.generateEventId
 import kotlinx.android.synthetic.main.activity_add_event.*
 import java.util.*
 import kotlin.collections.ArrayList
 
 class AddEventActivity : AppCompatActivity() {
 
-    private val db = DatabaseManager.DATABASE
+    private val db = DatabaseManager.eventsRef
     private val residents = DatabaseManager.getResidents()
     private lateinit var resident: Resident
     private lateinit var date: String
@@ -128,10 +129,10 @@ class AddEventActivity : AppCompatActivity() {
         val event = Event(convertDateToLong(date),
             mHour,
             mMinute,
-            resident,
+            resident.location,
             noteText.text.toString())
 
-        db.collection("Events").document(DatabaseManager.AuthUser!!.email!!)
+        db.document(generateEventId("$date $mHour:$mMinute"))
             .set(event)
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully written!")

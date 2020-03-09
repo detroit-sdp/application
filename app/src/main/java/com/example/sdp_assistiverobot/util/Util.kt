@@ -54,4 +54,9 @@ object Util {
         val format = SimpleDateFormat("yyyy.MM.dd")
         return format.format(date)
     }
+
+    fun generateEventId(time: String): String {
+        val df = SimpleDateFormat("yyyy.MM.dd HH:mm")
+        return df.parse(time).time.toString()
+    }
 }

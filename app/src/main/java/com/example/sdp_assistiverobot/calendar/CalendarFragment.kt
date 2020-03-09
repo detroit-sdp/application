@@ -9,16 +9,15 @@ import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sdp_assistiverobot.R
+import com.example.sdp_assistiverobot.util.DatabaseManager
 import com.example.sdp_assistiverobot.util.Util
 import com.example.sdp_assistiverobot.util.Util.convertDateToLong
 import kotlinx.android.synthetic.main.activity_add_event.*
 import kotlinx.android.synthetic.main.fragment_calendar.*
 
-/**
- *
- */
 class CalendarFragment : Fragment(){
 
     private var selectedDay = Util.getDayOfMonth()
@@ -36,14 +35,13 @@ class CalendarFragment : Fragment(){
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        showEvents(convertDateToLong("$selectedYear.$selectedMonth.$selectedDay"))
         calendarView.setOnDateChangeListener{_, year, month, day ->
-            Toast.makeText(this.context, "$year.${month+1}.$day", Toast.LENGTH_SHORT).show()
             selectedDay = day
             selectedMonth = month + 1
             selectedYear = year
 
-            showEvents(convertDateToLong("$year.${month+1}.$day"))
+            showEvents(convertDateToLong("$selectedYear.$selectedMonth.$selectedDay"))
         }
     }
 
@@ -68,10 +66,31 @@ class CalendarFragment : Fragment(){
     }
 
     private fun showEvents(date: Long) {
+        val events = DatabaseManager.getEvents()
 
+        val todayEventsList = ArrayList<Event>()
+        for (event in events) {
+            if (event.date == date) {
+                todayEventsList.add(event)
+            }
+        }
+
+        val viewManager = LinearLayoutManager(this.context)
+        val viewAdapter = MyAdapter(todayEventsList) {event ->
+            Intent(this.context, EventViewActivity::class.java).also {
+                it.putExtra("resident", event)
+                startActivity(it)
+            }
+        }
+
+        events_container.apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
     }
 
-    private class MyAdapter constructor(val myDataset: ArrayList<Event>, val clickListener: (Event) -> Unit) :
+    private class MyAdapter constructor(val myDataset: List<Event>, val clickListener: (Event) -> Unit) :
         RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
         // Provide a reference to the views for each data item
@@ -97,7 +116,7 @@ class CalendarFragment : Fragment(){
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-            holder.name.text
+            holder.name.text = "${myDataset[position].location}"
             holder.itemView.setOnClickListener {
                 clickListener(myDataset[position])
             }

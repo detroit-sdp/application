@@ -31,6 +31,10 @@ object DatabaseManager {
         return residents
     }
 
+    fun getEvents(): List<Event> {
+        return events
+    }
+
     fun initializeDB() {
         Log.w(TAG, "Set listener")
 
@@ -71,8 +75,7 @@ object DatabaseManager {
             }
         }
 
-        val eventQuery = DATABASE.collection("Events").whereEqualTo(AuthUser.email.toString(),true)
-        eventsListener = eventQuery.addSnapshotListener{ snapshots, e ->
+        eventsListener = eventsRef.addSnapshotListener{ snapshots, e ->
             if (e != null) {
                 Log.w(TAG, "listen:error", e)
                 return@addSnapshotListener
@@ -134,21 +137,24 @@ object DatabaseManager {
 
     private fun newEvent(document: QueryDocumentSnapshot): Event {
         var date: Long
-        var resident: Resident
+        var resident: String
         var minute: Int
         val hour: Int
+        val note: String
 
         document.apply {
             date = get("date") as Long
-            minute = get("minute") as Int
-            hour = get("hour") as Int
-            resident = get("resident") as Resident
+            minute = getLong("minute")!!.toInt()
+            hour = getLong("hour")!!.toInt()
+            resident = get("location").toString()
+            note = get("note").toString()
         }
         return Event(
             date,
             hour,
             minute,
-            resident
+            resident,
+            note
         )
     }
 
