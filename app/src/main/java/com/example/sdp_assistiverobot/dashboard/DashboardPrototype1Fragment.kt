@@ -38,7 +38,7 @@ class DashboardPrototype1Fragment : Fragment() {
     private val foodDeliveries: IntArray = intArrayOf(10,20,30,2,30,20,foodDelivery)
 
     private var waterDelivery = 0
-    private val waterDeliveries: IntArray = intArrayOf(40,6,50,40,50,60,foodDelivery)
+    private val waterDeliveries: IntArray = intArrayOf(40,6,50,40,50,60,waterDelivery)
 
     private var isPause = false
 
@@ -114,10 +114,6 @@ class DashboardPrototype1Fragment : Fragment() {
 //            }
 //    }
 
-    private fun dailyVisitsChart(residentTypesNum: Array<Float>) {
-        Log.d(TAG, "DailyVisits")
-
-    }
 
     private fun setDailyVisitChart(){
         //Horizontal bar chart for daily visits for each patient

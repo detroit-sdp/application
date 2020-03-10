@@ -41,6 +41,11 @@ class UserFragment : Fragment() {
         user_phone.setOnClickListener {
             updatePhoneNo()
         }
+        changePassword.setOnClickListener{
+            Intent(this.context, ChangePasswordActivity::class.java).also {
+                startActivity(it)
+            }
+        }
         logout.setOnClickListener {
             signOut()
         }
