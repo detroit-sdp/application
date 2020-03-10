@@ -11,14 +11,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sdp_assistiverobot.R
-//import com.example.sdp_assistiverobot.Resident
-//import com.example.sdp_assistiverobot.patients.PatientViewActivity
-import com.example.sdp_assistiverobot.patients.ResidentViewActivity
+import com.example.sdp_assistiverobot.residents.ResidentViewActivity
 import com.example.sdp_assistiverobot.util.Resident
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_choose_patient.*
-//import kotlinx.android.synthetic.main.fragment_patients.*
 
 class ChooseResidentActivity : AppCompatActivity() {
 
@@ -34,7 +31,7 @@ class ChooseResidentActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         val currentUser = auth.currentUser
-        var user_name = currentUser?.displayName
+        val user_name = currentUser?.displayName
 
         getResidents(user_name)
     }

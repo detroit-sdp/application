@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".map.ResidentDialogFragment">
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:paddingStart="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="36dp"
+        app:layout_constraintTop_toBottomOf="@id/divider">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:weightSum="10"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/colorTrans"
+                android:tint="@color/colorPrimary"
+                app:srcCompat="@drawable/baseline_close_black_24"/>
+
+            <androidx.legacy.widget.Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"/>
+
+            <ImageButton
+                android:id="@+id/full_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:layout_gravity="right"
+                android:backgroundTint="@color/colorTrans"
+                android:tint="@color/colorPrimary"
+                app:srcCompat="@drawable/baseline_expand_less_black_36" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="20sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="User Profile" />
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15sp"
+            android:layout_marginTop="16dp"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/priority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15sp"
+            android:layout_marginTop="16dp"
+            android:text="TextView" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/send_comm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="  send tadashi"
+            android:textColor="@color/colorWhite"
+            app:iconTint="@color/colorWhite"
+            android:backgroundTint="@color/colorPrimary"
+            app:icon="@drawable/baseline_near_me_black_24"
+            app:iconGravity="textStart"/>
+    </LinearLayout>
+</FrameLayout>

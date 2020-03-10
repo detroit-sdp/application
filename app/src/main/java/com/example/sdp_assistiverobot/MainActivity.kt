@@ -19,7 +19,6 @@ import com.example.sdp_assistiverobot.dashboard.DashboardPrototype2Fragment
 import com.example.sdp_assistiverobot.dashboard.DashboardPrototype3Fragment
 import com.example.sdp_assistiverobot.map.MapFragment
 import com.example.sdp_assistiverobot.map.NetworkCommService
-import com.example.sdp_assistiverobot.patients.PatientsFragment
 import com.example.sdp_assistiverobot.userpage.UserFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -89,10 +88,7 @@ class MainActivity : AppCompatActivity() {
 //                openFragment(DashboardPrototype2Fragment())
 //                openFragment(DashboardPrototype3Fragment())
             }
-//            R.id.navigation_patients -> {
-//                toolbar_title.text = "Residents"
-//                openFragment(PatientsFragment())
-//            }
+
             R.id.navigation_calendar -> {
                 toolbar_title.text = "Calendar"
                 openFragment(CalendarFragment())
