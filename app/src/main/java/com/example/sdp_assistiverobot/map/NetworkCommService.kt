@@ -1,18 +1,20 @@
 package com.example.sdp_assistiverobot.map
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.net.wifi.WifiManager
+import android.content.ServiceConnection
+import android.os.Build
 import android.os.IBinder
-import android.os.SystemClock
+import android.os.RemoteException
 import android.util.Log
+import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import com.example.sdp_assistiverobot.MainActivity
 import com.example.sdp_assistiverobot.util.Constants
 import java.net.DatagramPacket
 import java.net.DatagramSocket
-import java.net.InetAddress
 
 
 class NetworkCommService : Service() {
@@ -27,13 +29,70 @@ class NetworkCommService : Service() {
     private val STUCK = 3
     private val LOW_BATTERY = 4
 
+    private val CHANNEL_ID = "TadashiNetworkService"
+
+    private val connection = object: ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val iGuardServices = IGuardServices.Stub.asInterface(service)
+            try {
+                Log.i(TAG, "connected with " + iGuardServices.getServiceName())
+            } catch (e: RemoteException) {
+                e.printStackTrace()
+            }
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            startService(Intent(this@NetworkCommService, GuardService::class.java))
+            bindService(Intent(this@NetworkCommService, GuardService::class.java), this, Context.BIND_IMPORTANT)
+        }
+    }
+
     override fun onBind(intent: Intent?): IBinder? {
-        return null
+        return object: IGuardServices.Stub() {
+            override fun getServiceName(): String {
+                return "NetworkCommService"
+            }
+        }
     }
 
     private lateinit var mSocket: DatagramSocket
 
+    override fun onCreate() {
+        super.onCreate()
+        Log.d(TAG, "Service onCreate")
+//        val restartIntent = Intent(applicationContext, this.javaClass)
+//        val restartServicePI = PendingIntent.getService(applicationContext, 1
+//            , restartIntent, PendingIntent.FLAG_ONE_SHOT)
+//
+//        val alarmService = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        val now = System.currentTimeMillis()
+//        alarmService.setInexactRepeating(AlarmManager.RTC_WAKEUP, now, 5000, restartServicePI)
+//        alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), restartServicePI)
+
+//        buildNotification()
+    }
+
+    private fun buildNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val serviceChannel = NotificationChannel(CHANNEL_ID, "Tadashi Network Service", NotificationManager.IMPORTANCE_HIGH)
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(serviceChannel)
+        }
+
+        val notificationIntent = Intent(this, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0)
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("Tadashi Robot Status")
+            .setContentText("Running")
+            .setContentIntent(pendingIntent)
+            .build()
+
+        startForeground(1, notification)
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Toast.makeText(applicationContext, "Service started", Toast.LENGTH_SHORT).show()
+        bindService(Intent(this@NetworkCommService, GuardService::class.java), connection, Context.BIND_IMPORTANT)
         Thread(Runnable {
             if (openPort()) {
                 startListen()
@@ -93,16 +152,13 @@ class NetworkCommService : Service() {
 
     override fun onDestroy() {
         onTaskRemoved(null)
+        Log.d(TAG, "Service onDestroy")
         super.onDestroy()
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
-        val restartIntent = Intent(applicationContext, this.javaClass)
-        val restartServicePI = PendingIntent.getService(applicationContext, 1
-            , restartIntent, PendingIntent.FLAG_ONE_SHOT)
-
-        val alarmService = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), restartServicePI)
+        Log.d(TAG, "Service onTaskRemoved")
+        Toast.makeText(applicationContext, "Service killed", Toast.LENGTH_SHORT).show()
         super.onTaskRemoved(rootIntent)
     }
 }

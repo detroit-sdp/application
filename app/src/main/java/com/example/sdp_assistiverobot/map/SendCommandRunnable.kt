@@ -1,13 +1,12 @@
 package com.example.sdp_assistiverobot.map
 
-import android.os.Handler
 import android.os.Process.THREAD_PRIORITY_BACKGROUND
 import android.util.Log
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 
-class SendCommandRunnable(private val mHandler: Handler, private val message: String): Runnable {
+class SendCommandRunnable(private val message: String): Runnable {
 
     private val TAG = "SendMessageRunnable"
     lateinit var mThread: Thread
@@ -16,7 +15,7 @@ class SendCommandRunnable(private val mHandler: Handler, private val message: St
 
     private val SEND_START = 0
     private val SEND_SUCCESS = 1
-    private val SEND_FAIL = -1
+    private val SEND_FAILURE = -1
 
     override fun run() {
         android.os.Process.setThreadPriority(THREAD_PRIORITY_BACKGROUND)
@@ -28,7 +27,7 @@ class SendCommandRunnable(private val mHandler: Handler, private val message: St
             NetworkManager.handleState(SEND_START)
 
             if(Thread.interrupted()) {
-                NetworkManager.handleState(SEND_FAIL)
+                NetworkManager.handleState(SEND_FAILURE)
                 return
             }
             socket = DatagramSocket().also {
@@ -38,7 +37,7 @@ class SendCommandRunnable(private val mHandler: Handler, private val message: St
             val out = message.toByteArray()
             val outPackage = DatagramPacket(out, out.size, InetAddress.getByName(IP_ADDRESS), PORT)
             if(Thread.interrupted()){
-                NetworkManager.handleState(SEND_FAIL)
+                NetworkManager.handleState(SEND_FAILURE)
                 return
             }
             socket.send(outPackage)
@@ -47,7 +46,7 @@ class SendCommandRunnable(private val mHandler: Handler, private val message: St
             NetworkManager.handleState(SEND_SUCCESS)
         } catch (e: Exception) {
             e.printStackTrace()
-            NetworkManager.handleState(SEND_FAIL)
+            NetworkManager.handleState(SEND_FAILURE)
         }
     }
 }

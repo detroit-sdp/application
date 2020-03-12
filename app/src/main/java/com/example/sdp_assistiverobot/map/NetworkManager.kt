@@ -71,16 +71,9 @@ object NetworkManager {
         return mInstance
     }
 
-    fun sendCommand(location: String, progressBar: ProgressBar, button: ImageButton?) {
-//        networkThreadPool.execute(SendCommandRunnable(locationToComms[location]!!))
-        mProgressBar = progressBar
-        mButton = button
+    fun sendCommand(location: String) {
+        networkThreadPool.execute(SendCommandRunnable(locationToComms[location]!!))
     }
-
-    fun setContext(context: Context) {
-        mContext = context
-    }
-
 
     fun handleState(state: Int) {
         handler.obtainMessage(state)?.apply {

@@ -14,6 +14,7 @@ import com.example.sdp_assistiverobot.util.Constants
 import com.example.sdp_assistiverobot.util.DatabaseManager
 import com.example.sdp_assistiverobot.calendar.CalendarFragment
 import com.example.sdp_assistiverobot.dashboard.DashboardPrototype1Fragment
+import com.example.sdp_assistiverobot.map.GuardService
 import com.example.sdp_assistiverobot.map.MapFragment
 import com.example.sdp_assistiverobot.map.NetworkCommService
 import com.example.sdp_assistiverobot.userpage.UserFragment
@@ -61,8 +62,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Start listener port for receiving UDP packet.
-        val serviceIntent = Intent(this, NetworkCommService::class.java)
+        val serviceIntent = Intent(this.baseContext, GuardService::class.java)
         startService(serviceIntent)
+    }
+
+    private fun startRecursiveNetworkService() {
+
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {

@@ -93,11 +93,11 @@ object DatabaseManager {
                     }
                     DocumentChange.Type.MODIFIED -> {
                         Log.d(TAG, "Modified Resident: ${dc.document.data}")
-                        val resident =
-                            newResident(
+                        val event =
+                            newEvent(
                                 dc.document
                             )
-                        residents[dc.oldIndex] = resident
+                        events[dc.oldIndex] = event
                     }
                     DocumentChange.Type.REMOVED -> {
                         Log.d(TAG, "Removed Event: ${dc.document.data}")
@@ -110,7 +110,7 @@ object DatabaseManager {
 
     fun detachListeners() {
         residentListener.remove()
-        eventsListener.remove()
+//        eventsListener.remove()
     }
 
     private fun newResident(document: QueryDocumentSnapshot): Resident {
@@ -135,7 +135,7 @@ object DatabaseManager {
         )
     }
 
-    private fun newEvent(document: QueryDocumentSnapshot): Event {
+    fun newEvent(document: QueryDocumentSnapshot): Event {
         var date: Long
         var resident: String
         var minute: Int

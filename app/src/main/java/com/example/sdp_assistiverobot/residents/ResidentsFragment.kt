@@ -80,7 +80,7 @@ class PatientsFragment : Fragment() {
         // you provide access to all the views for a data item in a view holder.
         // Each data item is just a string in this case that is shown in a TextView.
         class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val name: TextView = view.findViewById(R.id.line_view)
+//            val name: TextView = view.findViewById(R.id.line_view)
 
         }
 
@@ -99,7 +99,7 @@ class PatientsFragment : Fragment() {
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-            holder.name.text = "${myDataset[position].first} ${myDataset[position].last}"
+//            holder.name.text = "${myDataset[position].first} ${myDataset[position].last}"
             holder.itemView.setOnClickListener {
                 clickListener(myDataset[position])
             }

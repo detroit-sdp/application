@@ -171,9 +171,9 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
     }
 
     override fun onDialogPositiveClick(location: String) {
-//        NetworkManager.sendCommand(location, progressBar, findButtonByLocation(location))
-        val task = NetworkAsyncTask()
-        task.executeOnExecutor(networkThreadPool, location)
+        NetworkManager.sendCommand(location)
+//        val task = NetworkAsyncTask()
+//        task.executeOnExecutor(networkThreadPool, location)
     }
 
     override fun onDialogNegativeClick(dialog: DialogFragment) {
