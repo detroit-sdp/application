@@ -2,8 +2,6 @@ package com.example.sdp_assistiverobot.calendar
 
 
 import android.content.Intent
-import android.database.DatabaseErrorHandler
-import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.view.*

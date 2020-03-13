@@ -36,25 +36,23 @@ object NetworkManager {
     private val SEND_SUCCESS = 1
     private val SEND_FAIL = -1
 
-    private val handler: Handler = object: Handler(Looper.getMainLooper()) {
-
-        override fun handleMessage(msg: Message?) {
-            when (msg?.what) {
-                SEND_START -> {
-                    mProgressBar.visibility = ProgressBar.VISIBLE
-                }
-                SEND_SUCCESS -> {
-                    mProgressBar.visibility = ProgressBar.GONE
-                }
-                SEND_FAIL -> {
-                    mButton?.imageTintList = ContextCompat.getColorStateList(mContext, R.color.colorPrimary)
-                    mButton?.setImageResource(R.drawable.baseline_person_pin_circle_black_36)
-                    mButton?.tag = 1
-                }
-            }
-        }
-
-    }
+//    private val handler: Handler = object: Handler(Looper.getMainLooper()) {
+//        override fun handleMessage(msg: Message?) {
+//            when (msg?.what) {
+//                SEND_START -> {
+//                    mProgressBar.visibility = ProgressBar.VISIBLE
+//                }
+//                SEND_SUCCESS -> {
+//                    mProgressBar.visibility = ProgressBar.GONE
+//                }
+//                SEND_FAIL -> {
+//                    mButton?.imageTintList = ContextCompat.getColorStateList(mContext, R.color.colorPrimary)
+//                    mButton?.setImageResource(R.drawable.baseline_person_pin_circle_black_36)
+//                    mButton?.tag = 1
+//                }
+//            }
+//        }
+//    }
 
     private val locationToComms: HashMap<String, String> = hashMapOf(
         "Room 1" to "GOTO 3",
@@ -76,8 +74,8 @@ object NetworkManager {
     }
 
     fun handleState(state: Int) {
-        handler.obtainMessage(state)?.apply {
-            sendToTarget()
-        }
+//        handler.obtainMessage(state)?.apply {
+//            sendToTarget()
+//        }
     }
 }

@@ -142,7 +142,7 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
             button.setOnClickListener {
                 if (button.tag == AVAILABLE) {
                     button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryYellow)
-                    showAlertDialog("Charging Station", "Charging Station")
+                    showAlertDialog("Charging Station", "Charging Station", "High")
                 } else {
                     button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryGreen)
                 }
@@ -160,17 +160,18 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
         residentDialogFragment.show(fragmentManager?.beginTransaction(), "dialog")
     }
 
-    fun showAlertDialog(name: String, location: String) {
+    fun showAlertDialog(name: String, location: String, priority: String) {
         val dialogFragment = ConfirmDialogFragment()
         dialogFragment.setTargetFragment(this, 0)
         val bundle = Bundle()
         bundle.putString("name", name)
         bundle.putString("location", location)
+        bundle.putString("priority", priority)
         dialogFragment.arguments = bundle
         dialogFragment.show(fragmentManager?.beginTransaction(), "dialog")
     }
 
-    override fun onDialogPositiveClick(location: String) {
+    override fun onDialogPositiveClick(location: String, priority: String) {
         NetworkManager.sendCommand(location)
 //        val task = NetworkAsyncTask()
 //        task.executeOnExecutor(networkThreadPool, location)
@@ -248,6 +249,7 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
                 Constants.ACTION_NETWORK_RECEIVE -> {
                     // Push message to chat frame
                     Log.d(TAG, "Income Message: ${intent.getStringExtra("message")}")
+                    Toast.makeText(context, "${intent.getStringExtra("message")}", Toast.LENGTH_LONG).show()
 
                     val builder = buildNotification(intent.getStringExtra("message"))
                     with(NotificationManagerCompat.from(context)) {
@@ -268,89 +270,89 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
     }
 
 
-    /**
-     * AsyncTask class
-     */
-    private val networkWorkQueue: BlockingQueue<Runnable> = LinkedBlockingQueue<Runnable>()
-    // Check how many processors on the machine
-    private val NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors()
-    // Sets the amount of time an idle thread waits before terminating
-    private val KEEP_ALIVE_TIME = 1L
-    // Sets the Time Unit to seconds
-    private val KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS
-    // Creates a thread pool manager
-    private val networkThreadPool: ThreadPoolExecutor = ThreadPoolExecutor(
-        NUMBER_OF_CORES,       // Initial pool size
-        NUMBER_OF_CORES,       // Max pool size
-        KEEP_ALIVE_TIME,
-        KEEP_ALIVE_TIME_UNIT,
-        networkWorkQueue
-    )
-
-    inner class NetworkAsyncTask: AsyncTask<String, Void, Int>() {
-        private val TAG = "SendMessageRunnable"
-        private val IP_ADDRESS = "172.21.3.60"
-        private val PORT = 20001
-
-        private val SEND_SUCCESS = 0
-        private val SEND_FAIL = -1
-        private lateinit var location: String
-
-        private val locationToComms: HashMap<String, String> = hashMapOf(
-            "Room 1" to "GOTO 3",
-            "Room 2" to "GOTO 3",
-            "Room 3" to "GOTO 3")
-
-        private val LIFT_UP = 0
-        private val LIFT_DOWN = 1
-
-        override fun doInBackground(vararg params: String): Int {
-            val socket: DatagramSocket
-            location = params[0]
-            val message = locationToComms[location]
-            try {
-                Log.d(TAG, "Sending $message to $IP_ADDRESS:$PORT")
-
-                if(Thread.interrupted()) {
-                    return SEND_FAIL
-                }
-                socket = DatagramSocket().also {
-                    it.broadcast = true
-                }
-
-                val out = message!!.toByteArray()
-                val outPackage = DatagramPacket(out, out.size, InetAddress.getByName(IP_ADDRESS), PORT)
-                if(Thread.interrupted()){
-                    return SEND_FAIL
-                }
-                socket.send(outPackage)
-                socket.close()
-                Log.d(TAG, "Send success")
-            } catch (e: Exception) {
-                e.printStackTrace()
-                return SEND_FAIL
-            }
-            return SEND_SUCCESS
-        }
-
-        override fun onPreExecute() {
-            super.onPreExecute()
-            progressBar.visibility = ProgressBar.VISIBLE
-            activity?.window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-        }
-
-        override fun onPostExecute(result: Int) {
-            super.onPostExecute(result)
-            progressBar.visibility = ProgressBar.GONE
-            activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-            when (result) {
-                SEND_FAIL -> {
-                    val button = findButtonByLocation(location)
-                    onOccupiedNormal(button)
-                    Toast.makeText(context, "Send failed", Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-    }
+//    /**
+//     * AsyncTask class
+//     */
+//    private val networkWorkQueue: BlockingQueue<Runnable> = LinkedBlockingQueue<Runnable>()
+//    // Check how many processors on the machine
+//    private val NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors()
+//    // Sets the amount of time an idle thread waits before terminating
+//    private val KEEP_ALIVE_TIME = 1L
+//    // Sets the Time Unit to seconds
+//    private val KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS
+//    // Creates a thread pool manager
+//    private val networkThreadPool: ThreadPoolExecutor = ThreadPoolExecutor(
+//        NUMBER_OF_CORES,       // Initial pool size
+//        NUMBER_OF_CORES,       // Max pool size
+//        KEEP_ALIVE_TIME,
+//        KEEP_ALIVE_TIME_UNIT,
+//        networkWorkQueue
+//    )
+//
+//    inner class NetworkAsyncTask: AsyncTask<String, Void, Int>() {
+//        private val TAG = "SendMessageRunnable"
+//        private val IP_ADDRESS = "192.168.105.172"
+//        private val PORT = 20001
+//
+//        private val SEND_SUCCESS = 0
+//        private val SEND_FAIL = -1
+//        private lateinit var location: String
+//
+//        private val locationToComms: HashMap<String, String> = hashMapOf(
+//            "Room 1" to "GOTO 3",
+//            "Room 2" to "GOTO 3",
+//            "Room 3" to "GOTO 3")
+//
+//        private val LIFT_UP = 0
+//        private val LIFT_DOWN = 1
+//
+//        override fun doInBackground(vararg params: String): Int {
+//            val socket: DatagramSocket
+//            location = params[0]
+//            val message = locationToComms[location]
+//            try {
+//                Log.d(TAG, "Sending $message to $IP_ADDRESS:$PORT")
+//
+//                if(Thread.interrupted()) {
+//                    return SEND_FAIL
+//                }
+//                socket = DatagramSocket().also {
+//                    it.broadcast = true
+//                }
+//
+//                val out = message!!.toByteArray()
+//                val outPackage = DatagramPacket(out, out.size, InetAddress.getByName(IP_ADDRESS), PORT)
+//                if(Thread.interrupted()){
+//                    return SEND_FAIL
+//                }
+//                socket.send(outPackage)
+//                socket.close()
+//                Log.d(TAG, "Send success")
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//                return SEND_FAIL
+//            }
+//            return SEND_SUCCESS
+//        }
+//
+//        override fun onPreExecute() {
+//            super.onPreExecute()
+//            progressBar.visibility = ProgressBar.VISIBLE
+//            activity?.window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+//                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+//        }
+//
+//        override fun onPostExecute(result: Int) {
+//            super.onPostExecute(result)
+//            progressBar.visibility = ProgressBar.GONE
+//            activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+//            when (result) {
+//                SEND_FAIL -> {
+//                    val button = findButtonByLocation(location)
+//                    onOccupiedNormal(button)
+//                    Toast.makeText(context, "Send failed", Toast.LENGTH_LONG).show()
+//                }
+//            }
+//        }
+//    }
 }

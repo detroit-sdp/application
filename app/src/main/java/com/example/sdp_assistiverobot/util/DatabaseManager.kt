@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.sdp_assistiverobot.calendar.Event
 import com.example.sdp_assistiverobot.residents.Resident
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -14,6 +15,7 @@ object DatabaseManager {
     private val TAG = "DatabaseManager"
 
     val DATABASE: FirebaseFirestore = FirebaseFirestore.getInstance()
+    val RobotStatusRef = FirebaseDatabase.getInstance().getReference("")
     val AuthUser = FirebaseAuth.getInstance().currentUser!!
     val residentsRef = DATABASE.collection("Residents")
     val eventsRef = DATABASE.collection("Users").document(AuthUser.email!!).collection("Events")

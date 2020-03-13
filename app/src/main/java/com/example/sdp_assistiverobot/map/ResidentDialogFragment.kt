@@ -58,7 +58,7 @@ class ResidentDialogFragment : BottomSheetDialogFragment() {
         }
 
         send_comm.setOnClickListener {
-            mHost.showAlertDialog("${mResident.first} ${mResident.last}", mResident.location)
+            mHost.showAlertDialog("${mResident.first} ${mResident.last}", mResident.location, mResident.priority)
             sendClicked = true
             dismiss()
         }

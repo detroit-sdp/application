@@ -53,6 +53,8 @@ class NetworkCommService : Service() {
                 return "NetworkCommService"
             }
         }
+
+//        return null
     }
 
     private lateinit var mSocket: DatagramSocket
@@ -144,10 +146,14 @@ class NetworkCommService : Service() {
     private fun handleReceivedMessage(packet: DatagramPacket) {
         val inMessage = String(packet.data, 0, packet.length)
 
+        Log.d(TAG,  inMessage)
+
         sendBroadcast(Intent().apply {
-            action = Constants.ACTION_NETWORK_RECEIVE
+            action = "com.example.sdp_assistiverobot.getMessage"
             putExtra("message", "$inMessage from ${packet.address}")
         })
+
+
     }
 
     override fun onDestroy() {
@@ -158,7 +164,7 @@ class NetworkCommService : Service() {
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         Log.d(TAG, "Service onTaskRemoved")
-        Toast.makeText(applicationContext, "Service killed", Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext, "Tadashi connection lost", Toast.LENGTH_LONG).show()
         super.onTaskRemoved(rootIntent)
     }
 }

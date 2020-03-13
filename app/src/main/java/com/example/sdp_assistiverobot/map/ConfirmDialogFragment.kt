@@ -24,12 +24,13 @@ class ConfirmDialogFragment : DialogFragment() {
             val bundle = arguments
             val name = bundle?.getString("name") as String
             val location = bundle.getString("location") as String
+            val priority = bundle.getString("priority") as String
             val mHost = targetFragment as MapFragment
 
             builder.setTitle("Moving to $name?")
                 .setPositiveButton("CONFIRM",
                     DialogInterface.OnClickListener { _, _ ->
-                        mHost.onDialogPositiveClick(location)
+                        mHost.onDialogPositiveClick(location, priority)
                     })
                 .setNegativeButton("CANCEL",
                     DialogInterface.OnClickListener { dialog, _ ->
@@ -49,7 +50,7 @@ class ConfirmDialogFragment : DialogFragment() {
     }
 
     interface ConfirmDialogListener {
-        fun onDialogPositiveClick(location: String)
+        fun onDialogPositiveClick(location: String, priority: String)
         fun onDialogNegativeClick(dialog: DialogFragment)
     }
 

@@ -69,7 +69,7 @@ class ResidentViewActivity : AppCompatActivity(), ConfirmDialogFragment.ConfirmD
         priority.text = "Priority: ${resident.priority}"
     }
 
-    override fun onDialogPositiveClick(location: String) {
+    override fun onDialogPositiveClick(location: String, priority: String) {
         Log.d(TAG, "activity result received")
         setResult(Activity.RESULT_OK, Intent().putExtra("location", resident.location))
         finish()
