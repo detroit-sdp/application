@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,13 +12,30 @@
         android:orientation="vertical"
         android:padding="10dp">
 
+        <!--Robot status-->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+<!--            <TextView-->
+<!--                android:id="@+id/robot_battery"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="TextView" />-->
+
+            <TextView
+                android:id="@+id/robot_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="0dp"
+                android:text="Connecting..." />
+        </androidx.cardview.widget.CardView>
+
         <!--daily visits chart-->
         <com.github.mikephil.charting.charts.HorizontalBarChart
             android:id="@+id/HbarChart1"
             android:layout_width="match_parent"
             android:layout_height="104dp" />
-
-        <!--Robot status?-->
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/barChart2"
@@ -29,4 +47,4 @@
             android:layout_height="220dp" />
     </LinearLayout>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
