@@ -169,13 +169,31 @@
                 android:text="Delivery History" />
 
             <TextView
-                android:id="@+id/delivery_history"
+                android:id="@+id/dayVisits"
                 android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:textColor="@color/colorPrimaryDark"
                 android:text="TextView" />
+            <TextView
+                android:id="@+id/weekVisits"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="TextView" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/foodChart"
+                android:layout_width="match_parent"
+                android:layout_height="220dp" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/waterChart"
+                android:layout_width="match_parent"
+                android:layout_height="220dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/delete"
