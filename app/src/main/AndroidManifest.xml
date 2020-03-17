@@ -33,9 +33,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name=".map.GuardService"
+            android:name=".calendar.DeliveryMonitorService"
             android:enabled="true"
             android:exported="false"></service>
+        <service
+            android:name=".map.GuardService"
+            android:enabled="true"
+            android:exported="false" />
 
         <activity android:name=".calendar.EventViewActivity" />
         <activity
@@ -47,10 +51,11 @@
 
         <service
             android:name=".map.NetworkCommService"
-            android:enabled="true"
-            android:process=":tadashiProcess" />
+            android:enabled="true" />
 
-        <activity android:name=".residents.EditResidentActivity" />
+        <activity
+            android:name=".residents.EditResidentActivity"
+            android:parentActivityName=".residents.ResidentViewActivity"/>
         <activity
             android:name=".residents.ResidentViewActivity"
             android:parentActivityName=".MainActivity" />

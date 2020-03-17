@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_resident_dialog.*
 class ResidentDialogFragment : BottomSheetDialogFragment() {
 
     private lateinit var mResident: Resident
+    private lateinit var mId: String
     private lateinit var mHost: MapFragment
     private var sendClicked: Boolean = false
 
@@ -27,6 +28,7 @@ class ResidentDialogFragment : BottomSheetDialogFragment() {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         mResident = arguments?.getSerializable("resident") as Resident
+        mId = arguments?.getString("residentId") as String
         mHost = targetFragment as MapFragment
         return dialog
     }
@@ -52,6 +54,7 @@ class ResidentDialogFragment : BottomSheetDialogFragment() {
 
         full_screen.setOnClickListener {
             startActivity(Intent(this.context, ResidentViewActivity::class.java).apply {
+                putExtra("id", mId)
                 putExtra("resident", mResident)
             })
             dismiss()

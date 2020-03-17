@@ -99,7 +99,7 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
 
     private fun initialiseButtons() {
         val residents = DatabaseManager.getResidents()
-        for (resident in residents) {
+        for ((id, resident) in residents) {
             val button = findButtonByLocation(resident.location)
             onOccupiedNormal(button)
             if (button?.tag == SELECTED) {
@@ -109,7 +109,7 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
             button!!.setOnClickListener {
                 if (button.tag == OCCUPIED) {
                     onOccupiedSelected(button)
-                    showResidentDialog(resident)
+                    showResidentDialog(id, resident)
                 } else {
                     onOccupiedNormal(button)
                 }
@@ -151,10 +151,11 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
         }
     }
 
-    private fun showResidentDialog(resident: Resident) {
+    private fun showResidentDialog(id: String, resident: Resident) {
         val residentDialogFragment = ResidentDialogFragment()
         residentDialogFragment.setTargetFragment(this, 0)
         val bundle = Bundle()
+        bundle.putString("residentId", id)
         bundle.putSerializable("resident", resident)
         residentDialogFragment.arguments = bundle
         residentDialogFragment.show(fragmentManager?.beginTransaction(), "dialog")

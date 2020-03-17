@@ -125,7 +125,7 @@
         app:layout_constraintTop_toBottomOf="@+id/calendarView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:foreground="@color/colorAccent"
+        android:foreground="@color/colorGery"
         android:background="?android:attr/listDivider" />
 
     <androidx.recyclerview.widget.RecyclerView

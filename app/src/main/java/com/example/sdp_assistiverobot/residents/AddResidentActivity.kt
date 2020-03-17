@@ -8,15 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.util.Constants.currentUser
 import com.example.sdp_assistiverobot.util.DatabaseManager.DATABASE
+import com.example.sdp_assistiverobot.util.DatabaseManager.authUser
 import com.example.sdp_assistiverobot.util.Util
 import com.example.sdp_assistiverobot.util.Util.formatName
-import kotlinx.android.synthetic.main.activity_add_resident.button_save
-import kotlinx.android.synthetic.main.activity_add_resident.firstText
-import kotlinx.android.synthetic.main.activity_add_resident.lastText
-import kotlinx.android.synthetic.main.activity_add_resident.priorityText
+import kotlinx.android.synthetic.main.activity_add_resident.*
 
 
 class AddResidentActivity : AppCompatActivity() {
@@ -34,6 +32,8 @@ class AddResidentActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         location = intent.getStringExtra("location")
+
+        isEnable(true)
 
         val states = resources.getStringArray(R.array.priorities)
         priorityText.adapter = SpinnerArrayAdapter<String>(
@@ -88,24 +88,6 @@ class AddResidentActivity : AppCompatActivity() {
         return true
     }
 
-    /**
-     * For Test
-     */
-    private fun createsTestUsers() {
-        for (x in 0..4) {
-            val patient = Resident(
-                "${currentUser!!.email}", "Test", "User$x", "Medium", "Room ${x + 1}"
-            )
-            DATABASE.collection("Residents").document().set(patient)
-                .addOnSuccessListener {
-                    Log.d(TAG, "DocumentSnapshot successfully written!")
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Error adding document", e)
-                    isEnable(true)
-                }
-        }
-    }
 
     private fun uploadNewResident() {
         isEnable(false)
@@ -116,7 +98,7 @@ class AddResidentActivity : AppCompatActivity() {
         }
 
         val resident = Resident(
-            currentUser!!.email!!,
+            authUser.email!!,
             formatName(firstText.text.toString()),
             formatName(lastText.text.toString()),
             state!!,
@@ -138,6 +120,14 @@ class AddResidentActivity : AppCompatActivity() {
         firstText.isEnabled = enable
         lastText.isEnabled = enable
         priorityText.isEnabled = enable
+        button_save.isEnabled = enable
+        if (enable) {
+            progressBar.visibility = ProgressBar.GONE
+            button_save.backgroundTintList = ContextCompat.getColorStateList(this, R.color.colorPrimary)
+        } else {
+            progressBar.visibility = ProgressBar.VISIBLE
+            button_save.backgroundTintList = ContextCompat.getColorStateList(this, R.color.colorAccent)
+        }
     }
 
     // Customized spinner adapter for medical states

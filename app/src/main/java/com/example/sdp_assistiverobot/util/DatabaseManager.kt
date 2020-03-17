@@ -1,27 +1,31 @@
 package com.example.sdp_assistiverobot.util
 
 import android.util.Log
-import com.example.sdp_assistiverobot.calendar.Event
+import com.example.sdp_assistiverobot.calendar.Delivery
 import com.example.sdp_assistiverobot.residents.Resident
+import com.example.sdp_assistiverobot.util.Util.todayToLong
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.firebase.ktx.Firebase
 
 object DatabaseManager {
 
     private val TAG = "DatabaseManager"
 
     val DATABASE: FirebaseFirestore = FirebaseFirestore.getInstance()
-    val RobotStatusRef = FirebaseDatabase.getInstance().getReference("")
-    val AuthUser = FirebaseAuth.getInstance().currentUser!!
+    val robotStatusRef = Firebase.database.getReference("Status")
+    val authUser = FirebaseAuth.getInstance().currentUser!!
     val residentsRef = DATABASE.collection("Residents")
-    val eventsRef = DATABASE.collection("Users").document(AuthUser.email!!).collection("Events")
+    val eventsRef = DATABASE.collection("Delivery")
 
-    private val residents = ArrayList<Resident>()
-    private val events = ArrayList<Event>()
+//    private val residents = ArrayList<Resident>()
+    private val residents = HashMap<String, Resident>()
+    private val todayUnsuccessfulDelivery = ArrayList<Delivery>()
     private lateinit var residentListener: ListenerRegistration
     private lateinit var eventsListener: ListenerRegistration
 
@@ -29,12 +33,12 @@ object DatabaseManager {
         return this
     }
 
-    fun getResidents(): ArrayList<Resident> {
+    fun getResidents(): Map<String, Resident> {
         return residents
     }
 
-    fun getEvents(): List<Event> {
-        return events
+    fun getTodayUnsuccessfulDelivery(): List<Delivery> {
+        return todayUnsuccessfulDelivery
     }
 
     fun initializeDB() {
@@ -58,7 +62,7 @@ object DatabaseManager {
                             newResident(
                                 dc.document
                             )
-                        residents.add(resident)
+                        residents[dc.document.id] = resident
                     }
                     DocumentChange.Type.MODIFIED -> {
                         Log.d(TAG, "Modified Resident: ${dc.document.data}")
@@ -66,53 +70,77 @@ object DatabaseManager {
                             newResident(
                                 dc.document
                             )
-                        residents[dc.oldIndex] = resident
+
+                        residents[dc.document.id] = resident
                     }
                     DocumentChange.Type.REMOVED -> {
                         Log.d(TAG, "Removed Resident: ${dc.document.data}")
-                        val location = dc.document.get("location").toString()
-                        residents.removeAt(dc.oldIndex)
+                        residents.remove(dc.document.id)
                     }
                 }
             }
         }
 
-        eventsListener = eventsRef.addSnapshotListener{ snapshots, e ->
-            if (e != null) {
-                Log.w(TAG, "listen:error", e)
-                return@addSnapshotListener
-            }
+//        eventsListener = eventsRef
+//            .whereEqualTo("userId", authUser.email)
+//            .whereEqualTo("deliverySuccessful", false)
+//            .whereEqualTo("date", todayToLong())
+//            .addSnapshotListener{ snapshots, e ->
+//            if (e != null) {
+//                Log.w(TAG, "listen:error", e)
+//                return@addSnapshotListener
+//            }
+//
+//            for (dc in snapshots!!.documentChanges) {
+//                when (dc.type) {
+//                    DocumentChange.Type.ADDED -> {
+//                        Log.d(TAG, "Added Event: ${dc.document.data}")
+//                        val event =
+//                            newEvent(
+//                                dc.document
+//                            )
+//                        todayUnsuccessfulDelivery.add(event)
+//                    }
+//                    DocumentChange.Type.MODIFIED -> {
+//                        Log.d(TAG, "Modified Resident: ${dc.document.data}")
+//                        val event =
+//                            newEvent(
+//                                dc.document
+//                            )
+//                        todayUnsuccessfulDelivery[dc.oldIndex] = event
+//                    }
+//                    DocumentChange.Type.REMOVED -> {
+//                        Log.d(TAG, "Removed Event: ${dc.document.data}")
+//                        todayUnsuccessfulDelivery.removeAt(dc.oldIndex)
+//                    }
+//                }
+//            }
+//        }
+    }
 
-            for (dc in snapshots!!.documentChanges) {
-                when (dc.type) {
-                    DocumentChange.Type.ADDED -> {
-                        Log.d(TAG, "Added Event: ${dc.document.data}")
-                        val event =
-                            newEvent(
-                                dc.document
-                            )
-                        events.add(event)
-                    }
-                    DocumentChange.Type.MODIFIED -> {
-                        Log.d(TAG, "Modified Resident: ${dc.document.data}")
-                        val event =
-                            newEvent(
-                                dc.document
-                            )
-                        events[dc.oldIndex] = event
-                    }
-                    DocumentChange.Type.REMOVED -> {
-                        Log.d(TAG, "Removed Event: ${dc.document.data}")
-                        events.removeAt(dc.oldIndex)
-                    }
+    fun setUnsuccessfulDeliveryListener(time: Long) {
+        val delivery = ArrayList<Delivery>()
+        eventsRef
+            .whereEqualTo("userId", authUser.email)
+            .whereEqualTo("deliverySuccessful", false)
+            .whereEqualTo("date", todayToLong())
+            .whereGreaterThanOrEqualTo("time", Long)
+            .get()
+            .addOnSuccessListener {documents ->
+                for (document in documents) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+                    delivery.add(DatabaseManager.newEvent(document))
                 }
             }
-        }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
+
     }
 
     fun detachListeners() {
         residentListener.remove()
-//        eventsListener.remove()
+        eventsListener.remove()
     }
 
     private fun newResident(document: QueryDocumentSnapshot): Resident {
@@ -137,25 +165,37 @@ object DatabaseManager {
         )
     }
 
-    fun newEvent(document: QueryDocumentSnapshot): Event {
-        var date: Long
-        var resident: String
-        var minute: Int
-        val hour: Int
+    fun newEvent(document: QueryDocumentSnapshot): Delivery {
+        val userId: String
+        val date: Long
+        val residentId: String
+        val time: Long
+        val category: String
+        val weightBefore: Double
+        val weightAfter: Double
+        val deliveryState: Int
         val note: String
 
         document.apply {
-            date = get("date") as Long
-            minute = getLong("minute")!!.toInt()
-            hour = getLong("hour")!!.toInt()
-            resident = get("location").toString()
+            userId = get("userId").toString()
+            date = getLong("date")!!
+            time = getLong("time")!!
+            residentId = get("residentId").toString()
+            category = get("category").toString()
+            weightBefore = getDouble("weightBefore")!!
+            weightAfter = getDouble("weightAfter")!!
+            deliveryState = getLong("deliveryState")!!.toInt()
             note = get("note").toString()
         }
-        return Event(
+        return Delivery(
+            userId,
             date,
-            hour,
-            minute,
-            resident,
+            time,
+            residentId,
+            category,
+            weightBefore,
+            weightAfter,
+            deliveryState,
             note
         )
     }

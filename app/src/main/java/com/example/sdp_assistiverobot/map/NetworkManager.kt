@@ -32,36 +32,11 @@ object NetworkManager {
         networkWorkQueue
     )
 
-    private val SEND_START = 0
-    private val SEND_SUCCESS = 1
-    private val SEND_FAIL = -1
-
-//    private val handler: Handler = object: Handler(Looper.getMainLooper()) {
-//        override fun handleMessage(msg: Message?) {
-//            when (msg?.what) {
-//                SEND_START -> {
-//                    mProgressBar.visibility = ProgressBar.VISIBLE
-//                }
-//                SEND_SUCCESS -> {
-//                    mProgressBar.visibility = ProgressBar.GONE
-//                }
-//                SEND_FAIL -> {
-//                    mButton?.imageTintList = ContextCompat.getColorStateList(mContext, R.color.colorPrimary)
-//                    mButton?.setImageResource(R.drawable.baseline_person_pin_circle_black_36)
-//                    mButton?.tag = 1
-//                }
-//            }
-//        }
-//    }
-
     private val locationToComms: HashMap<String, String> = hashMapOf(
-        "Room 1" to "GOTO 3",
-        "Room 2" to "GOTO 3",
-        "Room 3" to "GOTO 3")
-
-    private lateinit var mProgressBar: ProgressBar
-    private var mButton: ImageButton? = null
-    private lateinit var mContext: Context
+        "Room 1" to "GOTO 1",
+        "Room 2" to "GOTO 2",
+        "Room 3" to "GOTO 3",
+        "Base" to "GOTO Base")
 
     private val mInstance = NetworkManager
 
@@ -73,9 +48,4 @@ object NetworkManager {
         networkThreadPool.execute(SendCommandRunnable(locationToComms[location]!!))
     }
 
-    fun handleState(state: Int) {
-//        handler.obtainMessage(state)?.apply {
-//            sendToTarget()
-//        }
-    }
 }

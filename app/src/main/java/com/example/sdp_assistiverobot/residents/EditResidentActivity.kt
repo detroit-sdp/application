@@ -2,6 +2,7 @@ package com.example.sdp_assistiverobot.residents
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,15 +11,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.content.ContextCompat
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.util.Constants.currentUser
 import com.example.sdp_assistiverobot.util.DatabaseManager
 import com.example.sdp_assistiverobot.util.DatabaseManager.DATABASE
+import com.example.sdp_assistiverobot.util.DatabaseManager.authUser
+import com.example.sdp_assistiverobot.util.DatabaseManager.eventsRef
+import com.example.sdp_assistiverobot.util.DatabaseManager.residentsRef
 import com.example.sdp_assistiverobot.util.Util
 import com.example.sdp_assistiverobot.util.Util.formatName
 import kotlinx.android.synthetic.main.activity_edit_resident.*
@@ -30,6 +30,7 @@ class EditResidentActivity : AppCompatActivity() {
     private lateinit var priority: String
     private lateinit var location: String
     private lateinit var resident: Resident
+    private lateinit var id: String
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu_single, menu)
@@ -44,6 +45,7 @@ class EditResidentActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.edit_resident_toolbar))
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        id = intent.getStringExtra("id")
         resident = intent.getSerializableExtra("resident") as Resident
 
         firstText.setText(resident.first)
@@ -73,7 +75,7 @@ class EditResidentActivity : AppCompatActivity() {
         val residents = DatabaseManager.getResidents()
         val occupiedLocations = ArrayList<String>()
 
-        residents.forEach {occupiedLocations.add(it.location)}
+        residents.forEach {occupiedLocations.add(it.value.location)}
 
         val freeLocations = locations.filterNot { occupiedLocations.contains(it) } as ArrayList
         freeLocations[0] = resident.location
@@ -96,7 +98,8 @@ class EditResidentActivity : AppCompatActivity() {
         }
 
         button_delete.setOnClickListener {
-            DATABASE.collection("Residents").document(resident.location)
+            isEnable(false)
+            residentsRef.document(id)
                 .delete()
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully deleted!")
@@ -104,12 +107,18 @@ class EditResidentActivity : AppCompatActivity() {
                     finish()
                 }
                 .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+
+            eventsRef
+                .whereEqualTo("residentId", id)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        eventsRef.document(document.id).delete()
+                    }
+                }
         }
 
-        cancel_action.setOnClickListener {
-            setResult(Activity.RESULT_OK)
-            finish()
-        }
+        isEnable(true)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -155,10 +164,18 @@ class EditResidentActivity : AppCompatActivity() {
     }
 
     private fun isEnable(enable: Boolean) {
+        supportActionBar?.setDisplayHomeAsUpEnabled(enable)
         firstText.isEnabled = enable
         lastText.isEnabled = enable
         priorityText.isEnabled = enable
         locationText.isEnabled = enable
+        if (enable) {
+            progressBar.visibility = ProgressBar.GONE
+            button_delete.foregroundTintList = ContextCompat.getColorStateList(this, R.color.colorPrimary)
+        } else {
+            progressBar.visibility = ProgressBar.VISIBLE
+            button_delete.backgroundTintList = ContextCompat.getColorStateList(this, R.color.colorAccent)
+        }
     }
 
     private fun updateResident() {
@@ -170,14 +187,14 @@ class EditResidentActivity : AppCompatActivity() {
         }
 
         val newResident = Resident(
-            currentUser!!.email!!,
+            authUser.email!!,
             formatName(firstText.text.toString()),
             formatName(lastText.text.toString()),
             priority,
             location
         )
 
-        val docRef = DATABASE.collection("Residents").document(resident.location)
+        val docRef = DATABASE.collection("Residents").document(id)
         DATABASE.runBatch {batch ->
             if (newResident.first != resident.first) {
                 batch.update(docRef, "first", newResident.first)
@@ -193,7 +210,10 @@ class EditResidentActivity : AppCompatActivity() {
             }
         }.addOnCompleteListener {
             Log.d(TAG, "Database update complete")
-            setResult(Activity.RESULT_OK)
+            setResult(Activity.RESULT_OK, Intent(applicationContext, ResidentViewActivity::class.java).apply {
+                putExtra("id", id)
+                putExtra("resident", newResident)
+            })
             finish()
         }
     }

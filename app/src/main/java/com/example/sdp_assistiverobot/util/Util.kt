@@ -3,6 +3,7 @@ package com.example.sdp_assistiverobot.util
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,11 +34,12 @@ object Util {
     fun getYear(): Int {
         return calendar.get(Calendar.YEAR)
     }
-    fun todayToString(): String {
+
+    fun todayToLong(): Long {
         val curDay = "${getDayOfMonth()}".padStart(2,'0')
         val curMonth = "${getMonth()}".padStart(2,'0')
         val curYear = "${getYear()}"
-        return "${curDay}/${curMonth}/${curYear}"
+        return convertDateToLong("${curYear}.${curMonth}.${curDay}")
     }
 
     fun formatName(string: String): String {
@@ -49,10 +51,15 @@ object Util {
         return df.parse(time).time
     }
 
-    fun convertLongToDate(time: Long): String {
+    fun convertLongToTime(time: Long): String {
         val date = Date(time)
-        val format = SimpleDateFormat("yyyy.MM.dd")
+        val format = SimpleDateFormat("HH:mm")
         return format.format(date)
+    }
+
+    fun convertTimeToLong(time: String): Long {
+        val df = SimpleDateFormat("HH:mm")
+        return df.parse(time).time
     }
 
     fun generateEventId(time: String): String {

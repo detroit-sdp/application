@@ -56,6 +56,13 @@
         <item>Room 3</item>
     </string-array>
 
+    <string-array name="categories">
+        <item>Category</item>
+        <item>Both</item>
+        <item>Food</item>
+        <item>Water</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
