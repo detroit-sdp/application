@@ -63,6 +63,7 @@ class ResidentViewActivity : AppCompatActivity() {
                 startActivity(data)
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 finish()
+                startActivity(intent)
             }
         }
     }
@@ -71,7 +72,7 @@ class ResidentViewActivity : AppCompatActivity() {
         resident = intent.getSerializableExtra("resident") as Resident
         id = intent.getStringExtra("id")
         name.text = "${resident.first} ${resident.last}"
-        location.text = "Location: ${resident.location}"
-        priority.text = "Priority: ${resident.priority}"
+        location.text = "${resident.location}"
+        priority.text = "${resident.priority}"
     }
 }

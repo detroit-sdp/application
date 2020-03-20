@@ -36,7 +36,7 @@ class AddResidentActivity : AppCompatActivity() {
         isEnable(true)
 
         val states = resources.getStringArray(R.array.priorities)
-        priorityText.adapter = SpinnerArrayAdapter<String>(
+        priorityText.adapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_item,
             states.toList()
@@ -73,11 +73,6 @@ class AddResidentActivity : AppCompatActivity() {
             return false
         }  else {
             lastText.error = null
-        }
-
-        if (state == "Priority") {
-            Toast.makeText(this, "Select a medical state", Toast.LENGTH_SHORT).show()
-            return false
         }
 
         if (!Util.isInternetAvailable(baseContext)) {
@@ -130,24 +125,4 @@ class AddResidentActivity : AppCompatActivity() {
         }
     }
 
-    // Customized spinner adapter for medical states
-    private class SpinnerArrayAdapter<String>(context: Context, resource: Int,
-                                              objects : List<String>) : ArrayAdapter<String>(context, resource, objects) {
-        override fun isEnabled(position: Int): Boolean {
-            return position != 0
-        }
-        override fun getDropDownView(
-            position: Int, convertView: View?,
-            parent: ViewGroup?
-        ): View? {
-            val view = super.getDropDownView(position, convertView, parent!!)
-            val tv = view as TextView
-            if (position == 0) { // Set the hint text color gray
-                tv.setTextColor(Color.GRAY)
-            } else {
-                tv.setTextColor(Color.BLACK)
-            }
-            return view
-        }
-    }
 }

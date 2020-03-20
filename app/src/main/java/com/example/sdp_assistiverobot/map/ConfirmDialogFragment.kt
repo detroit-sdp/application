@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 
 import com.example.sdp_assistiverobot.R
+import com.example.sdp_assistiverobot.util.DatabaseManager.getResidents
 
 class ConfirmDialogFragment : DialogFragment() {
 
@@ -22,21 +23,31 @@ class ConfirmDialogFragment : DialogFragment() {
             // Use the Builder class for convenient dialog construction
             val builder = AlertDialog.Builder(this.context!!)
             val bundle = arguments
-            val name = bundle?.getString("name") as String
-            val location = bundle.getString("location") as String
+            val id = bundle?.getString("id") as String
+            val category = bundle.getString("category") as String
             val priority = bundle.getString("priority") as String
+            val note = bundle.getString("note") as String
             val mHost = targetFragment as MapFragment
+            if (id != "Base") {
+                val residents = getResidents()
+                val resident = residents[id]
+                builder.setTitle("Moving to ${resident?.first} ${resident?.last}?")
+                    .setMessage("Priority: $priority\nCategory: $category\nNote: $note")
+            } else {
+                builder.setTitle("Moving to $id?")
+                    .setMessage("Priority: $priority\nCategory: $category\nNote: $note")
+            }
 
-            builder.setTitle("Moving to $name?")
-                .setPositiveButton("CONFIRM",
-                    DialogInterface.OnClickListener { _, _ ->
-                        mHost.onDialogPositiveClick(location, priority)
-                    })
+            builder.setPositiveButton("CONFIRM",
+                DialogInterface.OnClickListener { _, _ ->
+                    mHost.onDialogPositiveClick(id, category, priority, note)
+                })
                 .setNegativeButton("CANCEL",
                     DialogInterface.OnClickListener { dialog, _ ->
                         mHost.onDialogNegativeClick(this)
                         dialog.dismiss()
                     })
+
             // Create the AlertDialog object and return it
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
@@ -50,20 +61,7 @@ class ConfirmDialogFragment : DialogFragment() {
     }
 
     interface ConfirmDialogListener {
-        fun onDialogPositiveClick(location: String, priority: String)
+        fun onDialogPositiveClick(id: String, category: String, priority: String, note: String)
         fun onDialogNegativeClick(dialog: DialogFragment)
     }
-
-//    internal lateinit var listener: ConfirmDialogListener
-//    override fun onAttach(context: Context?) {
-//        super.onAttach(context)
-//        // Verify that the host activity implements the callback interface
-//        try {
-//            // Instantiate the NoticeDialogListener so we can send events to the host
-//            listener = context as ConfirmDialogListener
-//        } catch (e: ClassCastException) {
-//            // Drop it silently because it is also called by fragment
-//        }
-//    }
-
 }

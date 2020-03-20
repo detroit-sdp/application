@@ -9,11 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
 
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.residents.ResidentViewActivity
 import com.example.sdp_assistiverobot.residents.Resident
+import com.example.sdp_assistiverobot.util.SpinnerArrayAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_resident_dialog.*
 
@@ -23,6 +26,8 @@ class ResidentDialogFragment : BottomSheetDialogFragment() {
     private lateinit var mId: String
     private lateinit var mHost: MapFragment
     private var sendClicked: Boolean = false
+    lateinit var category: String
+    lateinit var priority: String
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -46,7 +51,44 @@ class ResidentDialogFragment : BottomSheetDialogFragment() {
 
         name.text = "${mResident.first} ${mResident.last}"
         location.text = "Location: ${mResident.location}"
-        priority.text = "Priority: ${mResident.priority}"
+
+        val priorities = resources.getStringArray(R.array.priorities)
+        prioritySpinner.adapter = ArrayAdapter<String>(
+            this.context!!,
+            android.R.layout.simple_spinner_item,
+            priorities.toList()
+        )
+            .apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+        prioritySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                priority = parent?.getItemAtPosition(position) as String
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+        prioritySpinner.setSelection(priorities.indexOf(mResident.priority))
+
+        val categories = resources.getStringArray(R.array.categories)
+        categorySpinner.adapter = ArrayAdapter(
+            this.context!!,
+            android.R.layout.simple_spinner_item,
+            categories.toList()
+        ). apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+        categorySpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                category = parent?.getItemAtPosition(position) as String
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
 
         cancel.setOnClickListener {
             dismiss()
@@ -61,7 +103,10 @@ class ResidentDialogFragment : BottomSheetDialogFragment() {
         }
 
         send_comm.setOnClickListener {
-            mHost.showAlertDialog("${mResident.first} ${mResident.last}", mResident.location, mResident.priority)
+            if (category == "Category") {
+                return@setOnClickListener
+            }
+            mHost.showAlertDialog(mId, category, priority, noteText.text.toString())
             sendClicked = true
             dismiss()
         }

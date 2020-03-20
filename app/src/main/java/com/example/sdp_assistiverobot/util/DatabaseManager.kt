@@ -5,8 +5,12 @@ import com.example.sdp_assistiverobot.calendar.Delivery
 import com.example.sdp_assistiverobot.residents.Resident
 import com.example.sdp_assistiverobot.util.Util.todayToLong
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -22,12 +26,10 @@ object DatabaseManager {
     val authUser = FirebaseAuth.getInstance().currentUser!!
     val residentsRef = DATABASE.collection("Residents")
     val eventsRef = DATABASE.collection("Delivery")
+    var robotStatus: String? = null
 
-//    private val residents = ArrayList<Resident>()
     private val residents = HashMap<String, Resident>()
-    private val todayUnsuccessfulDelivery = ArrayList<Delivery>()
     private lateinit var residentListener: ListenerRegistration
-    private lateinit var eventsListener: ListenerRegistration
 
     fun getInstance(): DatabaseManager {
         return this
@@ -37,8 +39,10 @@ object DatabaseManager {
         return residents
     }
 
-    fun getTodayUnsuccessfulDelivery(): List<Delivery> {
-        return todayUnsuccessfulDelivery
+    fun updatePriority(id: String, priority: String) {
+        residentsRef.document(id).update("priority", priority)
+            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
     }
 
     fun initializeDB() {
@@ -81,66 +85,22 @@ object DatabaseManager {
             }
         }
 
-//        eventsListener = eventsRef
-//            .whereEqualTo("userId", authUser.email)
-//            .whereEqualTo("deliverySuccessful", false)
-//            .whereEqualTo("date", todayToLong())
-//            .addSnapshotListener{ snapshots, e ->
-//            if (e != null) {
-//                Log.w(TAG, "listen:error", e)
-//                return@addSnapshotListener
+//        val robotStatusListener = object: ValueEventListener {
+//            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                robotStatus = dataSnapshot.getValue<String>()
+//                Log.d(TAG, "Robot status is: $robotStatus")
 //            }
 //
-//            for (dc in snapshots!!.documentChanges) {
-//                when (dc.type) {
-//                    DocumentChange.Type.ADDED -> {
-//                        Log.d(TAG, "Added Event: ${dc.document.data}")
-//                        val event =
-//                            newEvent(
-//                                dc.document
-//                            )
-//                        todayUnsuccessfulDelivery.add(event)
-//                    }
-//                    DocumentChange.Type.MODIFIED -> {
-//                        Log.d(TAG, "Modified Resident: ${dc.document.data}")
-//                        val event =
-//                            newEvent(
-//                                dc.document
-//                            )
-//                        todayUnsuccessfulDelivery[dc.oldIndex] = event
-//                    }
-//                    DocumentChange.Type.REMOVED -> {
-//                        Log.d(TAG, "Removed Event: ${dc.document.data}")
-//                        todayUnsuccessfulDelivery.removeAt(dc.oldIndex)
-//                    }
-//                }
+//            override fun onCancelled(e: DatabaseError) {
+//                Log.w(TAG, "loadPost:onCancelled", e.toException())
 //            }
 //        }
-    }
-
-    fun setUnsuccessfulDeliveryListener(time: Long) {
-        val delivery = ArrayList<Delivery>()
-        eventsRef
-            .whereEqualTo("userId", authUser.email)
-            .whereEqualTo("deliverySuccessful", false)
-            .whereEqualTo("date", todayToLong())
-            .whereGreaterThanOrEqualTo("time", Long)
-            .get()
-            .addOnSuccessListener {documents ->
-                for (document in documents) {
-                    Log.d(TAG, "${document.id} => ${document.data}")
-                    delivery.add(DatabaseManager.newEvent(document))
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents: ", exception)
-            }
-
+//
+//        robotStatusRef.addValueEventListener(robotStatusListener)
     }
 
     fun detachListeners() {
         residentListener.remove()
-        eventsListener.remove()
     }
 
     private fun newResident(document: QueryDocumentSnapshot): Resident {
@@ -173,7 +133,7 @@ object DatabaseManager {
         val category: String
         val weightBefore: Double
         val weightAfter: Double
-        val deliveryState: Int
+        val deliveryState: String
         val note: String
 
         document.apply {
@@ -184,7 +144,7 @@ object DatabaseManager {
             category = get("category").toString()
             weightBefore = getDouble("weightBefore")!!
             weightAfter = getDouble("weightAfter")!!
-            deliveryState = getLong("deliveryState")!!.toInt()
+            deliveryState = get("deliveryState").toString()
             note = get("note").toString()
         }
         return Delivery(

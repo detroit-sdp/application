@@ -19,6 +19,7 @@ import com.example.sdp_assistiverobot.util.DatabaseManager.DATABASE
 import com.example.sdp_assistiverobot.util.DatabaseManager.authUser
 import com.example.sdp_assistiverobot.util.DatabaseManager.eventsRef
 import com.example.sdp_assistiverobot.util.DatabaseManager.residentsRef
+import com.example.sdp_assistiverobot.util.SpinnerArrayAdapter
 import com.example.sdp_assistiverobot.util.Util
 import com.example.sdp_assistiverobot.util.Util.formatName
 import kotlinx.android.synthetic.main.activity_edit_resident.*
@@ -52,7 +53,7 @@ class EditResidentActivity : AppCompatActivity() {
         lastText.setText(resident.last)
 
         val priorities = resources.getStringArray(R.array.priorities)
-        priorityText.adapter = SpinnerArrayAdapter<String>(
+        priorityText.adapter = ArrayAdapter<String>(
             this,
             android.R.layout.simple_spinner_item,
             priorities.toList()
@@ -78,7 +79,7 @@ class EditResidentActivity : AppCompatActivity() {
         residents.forEach {occupiedLocations.add(it.value.location)}
 
         val freeLocations = locations.filterNot { occupiedLocations.contains(it) } as ArrayList
-        freeLocations[0] = resident.location
+        freeLocations.add(0, resident.location)
         locationText.adapter = SpinnerArrayAdapter<String>(
             this,
             android.R.layout.simple_spinner_item,
@@ -121,6 +122,11 @@ class EditResidentActivity : AppCompatActivity() {
         isEnable(true)
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        setResult(Activity.RESULT_CANCELED)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action0 -> {
@@ -144,16 +150,6 @@ class EditResidentActivity : AppCompatActivity() {
             return false
         }  else {
             lastText.error = null
-        }
-
-        if (priority == "Priority") {
-            Toast.makeText(this, "Select a medical state", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        if (location == "Location") {
-            Toast.makeText(this, "Select a location", Toast.LENGTH_SHORT).show()
-            return false
         }
 
         if (!Util.isInternetAvailable(baseContext)) {
@@ -216,28 +212,5 @@ class EditResidentActivity : AppCompatActivity() {
             })
             finish()
         }
-    }
-
-    private class SpinnerArrayAdapter<String>(
-            context: Context, resource: Int,
-            objects: List<String>
-        ) : ArrayAdapter<String>(context, resource, objects) {
-            override fun isEnabled(position: Int): Boolean {
-                return position != 0
-            }
-
-            override fun getDropDownView(
-                position: Int, convertView: View?,
-                parent: ViewGroup?
-            ): View? {
-                val view = super.getDropDownView(position, convertView, parent!!)
-                val tv = view as TextView
-                if (position == 0) { // Set the hint text color gray
-                    tv.setTextColor(Color.GRAY)
-                } else {
-                    tv.setTextColor(Color.BLACK)
-                }
-                return view
-            }
     }
 }

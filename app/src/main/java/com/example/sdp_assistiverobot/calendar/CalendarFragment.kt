@@ -1,7 +1,11 @@
 package com.example.sdp_assistiverobot.calendar
 
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -9,10 +13,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.residents.Resident
+import com.example.sdp_assistiverobot.util.Constants.Delivery_Pending
+import com.example.sdp_assistiverobot.util.Constants.Delivery_Send
+import com.example.sdp_assistiverobot.util.Constants.Delivery_Success
 import com.example.sdp_assistiverobot.util.DatabaseManager
 import com.example.sdp_assistiverobot.util.DatabaseManager.authUser
 import com.example.sdp_assistiverobot.util.Util
@@ -100,6 +108,7 @@ class CalendarFragment : Fragment(){
                         setHasFixedSize(true)
                         layoutManager = viewManager
                         adapter = viewAdapter
+                        addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
                     }
                 }
             }
@@ -133,12 +142,14 @@ class CalendarFragment : Fragment(){
         }
 
         // Replace the contents of a view (invoked by the layout manager)
+        @SuppressLint("ResourceAsColor")
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
             val resident = DatabaseManager.getResidents()[myDataset[position].residentId] as Resident
             holder.time.text = "${convertLongToTime(myDataset[position].time)}"
             holder.title.text = "Move to ${resident.location} (${resident.first} ${resident.last})"
+
             holder.itemView.setOnClickListener {
                 clickListener(myDataset[position])
             }

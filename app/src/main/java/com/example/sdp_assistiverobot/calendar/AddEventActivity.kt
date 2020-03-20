@@ -63,7 +63,7 @@ class AddEventActivity : AppCompatActivity() {
     private fun initialiseSpinner() {
         val residentList = generateResidentList()
 
-        residentSpinner.adapter = SpinnerArrayAdapter(
+        residentSpinner.adapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_item,
             residentList
@@ -75,15 +75,13 @@ class AddEventActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                if (position >= 1) {
-                    resident = residents.keys.toList()[position-1]
-                }
+                resident = residents.keys.toList()[position]
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
         val categories = resources.getStringArray(R.array.categories)
-        categorySpinner.adapter = SpinnerArrayAdapter(
+        categorySpinner.adapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_item,
             categories.toList()
@@ -131,8 +129,6 @@ class AddEventActivity : AppCompatActivity() {
 
     private fun generateResidentList(): List<String> {
         val spinnerList = ArrayList<String>()
-        spinnerList.add("Resident")
-
         for (resident in residents.values) {
             spinnerList.add("${resident.location} (${resident.first} ${resident.last})")
         }
@@ -140,27 +136,8 @@ class AddEventActivity : AppCompatActivity() {
         return spinnerList
     }
 
-    private fun validate(): Boolean {
-        if (residentSpinner.selectedItemPosition == 0) {
-            Toast.makeText(this, "Please select a destination (resident)", Toast.LENGTH_LONG).show()
-            return false
-        }
-
-        if (category == "Category") {
-            Toast.makeText(this, "Please select a category", Toast.LENGTH_LONG).show()
-            return false
-        }
-
-        return true
-    }
-
     private fun addNewEvent() {
         isEnable(false)
-
-        if (!validate()) {
-            isEnable(true)
-            return
-        }
 
         val event = Delivery(authUser.email!!,
             convertDateToLong(date),
@@ -182,25 +159,5 @@ class AddEventActivity : AppCompatActivity() {
                 Log.w(TAG, "Error writing document", e)
                 isEnable(true)
             }
-    }
-
-    private class SpinnerArrayAdapter<String>(context: Context, resource: Int,
-                                              objects : List<String>) : ArrayAdapter<String>(context, resource, objects) {
-        override fun isEnabled(position: Int): Boolean {
-            return position != 0
-        }
-        override fun getDropDownView(
-            position: Int, convertView: View?,
-            parent: ViewGroup?
-        ): View? {
-            val view = super.getDropDownView(position, convertView, parent!!)
-            val tv = view as TextView
-            if (position == 0) { // Set the hint text color gray
-                tv.setTextColor(Color.GRAY)
-            } else {
-                tv.setTextColor(Color.BLACK)
-            }
-            return view
-        }
     }
 }

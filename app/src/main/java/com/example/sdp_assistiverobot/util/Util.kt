@@ -34,12 +34,34 @@ object Util {
     fun getYear(): Int {
         return calendar.get(Calendar.YEAR)
     }
+    fun getHour(): Int {
+        return calendar.get(Calendar.HOUR_OF_DAY)
+    }
+    fun getMinute(): Int {
+        return calendar.get(Calendar.MINUTE)
+    }
+
+    fun nowToId(): String {
+        val curDay = "${getDayOfMonth()}".padStart(2,'0')
+        val curMonth = "${getMonth()}".padStart(2,'0')
+        val curYear = "${getYear()}"
+        val curHour = "${getHour()}".padStart(2,'0')
+        val curMinute = "${getMinute()}".padStart(2,'0')
+
+        return generateEventId("$curYear.$curMonth.$curDay $curHour:$curMinute")
+    }
 
     fun todayToLong(): Long {
         val curDay = "${getDayOfMonth()}".padStart(2,'0')
         val curMonth = "${getMonth()}".padStart(2,'0')
         val curYear = "${getYear()}"
         return convertDateToLong("${curYear}.${curMonth}.${curDay}")
+    }
+
+    fun nowToLong(): Long {
+        val curHour = "${getHour()}".padStart(2,'0')
+        val curMinute = "${getMinute()}".padStart(2,'0')
+        return convertTimeToLong("$curHour:$curMinute")
     }
 
     fun formatName(string: String): String {
@@ -49,6 +71,12 @@ object Util {
     fun convertDateToLong(time: String): Long {
         val df = SimpleDateFormat("yyyy.MM.dd")
         return df.parse(time).time
+    }
+
+    fun convertLongToDate(time: Long): String {
+        val t = Date(time)
+        val format = SimpleDateFormat("yyyy.MM.dd")
+        return format.format(t)
     }
 
     fun convertLongToTime(time: Long): String {

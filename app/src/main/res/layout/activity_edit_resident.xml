@@ -30,6 +30,16 @@
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
+    <View
+        android:id="@+id/divider5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_resident_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:foreground="@color/colorGery"
+        android:background="?android:attr/listDivider" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/priority"
         android:layout_width="match_parent"
@@ -39,6 +49,7 @@
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:helperText="Priority"
         app:layout_constraintTop_toBottomOf="@+id/first">
 
         <androidx.appcompat.widget.AppCompatSpinner
@@ -58,6 +69,7 @@
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:helperText="Location"
         app:layout_constraintTop_toBottomOf="@+id/priority">
 
         <androidx.appcompat.widget.AppCompatSpinner
@@ -99,7 +111,6 @@
             android:id="@+id/firstText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="12dp"
             android:hint="Forename"
             android:textSize="16sp"
             android:singleLine="true" />
@@ -121,7 +132,6 @@
             android:id="@+id/lastText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="12dp"
             android:textSize="16sp"
             android:hint="Surename"
             android:singleLine="true" />

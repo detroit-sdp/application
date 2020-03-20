@@ -10,5 +10,5 @@ data class Delivery(val userId: String,
                     val category: String,
                     val weightBefore: Double,
                     val weightAfter: Double,
-                    val deliveryState: Int,
+                    val deliveryState: String,
                     val note: String = "") : Serializable
