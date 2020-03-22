@@ -34,16 +34,6 @@
         app:layout_constraintTop_toBottomOf="@+id/user_name" />
 
     <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="100dp"
-        android:text="Change email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/user_email"
-        app:layout_constraintTop_toBottomOf="@+id/user_name" />
-
-    <TextView
         android:id="@+id/user_phone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -55,6 +45,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_email" />
+
+    <TextView
+        android:id="@+id/changePassword"
+        style="@style/Widget.AppCompat.TextView.SpinnerItem"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:text="Change Password"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_phone" />
 
     <TextView
         android:id="@+id/logout"
@@ -69,5 +74,5 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_phone" />
+        app:layout_constraintTop_toBottomOf="@+id/changePassword" />
 </androidx.constraintlayout.widget.ConstraintLayout>

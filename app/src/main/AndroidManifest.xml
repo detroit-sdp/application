@@ -50,6 +50,10 @@
             android:name=".calendar.AddEventActivity"
             android:parentActivityName=".MainActivity" />
         <activity
+            android:name=".userpage.ChangePasswordActivity"
+            android:label="@string/title_activity_change_password"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".dashboard.ChooseResidentActivity"
             android:parentActivityName=".MainActivity" />
 
