@@ -44,7 +44,7 @@ class DeliveryMonitorService : Service() {
         val now = Util.convertTimeToLong("$hour:$minute")
         val residents = DatabaseManager.getResidents()
         DatabaseManager.eventsRef
-            .whereEqualTo("userId", DatabaseManager.authUser.email)
+            .whereEqualTo("userId", DatabaseManager.authUser?.email)
             .whereEqualTo("date", Util.todayToLong())
             .whereEqualTo("time", now)
             .whereEqualTo("deliveryState", Delivery_Pending)

@@ -54,7 +54,5 @@ class EditEventActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
         }
-
-
     }
 }

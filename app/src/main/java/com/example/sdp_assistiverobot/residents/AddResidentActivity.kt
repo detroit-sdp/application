@@ -93,7 +93,7 @@ class AddResidentActivity : AppCompatActivity() {
         }
 
         val resident = Resident(
-            authUser.email!!,
+            authUser?.email!!,
             formatName(firstText.text.toString()),
             formatName(lastText.text.toString()),
             state!!,

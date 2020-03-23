@@ -49,7 +49,7 @@ class DashboardPrototype1Fragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        getStatus()
+//        getStatus()
         return inflater.inflate(R.layout.fragment_dashboard_prototype1, container, false)
     }
 
@@ -65,26 +65,26 @@ class DashboardPrototype1Fragment : Fragment() {
     }
 
 
-    private fun getStatus(){
-        Log.d(TAG, "Getting robot status")
-        rtdb = FirebaseDatabase.getInstance().getReference()
-        val statusListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-
-                val status = dataSnapshot.child("Status").getValue().toString()
-                Log.d(TAG,"status got: ${status}")
-
-                robot_status?.text = "Tadashi's status: ${status}"
-
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadStatus:onCancelled", databaseError.toException())
-            }
-        }
-        rtdb.addValueEventListener(statusListener)
-    }
+//    private fun getStatus(){
+//        Log.d(TAG, "Getting robot status")
+//        rtdb = FirebaseDatabase.getInstance().getReference()
+//        val statusListener = object : ValueEventListener {
+//            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//
+//                val status = dataSnapshot.child("Status").getValue().toString()
+//                Log.d(TAG,"status got: ${status}")
+//
+//                robot_status?.text = "Tadashi's status: ${status}"
+//
+//            }
+//
+//            override fun onCancelled(databaseError: DatabaseError) {
+//                // Getting Post failed, log a message
+//                Log.w(TAG, "loadStatus:onCancelled", databaseError.toException())
+//            }
+//        }
+//        rtdb.addValueEventListener(statusListener)
+//    }
 
 //    private fun getResidents(){
 //        db = FirebaseFirestore.getInstance()

@@ -44,7 +44,7 @@ class ConfirmDialogFragment : DialogFragment() {
                 })
                 .setNegativeButton("CANCEL",
                     DialogInterface.OnClickListener { dialog, _ ->
-                        mHost.onDialogNegativeClick(this)
+                        mHost.onDialogNegativeClick(id)
                         dialog.dismiss()
                     })
 
@@ -62,6 +62,6 @@ class ConfirmDialogFragment : DialogFragment() {
 
     interface ConfirmDialogListener {
         fun onDialogPositiveClick(id: String, category: String, priority: String, note: String)
-        fun onDialogNegativeClick(dialog: DialogFragment)
+        fun onDialogNegativeClick(id: String)
     }
 }

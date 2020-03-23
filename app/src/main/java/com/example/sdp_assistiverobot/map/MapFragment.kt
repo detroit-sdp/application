@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.PopupWindow
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -115,6 +117,19 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
 //        setOnClick(room_4)
 //        setOnClick(room_5)
 //        setOnClick(charge_station)
+
+//        map_help_button.setOnClickListener{
+//            ​
+//            val view = layoutInflater.inflate(R.layout.map_help_popup, null)
+//            val window = PopupWindow()
+//            ​
+//            window.contentView = view
+//            val textPopup = view.findViewById<ImageView>(R.id.starTest)
+//            textPopup.setOnClickListener(){
+//                window.dismiss()
+//            }
+//            window.showAsDropDown(map_help_button)
+//        }
     }
 
     private fun setOnClick(button: ImageButton) {
@@ -166,12 +181,12 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
     }
 
     override fun onDialogPositiveClick(id: String, category: String, priority: String, note: String) {
-        if (id == "Base") {
+        if (id != "Base") {
             val now = nowToId()
             val date = todayToLong()
             val time = nowToLong()
             val delivery = Delivery(
-                authUser.email!!,
+                authUser?.email!!,
                 date,
                 time,
                 id,
@@ -195,19 +210,22 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
 
             // Send command
             NetworkManager.sendCommand(resident!!.location)
+
+            val button = findButtonByLocation(resident.location)
+            button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
+            button?.performClick()
         } else {
             NetworkManager.sendCommand(id)
         }
     }
 
-    override fun onDialogNegativeClick(dialog: DialogFragment) {
-        val name = dialog.arguments?.getString("name") as String
-
-        if (name == "Charging Station") {
+    override fun onDialogNegativeClick(id: String) {
+        if (id == "Base") {
             charge_station.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryGreen)
         } else {
-            val location = dialog.arguments?.get("location") as String
-            val button = findButtonByLocation(location)
+            val residents = getResidents()
+            val resident = residents[id]
+            val button = findButtonByLocation(resident!!.location)
             button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
             button?.performClick()
         }

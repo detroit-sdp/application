@@ -160,19 +160,6 @@
                 android:id="@+id/waterChart"
                 android:layout_width="match_parent"
                 android:layout_height="220dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/delete"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="@color/colorPrimaryRed"
-                app:iconTint="@color/colorWhite"
-                app:icon="@drawable/baseline_delete_forever_black_24"
-                app:iconGravity="textStart"
-                android:textColor="@color/colorWhite"
-                android:text="  Delete"/>
         </LinearLayout>
     </ScrollView>
 

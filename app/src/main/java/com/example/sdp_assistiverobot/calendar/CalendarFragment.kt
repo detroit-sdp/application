@@ -86,7 +86,7 @@ class CalendarFragment : Fragment(){
         val events = ArrayList<Delivery>()
 
         DatabaseManager.eventsRef
-            .whereEqualTo("userId", authUser.email)
+            .whereEqualTo("userId", authUser?.email)
             .whereEqualTo("date", date)
             .get()
             .addOnSuccessListener { documents ->

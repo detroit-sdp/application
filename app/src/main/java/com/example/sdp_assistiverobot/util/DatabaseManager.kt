@@ -23,7 +23,7 @@ object DatabaseManager {
 
     val DATABASE: FirebaseFirestore = FirebaseFirestore.getInstance()
     val robotStatusRef = Firebase.database.getReference("Status")
-    val authUser = FirebaseAuth.getInstance().currentUser!!
+    val authUser = FirebaseAuth.getInstance().currentUser
     val residentsRef = DATABASE.collection("Residents")
     val eventsRef = DATABASE.collection("Delivery")
     var robotStatus: String? = null

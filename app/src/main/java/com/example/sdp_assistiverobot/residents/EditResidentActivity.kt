@@ -104,7 +104,7 @@ class EditResidentActivity : AppCompatActivity() {
                 .delete()
                 .addOnSuccessListener {
                     Log.d(TAG, "DocumentSnapshot successfully deleted!")
-                    setResult(Activity.RESULT_CANCELED)
+                    setResult(1)
                     finish()
                 }
                 .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
@@ -183,7 +183,7 @@ class EditResidentActivity : AppCompatActivity() {
         }
 
         val newResident = Resident(
-            authUser.email!!,
+            authUser?.email!!,
             formatName(firstText.text.toString()),
             formatName(lastText.text.toString()),
             priority,

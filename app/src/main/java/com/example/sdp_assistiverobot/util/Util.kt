@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object Util {
+
     fun isInternetAvailable(context: Context): Boolean {
         var result = false
         val connectivityManager =

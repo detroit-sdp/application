@@ -139,7 +139,7 @@ class AddEventActivity : AppCompatActivity() {
     private fun addNewEvent() {
         isEnable(false)
 
-        val event = Delivery(authUser.email!!,
+        val event = Delivery(authUser?.email!!,
             convertDateToLong(date),
             convertTimeToLong("$mHour:$mMinute"),
             resident,

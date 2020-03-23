@@ -10,7 +10,7 @@ import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.util.Resident
+//import com.example.sdp_assistiverobot.util.Resident
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -80,13 +80,18 @@ class ResidentViewActivity : AppCompatActivity() {
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 finish()
                 startActivity(intent)
+            } else if (resultCode == 1) {
+                finish()
             }
         }
     }
 
     private fun setResidentInfo() {
-        location.text = "Location: ${resident.location}"
-        priority.text = "Priority: ${resident.priority}"
+        resident = intent.getSerializableExtra("resident") as Resident
+        id = intent.getStringExtra("id")
+        name.text = "${resident.first} ${resident.last}"
+        location.text = "${resident.location}"
+        priority.text = "${resident.priority}"
         dayVisits.text = "No. of visits today: ${dayVisitsNum}"
         weekVisits.text = "No. of visits this week: ${weekVisitsNum}"
         setFoodChart()
@@ -163,19 +168,10 @@ class ResidentViewActivity : AppCompatActivity() {
         waterChart.invalidate()
     }
 
-    private fun sendTadashi(){
-
-    }
-
     class MyXAxisFormatter : ValueFormatter() {
         private val days = arrayOf("Mon", "Tues", "Weds", "Thurs", "Fri", "Sat", "Sun")
         override fun getAxisLabel(value: Float, axis: AxisBase?): String {
             return days.getOrNull(value.toInt()) ?: value.toString()
         }
-        resident = intent.getSerializableExtra("resident") as Resident
-        id = intent.getStringExtra("id")
-        name.text = "${resident.first} ${resident.last}"
-        location.text = "${resident.location}"
-        priority.text = "${resident.priority}"
     }
 }

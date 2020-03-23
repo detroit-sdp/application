@@ -47,5 +47,4 @@ object NetworkManager {
     fun sendCommand(location: String) {
         networkThreadPool.execute(SendCommandRunnable(locationToComms[location]!!))
     }
-
 }
