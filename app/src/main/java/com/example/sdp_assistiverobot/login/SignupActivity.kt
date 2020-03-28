@@ -16,6 +16,7 @@ import com.example.sdp_assistiverobot.MainActivity
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.userpage.User
 import com.example.sdp_assistiverobot.util.Util
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 
 class SignupActivity : AppCompatActivity() {
 
@@ -45,28 +46,28 @@ class SignupActivity : AppCompatActivity() {
         val name = username.text.toString()
 
         if (name.isEmpty()) {
-            username.error = "enter a valid username"
+            username.error = "Enter a valid username"
             return false
         } else {
             username.error = null
         }
 
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(usr).matches()) {
-            useremail.error = "enter a valid email address"
+            useremail.error = "Enter a valid email address"
             return false
         } else {
             useremail.error = null
         }
 
         if (pwd.length < 6) {
-            password.error = "password should be more than 6 characters"
+            password.error = "Password should be more than 6 characters"
             return false
         } else {
             password.error = null
         }
 
         if (pwd != pwd2) {
-            confirmPassword.error = "password does not match"
+            confirmPassword.error = "Password does not match"
             return false
         } else {
             confirmPassword.error = null
@@ -96,18 +97,6 @@ class SignupActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(usr, pwd)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Create user instance
-                    val db = FirebaseFirestore.getInstance()
-                    db.collection("Users").document(usr)
-                        .set(
-                            User(
-                                username.text.toString(),
-                                "Female"
-                            )
-                        )
-                        .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-                        .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success")
                     val user = auth.currentUser
@@ -115,7 +104,9 @@ class SignupActivity : AppCompatActivity() {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    useremail.error = "email is registered."
+                    if (task.exception is FirebaseAuthUserCollisionException) {
+                        useremail.error = "The email address is already in use by another account."
+                    }
                     updateUI(null)
                 }
             }
@@ -149,7 +140,6 @@ class SignupActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         } else {
-//            Toast.makeText(this, "Login failed", Toast.LENGTH_LONG).show()
             loading.visibility = ProgressBar.GONE
             isEnabledAll(true)
         }

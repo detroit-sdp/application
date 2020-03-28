@@ -8,9 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.PopupWindow
-import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -20,11 +17,11 @@ import com.example.sdp_assistiverobot.residents.AddResidentActivity
 import com.example.sdp_assistiverobot.util.Constants
 import com.example.sdp_assistiverobot.util.DatabaseManager
 import com.example.sdp_assistiverobot.residents.Resident
+import com.example.sdp_assistiverobot.residents.ResidentDialogFragment
 import com.example.sdp_assistiverobot.util.Constants.Delivery_Send
 import com.example.sdp_assistiverobot.util.DatabaseManager.authUser
 import com.example.sdp_assistiverobot.util.DatabaseManager.eventsRef
 import com.example.sdp_assistiverobot.util.DatabaseManager.getResidents
-import com.example.sdp_assistiverobot.util.DatabaseManager.residentsRef
 import com.example.sdp_assistiverobot.util.DatabaseManager.updatePriority
 import com.example.sdp_assistiverobot.util.Util.nowToId
 import com.example.sdp_assistiverobot.util.Util.nowToLong
@@ -65,12 +62,14 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
         locationsToButtons = hashMapOf(
             "Room 1" to room_1.id,
             "Room 2" to room_2.id,
-            "Room 3" to room_3.id)
+            "Room 3" to room_3.id,
+            "Room 4" to room_4.id)
 
         buttonsToLocations = hashMapOf(
             room_1.id to "Room 1",
             room_2.id to "Room 2",
-            room_3.id to "Room 3")
+            room_3.id to "Room 3",
+            room_4.id to "Room 4")
 
         initialiseButtons()
 
@@ -78,8 +77,6 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
             val button = view?.findViewById<ImageButton>(savedInstanceState.getInt("clicked"))
             onOccupiedSelected(button)
         }
-
-        progressBar.visibility = ProgressBar.GONE
     }
 
     override fun onResume() {
@@ -114,15 +111,13 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
         setOnClick(room_1)
         setOnClick(room_2)
         setOnClick(room_3)
-//        setOnClick(room_4)
+        setOnClick(room_4)
 //        setOnClick(room_5)
 //        setOnClick(charge_station)
 
 //        map_help_button.setOnClickListener{
-//            ​
 //            val view = layoutInflater.inflate(R.layout.map_help_popup, null)
 //            val window = PopupWindow()
-//            ​
 //            window.contentView = view
 //            val textPopup = view.findViewById<ImageView>(R.id.starTest)
 //            textPopup.setOnClickListener(){
@@ -159,7 +154,8 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
     }
 
     private fun showResidentDialog(id: String, resident: Resident) {
-        val residentDialogFragment = ResidentDialogFragment()
+        val residentDialogFragment =
+            ResidentDialogFragment()
         residentDialogFragment.setTargetFragment(this, 0)
         val bundle = Bundle()
         bundle.putString("residentId", id)
@@ -210,10 +206,6 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
 
             // Send command
             NetworkManager.sendCommand(resident!!.location)
-
-            val button = findButtonByLocation(resident.location)
-            button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
-            button?.performClick()
         } else {
             NetworkManager.sendCommand(id)
         }
@@ -226,10 +218,11 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
             val residents = getResidents()
             val resident = residents[id]
             val button = findButtonByLocation(resident!!.location)
-            button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
-            button?.performClick()
+            onOccupiedNormal(button)
         }
     }
+
+
 
     override fun onCloseClicked(dialog: DialogFragment) {
         val resident = dialog.arguments?.get("resident") as Resident

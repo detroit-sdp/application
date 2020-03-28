@@ -47,7 +47,7 @@ class AddEventActivity : AppCompatActivity() {
         isEnable(true)
 
         date = intent.getStringExtra("date")
-        timeText.text = "Start Time: $mHour:$mMinute"
+        timeText.text = "$mHour:$mMinute"
 
         initialiseSpinner()
 
@@ -105,7 +105,7 @@ class AddEventActivity : AppCompatActivity() {
             override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
                 mHour = "$hourOfDay".padStart(2, '0')
                 mMinute = "$minute".padStart(2, '0')
-                timeText.text = "Start Time: $mHour:$mMinute"
+                timeText.text = "$mHour:$mMinute"
             }
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true)
         timePickerDialog.setTitle("Select Time")

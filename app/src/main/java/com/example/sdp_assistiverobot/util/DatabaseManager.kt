@@ -26,7 +26,6 @@ object DatabaseManager {
     val authUser = FirebaseAuth.getInstance().currentUser
     val residentsRef = DATABASE.collection("Residents")
     val eventsRef = DATABASE.collection("Delivery")
-    var robotStatus: String? = null
 
     private val residents = HashMap<String, Resident>()
     private lateinit var residentListener: ListenerRegistration
@@ -85,18 +84,6 @@ object DatabaseManager {
             }
         }
 
-//        val robotStatusListener = object: ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                robotStatus = dataSnapshot.getValue<String>()
-//                Log.d(TAG, "Robot status is: $robotStatus")
-//            }
-//
-//            override fun onCancelled(e: DatabaseError) {
-//                Log.w(TAG, "loadPost:onCancelled", e.toException())
-//            }
-//        }
-//
-//        robotStatusRef.addValueEventListener(robotStatusListener)
     }
 
     fun detachListeners() {

@@ -2,6 +2,7 @@ package com.example.sdp_assistiverobot.calendar
 
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -18,15 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.residents.Resident
-import com.example.sdp_assistiverobot.util.Constants.Delivery_Pending
-import com.example.sdp_assistiverobot.util.Constants.Delivery_Send
-import com.example.sdp_assistiverobot.util.Constants.Delivery_Success
 import com.example.sdp_assistiverobot.util.DatabaseManager
 import com.example.sdp_assistiverobot.util.DatabaseManager.authUser
 import com.example.sdp_assistiverobot.util.Util
 import com.example.sdp_assistiverobot.util.Util.convertDateToLong
 import com.example.sdp_assistiverobot.util.Util.convertLongToTime
-import kotlinx.android.synthetic.main.activity_add_event.*
 import kotlinx.android.synthetic.main.fragment_calendar.*
 
 class CalendarFragment : Fragment(){
@@ -59,25 +56,25 @@ class CalendarFragment : Fragment(){
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater!!.inflate(R.menu.toolbar_menu_double, menu)
-        menu?.getItem(1)?.setIcon(R.drawable.baseline_add_black_24)
-        menu?.getItem(1)?.iconTintList = ContextCompat.getColorStateList(this.context!!, R.color.colorPrimary)
-        menu?.getItem(0)?.setIcon(R.drawable.baseline_search_black_24)
+        inflater!!.inflate(R.menu.toolbar_menu_single, menu)
+        menu?.getItem(0)?.setIcon(R.drawable.baseline_add_black_24)
         menu?.getItem(0)?.iconTintList = ContextCompat.getColorStateList(this.context!!, R.color.colorPrimary)
+//        menu?.getItem(0)?.setIcon(R.drawable.baseline_search_black_24)
+//        menu?.getItem(0)?.iconTintList = ContextCompat.getColorStateList(this.context!!, R.color.colorPrimary)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
-            R.id.action2 -> {
+            R.id.action0 -> {
                 activity?.startActivity(Intent(this.context, AddEventActivity::class.java).apply {
                     putExtra("date","$selectedYear.$selectedMonth.$selectedDay")
                 })
                 true
             }
-            R.id.action1 -> {
-                true
-            }
+//            R.id.action1 -> {
+//                true
+//            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -108,7 +105,6 @@ class CalendarFragment : Fragment(){
                         setHasFixedSize(true)
                         layoutManager = viewManager
                         adapter = viewAdapter
-                        addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
                     }
                 }
             }
@@ -142,7 +138,6 @@ class CalendarFragment : Fragment(){
         }
 
         // Replace the contents of a view (invoked by the layout manager)
-        @SuppressLint("ResourceAsColor")
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element

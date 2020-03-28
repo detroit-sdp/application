@@ -107,8 +107,7 @@ class NetworkCommService : Service() {
                     .bigText("I am stuck. Can you give me a hand please?"))
                 .setFullScreenIntent(pendingIntent, true)
         } else {
-            notification
-                .setContentIntent(pendingIntent)
+            notification.setContentIntent(pendingIntent)
         }
 
         return notification.build()
@@ -149,7 +148,7 @@ class NetworkCommService : Service() {
         setRealtimeListener()
         val buffer = ByteArray(1024)
         val packet = DatagramPacket(buffer, buffer.size)
-        handleReceivedMessage(DatagramPacket(LOW_BATTERY.toByteArray(), LOW_BATTERY.toByteArray().size))
+//        handleReceivedMessage(DatagramPacket(LOW_BATTERY.toByteArray(), LOW_BATTERY.toByteArray().size))
         while (true) {
             try {
                 if(Thread.interrupted() && !mSocket.isClosed) {

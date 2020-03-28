@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".map.ResidentDialogFragment">
+    tools:context=".residents.ResidentDialogFragment">
 
     <LinearLayout
         android:id="@+id/container"
@@ -14,8 +14,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:paddingStart="16dp"
-        android:paddingRight="16dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
         android:paddingBottom="36dp"
         app:layout_constraintTop_toBottomOf="@id/divider">
 
@@ -59,15 +59,30 @@
             android:textColor="@color/colorPrimaryDark"
             android:text="User Profile" />
 
-        <TextView
-            android:id="@+id/location"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="16sp"
             android:layout_marginTop="16dp"
-            android:paddingStart="12dp"
-            android:text="TextView" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="16sp"
+                android:text="Location"/>
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textSize="16sp" />
+        </LinearLayout>
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/priority"
@@ -125,7 +140,6 @@
                 android:id="@+id/noteText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="12dp"
                 android:hint="Note (optional)"
                 android:textSize="16sp"/>
         </com.google.android.material.textfield.TextInputLayout>

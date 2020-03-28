@@ -53,8 +53,6 @@ class DashboardFragment : Fragment() {
         }
     }
 
-
-
     private fun getResidents(){
         db = FirebaseFirestore.getInstance()
         Log.d(TAG, "getResidents")

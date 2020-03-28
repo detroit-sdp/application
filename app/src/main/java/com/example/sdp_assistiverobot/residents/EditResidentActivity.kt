@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.util.DatabaseManager
 import com.example.sdp_assistiverobot.util.DatabaseManager.DATABASE
@@ -24,7 +25,7 @@ import com.example.sdp_assistiverobot.util.Util
 import com.example.sdp_assistiverobot.util.Util.formatName
 import kotlinx.android.synthetic.main.activity_edit_resident.*
 
-class EditResidentActivity : AppCompatActivity() {
+class EditResidentActivity : AppCompatActivity(), DeleteResidentDialogFragment.DeleteResidentDialogListener {
 
     private val TAG = "EditResidentActivity"
 
@@ -100,26 +101,34 @@ class EditResidentActivity : AppCompatActivity() {
 
         button_delete.setOnClickListener {
             isEnable(false)
-            residentsRef.document(id)
-                .delete()
-                .addOnSuccessListener {
-                    Log.d(TAG, "DocumentSnapshot successfully deleted!")
-                    setResult(1)
-                    finish()
-                }
-                .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
-
-            eventsRef
-                .whereEqualTo("residentId", id)
-                .get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        eventsRef.document(document.id).delete()
-                    }
-                }
+            val dialogFragment = DeleteResidentDialogFragment()
+            dialogFragment.show(supportFragmentManager.beginTransaction(), "dialog")
         }
-
         isEnable(true)
+    }
+
+    override fun onDialogPositiveClick(dialog: DialogFragment) {
+        residentsRef.document(id)
+            .delete()
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully deleted!")
+                setResult(1)
+                finish()
+            }
+            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+
+        eventsRef
+            .whereEqualTo("residentId", id)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    eventsRef.document(document.id).delete()
+                }
+            }
+    }
+
+    override fun onDialogNegativeClick(dialog: DialogFragment) {
+
     }
 
     override fun onBackPressed() {

@@ -92,8 +92,8 @@ class ResidentViewActivity : AppCompatActivity() {
         name.text = "${resident.first} ${resident.last}"
         location.text = "${resident.location}"
         priority.text = "${resident.priority}"
-        dayVisits.text = "No. of visits today: ${dayVisitsNum}"
-        weekVisits.text = "No. of visits this week: ${weekVisitsNum}"
+        dayVisits.text = "${dayVisitsNum}"
+        weekVisits.text = "${weekVisitsNum}"
         setFoodChart()
         setWaterChart()
     }

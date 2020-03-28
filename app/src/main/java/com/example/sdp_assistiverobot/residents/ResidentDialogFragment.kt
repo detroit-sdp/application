@@ -1,9 +1,8 @@
-package com.example.sdp_assistiverobot.map
+package com.example.sdp_assistiverobot.residents
 
 
 import android.app.Dialog
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,20 +11,11 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.residents.ResidentViewActivity
-import com.example.sdp_assistiverobot.residents.Resident
-import com.example.sdp_assistiverobot.util.DatabaseManager
-import com.example.sdp_assistiverobot.util.SpinnerArrayAdapter
+import com.example.sdp_assistiverobot.map.MapFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.getValue
 import kotlinx.android.synthetic.main.fragment_resident_dialog.*
 
 class ResidentDialogFragment : BottomSheetDialogFragment() {
@@ -60,7 +50,7 @@ class ResidentDialogFragment : BottomSheetDialogFragment() {
         super.onStart()
 
         name.text = "${mResident.first} ${mResident.last}"
-        location.text = "Location: ${mResident.location}"
+        location.text = mResident.location
 
         val priorities = resources.getStringArray(R.array.priorities)
         prioritySpinner.adapter = ArrayAdapter<String>(
