@@ -30,7 +30,6 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-
         setContentView(R.layout.activity_login)
         isEnabledAll(true)
         // Set up listeners for buttons
@@ -56,9 +55,6 @@ class LoginActivity : AppCompatActivity() {
             updateUI(null)
             return
         }
-
-        loading.visibility = ProgressBar.VISIBLE
-        loading.isIndeterminate = true
 
         // Implement your own authentication logic here.
         auth.signInWithEmailAndPassword(username, password)
@@ -101,6 +97,11 @@ class LoginActivity : AppCompatActivity() {
         button_signup.isEnabled = enable
         username.isEnabled = enable
         password.isEnabled = enable
+        if (enable) {
+            loading.visibility = ProgressBar.GONE
+        } else {
+            loading.visibility = ProgressBar.VISIBLE
+        }
     }
 
     /**
@@ -116,7 +117,6 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         } else {
             Log.d(TAG, "user not signed in")
-            loading.visibility = ProgressBar.GONE
             isEnabledAll(true)
         }
     }

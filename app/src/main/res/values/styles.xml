@@ -16,6 +16,7 @@
 
     <style name="MyPinStyle" parent="Widget.AppCompat.ImageButton">
         <item name="android:tint">@color/colorPrimaryGreen</item>
+        <item name="android:tag">0</item>
         <item name="android:backgroundTint">@color/colorTrans</item>
         <item name="android:colorControlHighlight">@color/colorTrans</item>
         <item name="android:src">@drawable/baseline_add_location_black_36</item>
@@ -24,4 +25,13 @@
     <style name="MyButtonStyle" parent="Widget.MaterialComponents.Button">
 
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

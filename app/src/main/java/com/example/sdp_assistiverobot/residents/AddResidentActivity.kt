@@ -8,11 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.util.Constants.currentUser
-import com.example.sdp_assistiverobot.util.Resident
+import com.example.sdp_assistiverobot.util.DatabaseManager.DATABASE
+import com.example.sdp_assistiverobot.util.DatabaseManager.authUser
 import com.example.sdp_assistiverobot.util.Util
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.sdp_assistiverobot.util.Util.formatName
 import kotlinx.android.synthetic.main.activity_add_resident.*
 
 
@@ -20,7 +21,6 @@ class AddResidentActivity : AppCompatActivity() {
 
     private var state: String? = null
     private var location: String? = null
-    private lateinit var db : FirebaseFirestore
 
     private val TAG = "AddPatientActivity"
 
@@ -33,8 +33,10 @@ class AddResidentActivity : AppCompatActivity() {
 
         location = intent.getStringExtra("location")
 
+        isEnable(true)
+
         val states = resources.getStringArray(R.array.priorities)
-        priorityText.adapter = SpinnerArrayAdapter<String>(
+        priorityText.adapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_item,
             states.toList()
@@ -53,11 +55,9 @@ class AddResidentActivity : AppCompatActivity() {
         }
 
         button_save.setOnClickListener {
-            uploadNewPatient()
+            uploadNewResident()
 //            createsTestUsers()
         }
-
-        db = FirebaseFirestore.getInstance()
     }
 
     private fun validate(): Boolean {
@@ -75,11 +75,6 @@ class AddResidentActivity : AppCompatActivity() {
             lastText.error = null
         }
 
-        if (state == "Priority") {
-            Toast.makeText(this, "Select a medical state", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
         if (!Util.isInternetAvailable(baseContext)) {
             Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show()
             return false
@@ -88,26 +83,8 @@ class AddResidentActivity : AppCompatActivity() {
         return true
     }
 
-    /**
-     * For Test
-     */
-    private fun createsTestUsers() {
-        for (x in 0..4) {
-            val patient = Resident(
-                "${currentUser!!.email}","Test", "User$x", "Medium", "Room ${x+1}"
-            )
-            db.collection("Residents").document("$x").set(patient)
-                .addOnSuccessListener {
-                    Log.d(TAG, "DocumentSnapshot successfully written!")
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Error adding document", e)
-                    isEnable(true)
-                }
-        }
-    }
 
-    private fun uploadNewPatient() {
+    private fun uploadNewResident() {
         isEnable(false)
 
         if (!validate()) {
@@ -116,15 +93,14 @@ class AddResidentActivity : AppCompatActivity() {
         }
 
         val resident = Resident(
-            currentUser!!.email!!,
+            authUser?.email!!,
             formatName(firstText.text.toString()),
             formatName(lastText.text.toString()),
             state!!,
             location!!
-//            locationText.text.toString()
         )
 
-        db.collection("Residents").document().set(resident)
+        DATABASE.collection("Residents").document().set(resident)
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully written!")
                 finish()
@@ -135,34 +111,18 @@ class AddResidentActivity : AppCompatActivity() {
             }
     }
 
-    private fun formatName(string: String): String {
-        return string[0].toUpperCase()+string.substring(1).toLowerCase()
-    }
-
     private fun isEnable(enable: Boolean) {
         firstText.isEnabled = enable
         lastText.isEnabled = enable
-//        location.isEnabled = enable
+        priorityText.isEnabled = enable
+        button_save.isEnabled = enable
+        if (enable) {
+            progressBar.visibility = ProgressBar.GONE
+            button_save.backgroundTintList = ContextCompat.getColorStateList(this, R.color.colorPrimary)
+        } else {
+            progressBar.visibility = ProgressBar.VISIBLE
+            button_save.backgroundTintList = ContextCompat.getColorStateList(this, R.color.colorAccent)
+        }
     }
 
-    // Customized spinner adapter for medical states
-    private class SpinnerArrayAdapter<String>(context: Context, resource: Int,
-                                              objects : List<String>) : ArrayAdapter<String>(context, resource, objects) {
-        override fun isEnabled(position: Int): Boolean {
-            return position != 0
-        }
-        override fun getDropDownView(
-            position: Int, convertView: View?,
-            parent: ViewGroup?
-        ): View? {
-            val view = super.getDropDownView(position, convertView, parent!!)
-            val tv = view as TextView
-            if (position == 0) { // Set the hint text color gray
-                tv.setTextColor(Color.GRAY)
-            } else {
-                tv.setTextColor(Color.BLACK)
-            }
-            return view
-        }
-    }
 }

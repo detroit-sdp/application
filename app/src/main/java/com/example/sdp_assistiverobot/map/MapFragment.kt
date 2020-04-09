@@ -1,9 +1,5 @@
 package com.example.sdp_assistiverobot.map
 
-import android.app.Dialog
-import android.app.PendingIntent
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
@@ -12,20 +8,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import com.example.sdp_assistiverobot.MainActivity
 import com.example.sdp_assistiverobot.R
+import com.example.sdp_assistiverobot.calendar.Delivery
 import com.example.sdp_assistiverobot.residents.AddResidentActivity
 import com.example.sdp_assistiverobot.util.Constants
-import com.example.sdp_assistiverobot.util.Constants.CHANNEL_ID
 import com.example.sdp_assistiverobot.util.DatabaseManager
-import com.example.sdp_assistiverobot.util.Resident
+import com.example.sdp_assistiverobot.residents.Resident
+import com.example.sdp_assistiverobot.residents.ResidentDialogFragment
+import com.example.sdp_assistiverobot.util.Constants.Delivery_Send
+import com.example.sdp_assistiverobot.util.DatabaseManager.authUser
+import com.example.sdp_assistiverobot.util.DatabaseManager.eventsRef
+import com.example.sdp_assistiverobot.util.DatabaseManager.getResidents
+import com.example.sdp_assistiverobot.util.DatabaseManager.updatePriority
+import com.example.sdp_assistiverobot.util.NetworkManager
+import com.example.sdp_assistiverobot.util.Util.nowToId
+import com.example.sdp_assistiverobot.util.Util.nowToLong
+import com.example.sdp_assistiverobot.util.Util.todayToLong
 import kotlinx.android.synthetic.main.fragment_map.*
-
 
 class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
     ResidentDialogFragment.ResidentDialogListener {
@@ -35,11 +37,13 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
     private lateinit var locationsToButtons: HashMap<String, Int>
     private lateinit var buttonsToLocations: HashMap<Int, String>
 
-    private val mNetworkManager = NetworkManager.getInstance()
+    private val AVAILABLE = 0
+    private val OCCUPIED = 1
+    private val SELECTED = 2
 
-    private lateinit var br: NetworkBroadcastReceiver
+    private val SHOW_RESIDENT_PROFILE = 0
 
-    private var clicked: Int = 0
+    private var clickedButton: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,171 +56,194 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        br = NetworkBroadcastReceiver()
-
         locationsToButtons = hashMapOf(
             "Room 1" to room_1.id,
             "Room 2" to room_2.id,
-            "Room 3" to room_3.id)
+            "Room 3" to room_3.id,
+            "Room 4" to room_4.id)
 
         buttonsToLocations = hashMapOf(
             room_1.id to "Room 1",
             room_2.id to "Room 2",
-            room_3.id to "Room 3")
+            room_3.id to "Room 3",
+            room_4.id to "Room 4")
 
         initialiseButtons()
 
         if (savedInstanceState != null) {
             val button = view?.findViewById<ImageButton>(savedInstanceState.getInt("clicked"))
-            button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryYellow)
-            button?.setImageResource(R.drawable.baseline_person_pin_circle_black_48)
+            onOccupiedSelected(button)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        val filter = IntentFilter().apply {
-            addAction(Constants.ACTION_NETWORK_RECEIVE)
-        }
-        Log.d(TAG, "br registered")
-        activity?.registerReceiver(br, filter)
+//        val filter = IntentFilter().apply {
+//            addAction(Constants.ACTION_NETWORK_RECEIVE)
+//        }
     }
 
     private fun initialiseButtons() {
         val residents = DatabaseManager.getResidents()
-        for (resident in residents) {
-            val button = activity?.findViewById<ImageButton>(locationsToButtons[resident.location]!!)!!
-            button.setImageResource(R.drawable.baseline_person_pin_circle_black_36)
-            button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
-            button.setOnClickListener {
-                if (button.imageTintList == ContextCompat.getColorStateList(context!!, R.color.colorPrimary)) {
-                    button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryYellow)
-                    button.setImageResource(R.drawable.baseline_person_pin_circle_black_48)
-                    showResidentDialog(resident)
+        for ((id, resident) in residents) {
+            val button = findButtonByLocation(resident.location)
+            onOccupiedNormal(button)
+            if (button?.tag == SELECTED) {
+                onOccupiedSelected(button)
+            }
+
+            button!!.setOnClickListener {
+                if (button.tag == OCCUPIED) {
+                    onOccupiedSelected(button)
+                    showResidentDialog(id, resident)
                 } else {
-                    button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
-                    button.setImageResource(R.drawable.baseline_person_pin_circle_black_36)
+                    onOccupiedNormal(button)
                 }
-                clicked = button.id
+                clickedButton = button.id
             }
         }
 
         setOnClick(room_1)
         setOnClick(room_2)
         setOnClick(room_3)
-//        setOnClick(room_4)
+        setOnClick(room_4)
 //        setOnClick(room_5)
-//        setOnClick(charge_station)
+        setOnClick(charge_station)
+
+//        map_help_button.setOnClickListener{
+//            val view = layoutInflater.inflate(R.layout.map_help_popup, null)
+//            val window = PopupWindow()
+//            window.contentView = view
+//            val textPopup = view.findViewById<ImageView>(R.id.starTest)
+//            textPopup.setOnClickListener(){
+//                window.dismiss()
+//            }
+//            window.showAsDropDown(map_help_button)
+//        }
     }
 
     private fun setOnClick(button: ImageButton) {
-        if (button.imageTintList == ContextCompat.getColorStateList(context!!, R.color.colorPrimary)) {
+        if (button.tag == OCCUPIED) {
             return
         }
 
         if (button.id != charge_station.id) {
             button.setOnClickListener {
                 button.setImageResource(R.drawable.baseline_add_location_black_48)
-                startActivity(Intent(context, AddResidentActivity::class.java).apply {
+                startActivityForResult(Intent(context, AddResidentActivity::class.java).apply {
                     putExtra("location", buttonsToLocations[button.id])
-                })
-                clicked = button.id
+                },SHOW_RESIDENT_PROFILE)
+                clickedButton = button.id
             }
         } else {
             button.setOnClickListener {
-                if (button.imageTintList == ContextCompat.getColorStateList(context!!, R.color.colorPrimaryGreen)) {
+                if (button.tag == AVAILABLE) {
                     button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryYellow)
-                    showAlertDialog("Charging Station", "Charging Station")
+                    button.tag = SELECTED
+                    showAlertDialog("Base", "Charging", "High", "Go back to base.")
                 } else {
+                    button.tag = AVAILABLE
                     button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryGreen)
                 }
-                clicked = button.id
+                clickedButton = button.id
             }
         }
     }
 
-    private lateinit var residentDialogFragment: DialogFragment
-    private fun showResidentDialog(resident: Resident) {
-        residentDialogFragment = ResidentDialogFragment()
+    private fun showResidentDialog(id: String, resident: Resident) {
+        val residentDialogFragment =
+            ResidentDialogFragment()
         residentDialogFragment.setTargetFragment(this, 0)
         val bundle = Bundle()
+        bundle.putString("residentId", id)
         bundle.putSerializable("resident", resident)
         residentDialogFragment.arguments = bundle
         residentDialogFragment.show(fragmentManager?.beginTransaction(), "dialog")
     }
 
-    fun showAlertDialog(name: String, location: String) {
+    fun showAlertDialog(id: String, category: String, priority: String, note: String) {
         val dialogFragment = ConfirmDialogFragment()
         dialogFragment.setTargetFragment(this, 0)
         val bundle = Bundle()
-        bundle.putString("name", name)
-        bundle.putString("location", location)
+        bundle.putString("id", id)
+        bundle.putString("category", category)
+        bundle.putString("priority", priority)
+        bundle.putString("note", note)
         dialogFragment.arguments = bundle
         dialogFragment.show(fragmentManager?.beginTransaction(), "dialog")
     }
 
-    override fun onDialogNegativeClick(dialog: DialogFragment) {
-        val name = dialog.arguments?.getString("name") as String
+    override fun onDialogPositiveClick(id: String, category: String, priority: String, note: String) {
+        if (id != "Base") {
+            val now = nowToId()
+            val date = todayToLong()
+            val time = nowToLong()
+            val delivery = Delivery(
+                authUser?.email!!,
+                date,
+                time,
+                id,
+                category,
+                0.0,
+                0.0,
+                Delivery_Send,
+                note
+            )
 
-        if (name == "Charging Station") {
+            // Create new delivery
+            eventsRef.document(now).set(delivery)
+                .addOnSuccessListener {Log.d(TAG, "DocumentSnapshot successfully written!")}
+                .addOnFailureListener {e -> Log.w(TAG, "Error writing document", e)}
+
+            // Update priority of resident
+            val residents = getResidents()
+            val resident = residents[id]
+
+            updatePriority(id, priority)
+
+            // Send command
+            NetworkManager.sendCommand(resident!!.location)
+        } else {
+            NetworkManager.sendCommand(id)
+        }
+    }
+
+    override fun onDialogNegativeClick(id: String) {
+        if (id == "Base") {
+            charge_station.tag = AVAILABLE
             charge_station.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryGreen)
         } else {
-            val location = dialog.arguments?.get("location") as String
-            val button = activity?.findViewById<ImageButton>(locationsToButtons[location]!!)
-            button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
-            button?.performClick()
+            val residents = getResidents()
+            val resident = residents[id]
+            val button = findButtonByLocation(resident!!.location)
+            onOccupiedNormal(button)
         }
     }
 
     override fun onCloseClicked(dialog: DialogFragment) {
         val resident = dialog.arguments?.get("resident") as Resident
-        val button = activity?.findViewById<ImageButton>(locationsToButtons[resident.location]!!)
-        button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
-        button?.setImageResource(R.drawable.baseline_person_pin_circle_black_36)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "br unregistered")
-        activity?.unregisterReceiver(br)
+        val button = findButtonByLocation(resident.location)
+        onOccupiedNormal(button)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt("Clicked", clicked)
+        outState.putInt("Clicked", clickedButton)
     }
 
-    private fun buildNotification(message: String): NotificationCompat.Builder {
-        // Create an explicit intent for an Activity in your app
-        val intent = Intent(this.context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this.context, 0, intent, 0)
-
-        return NotificationCompat.Builder(this.context!!, CHANNEL_ID)
-            .setSmallIcon(R.drawable.baseline_notifications_black_24)
-            .setContentTitle("Tadashi")
-            .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            // Set the intent that will fire when the user taps the notification
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
+    private fun onOccupiedSelected(button: ImageButton?) {
+        button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryYellow)
+        button?.setImageResource(R.drawable.baseline_person_pin_circle_black_48)
+        button?.tag = SELECTED
     }
 
-    inner class NetworkBroadcastReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            when (intent.action) {
-                Constants.ACTION_NETWORK_RECEIVE -> {
-                    // Push message to chat frame
-                    Log.d(TAG, "Income Message: ${intent.getStringExtra("message")}")
+    private fun onOccupiedNormal(button: ImageButton?) {
+        button?.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimary)
+        button?.setImageResource(R.drawable.baseline_person_pin_circle_black_36)
+        button?.tag = OCCUPIED
+    }
 
-                    val builder = buildNotification(intent.getStringExtra("message"))
-                    with(NotificationManagerCompat.from(context)) {
-                        // notificationId is a unique int for each notification that you must define
-                        notify(Constants.NOTIFICATION_ID, builder.build())
-                    }
-                }
-            }
-        }
+    private fun findButtonByLocation(location: String?): ImageButton? {
+        return activity?.findViewById(locationsToButtons[location]!!)
     }
 }

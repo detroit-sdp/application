@@ -11,7 +11,7 @@ import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.sdp_assistiverobot.R
-import com.example.sdp_assistiverobot.util.Resident
+import com.example.sdp_assistiverobot.residents.Resident
 import com.github.mikephil.charting.data.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_dashboard.*
@@ -53,8 +53,6 @@ class DashboardFragment : Fragment() {
         }
     }
 
-
-
     private fun getResidents(){
         db = FirebaseFirestore.getInstance()
         Log.d(TAG, "getResidents")
@@ -73,12 +71,13 @@ class DashboardFragment : Fragment() {
                         priority = get("priority").toString()
                         location = get("location").toString()
                     }
-                    val resident = Resident(
-                        first,
-                        last,
-                        priority,
-                        location
-                    )
+                    val resident =
+                        Resident(
+                            first,
+                            last,
+                            priority,
+                            location
+                        )
                     if (!isPause && pieChart1 != null) {
                         if (resident.priority == "Low"){
                             lowPriorResidents.add(resident)

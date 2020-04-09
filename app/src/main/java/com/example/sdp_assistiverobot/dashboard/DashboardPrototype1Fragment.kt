@@ -1,6 +1,8 @@
 package com.example.sdp_assistiverobot.dashboard
 
 
+//import com.example.sdp_assistiverobot.Resident
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.sdp_assistiverobot.R
-//import com.example.sdp_assistiverobot.Resident
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -16,8 +17,8 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.fragment_dashboard_prototype1.*
 
 
@@ -28,9 +29,8 @@ class DashboardPrototype1Fragment : Fragment() {
 
     val TAG = "DashboardPrototype1"
     private lateinit var db: FirebaseFirestore
-//    private val lowPriorResidents: ArrayList<Resident> = ArrayList()
-//    private val medPriorResidents: ArrayList<Resident> = ArrayList()
-//    private val highPriorResidents: ArrayList<Resident> = ArrayList()
+    private lateinit var rtdb: DatabaseReference
+
 
     private var dailyVisits: IntArray = intArrayOf(1,1,5,8,3,2)
 
@@ -38,7 +38,7 @@ class DashboardPrototype1Fragment : Fragment() {
     private val foodDeliveries: IntArray = intArrayOf(10,20,30,2,30,20,foodDelivery)
 
     private var waterDelivery = 0
-    private val waterDeliveries: IntArray = intArrayOf(40,6,50,40,50,60,foodDelivery)
+    private val waterDeliveries: IntArray = intArrayOf(40,6,50,40,50,60,waterDelivery)
 
     private var isPause = false
 
@@ -49,19 +49,42 @@ class DashboardPrototype1Fragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+//        getStatus()
         return inflater.inflate(R.layout.fragment_dashboard_prototype1, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        db = FirebaseFirestore.getInstance()
 //        getResidents()
-        Log.d(TAG, "Getting residents data")
+//        getStatus()
+        //Log.d(TAG, "Getting residents data")
         setDailyVisitChart()
         setFoodChart()
         setWaterChart()
     }
 
 
+//    private fun getStatus(){
+//        Log.d(TAG, "Getting robot status")
+//        rtdb = FirebaseDatabase.getInstance().getReference()
+//        val statusListener = object : ValueEventListener {
+//            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//
+//                val status = dataSnapshot.child("Status").getValue().toString()
+//                Log.d(TAG,"status got: ${status}")
+//
+//                robot_status?.text = "Tadashi's status: ${status}"
+//
+//            }
+//
+//            override fun onCancelled(databaseError: DatabaseError) {
+//                // Getting Post failed, log a message
+//                Log.w(TAG, "loadStatus:onCancelled", databaseError.toException())
+//            }
+//        }
+//        rtdb.addValueEventListener(statusListener)
+//    }
 
 //    private fun getResidents(){
 //        db = FirebaseFirestore.getInstance()
@@ -114,10 +137,6 @@ class DashboardPrototype1Fragment : Fragment() {
 //            }
 //    }
 
-    private fun dailyVisitsChart(residentTypesNum: Array<Float>) {
-        Log.d(TAG, "DailyVisits")
-
-    }
 
     private fun setDailyVisitChart(){
         //Horizontal bar chart for daily visits for each patient

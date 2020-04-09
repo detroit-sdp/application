@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    ​
+    <TextView
+        android:id="@+id/map_help_text"
+        android:layout_width="117dp"
+        android:layout_height="99dp"
+        android:text="Help for using the map function"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    ​
+    <ImageView
+        android:id="@+id/starTest"
+        android:layout_width="139dp"
+        android:layout_height="130dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/btn_star_big_on" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

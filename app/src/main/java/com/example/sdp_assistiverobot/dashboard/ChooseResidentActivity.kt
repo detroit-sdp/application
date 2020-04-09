@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sdp_assistiverobot.R
 import com.example.sdp_assistiverobot.residents.ResidentViewActivity
-import com.example.sdp_assistiverobot.util.Resident
+import com.example.sdp_assistiverobot.residents.Resident
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_choose_patient.*
@@ -56,12 +56,13 @@ class ChooseResidentActivity : AppCompatActivity() {
                         priority = get("priority").toString()
                         location = get("location").toString()
                     }
-                    val resident = Resident(
-                        first,
-                        last,
-                        priority,
-                        location
-                    )
+                    val resident =
+                        Resident(
+                            first,
+                            last,
+                            priority,
+                            location
+                        )
                     residents.add(resident)
                 }
 
@@ -102,7 +103,7 @@ class ChooseResidentActivity : AppCompatActivity() {
         // you provide access to all the views for a data item in a view holder.
         // Each data item is just a string in this case that is shown in a TextView.
         class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val name: TextView = view.findViewById(R.id.line_view)
+//            val name: TextView = view.findViewById(R.id.line_view)
 
         }
 
@@ -121,7 +122,7 @@ class ChooseResidentActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-            holder.name.text = "${myDataset[position].first} ${myDataset[position].last}"
+//            holder.name.text = "${myDataset[position].first} ${myDataset[position].last}"
             holder.itemView.setOnClickListener {
                 clickListener(myDataset[position])
             }

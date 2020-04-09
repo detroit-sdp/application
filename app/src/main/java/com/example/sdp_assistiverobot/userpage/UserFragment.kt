@@ -33,20 +33,13 @@ class UserFragment : Fragment() {
         val currentUser = auth.currentUser
         user_name.text = currentUser?.displayName
         user_email.text = currentUser?.email
-        user_phone.text = currentUser?.phoneNumber
 
-        user_name.setOnClickListener {
-//            Intent(this.context, ChangeNameActivity::class.java).also {
-//                startActivity((it))
-//            }
-            updateName()
+        changePassword.setOnClickListener{
+            Intent(this.context, ChangePasswordActivity::class.java).also {
+                startActivity(it)
+            }
         }
-        user_email.setOnClickListener {
-            updateEmail()
-        }
-        user_phone.setOnClickListener {
-            updatePhoneNo()
-        }
+
         logout.setOnClickListener {
             signOut()
         }

@@ -13,10 +13,11 @@ import androidx.fragment.app.Fragment
 import com.example.sdp_assistiverobot.util.Constants
 import com.example.sdp_assistiverobot.util.DatabaseManager
 import com.example.sdp_assistiverobot.calendar.CalendarFragment
-import com.example.sdp_assistiverobot.dashboard.DashboardFragment
+import com.example.sdp_assistiverobot.calendar.DeliveryMonitorService
 import com.example.sdp_assistiverobot.dashboard.DashboardPrototype1Fragment
 import com.example.sdp_assistiverobot.dashboard.DashboardPrototype2Fragment
 import com.example.sdp_assistiverobot.dashboard.DashboardPrototype3Fragment
+import com.example.sdp_assistiverobot.map.GuardService
 import com.example.sdp_assistiverobot.map.MapFragment
 import com.example.sdp_assistiverobot.map.NetworkCommService
 import com.example.sdp_assistiverobot.userpage.UserFragment
@@ -63,30 +64,24 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Start listener port for receiving UDP packet.
+        // Start services
         val serviceIntent = Intent(this, NetworkCommService::class.java)
-        startService(serviceIntent)
+        val deliveryIntent = Intent(this, DeliveryMonitorService::class.java)
+        startService(deliveryIntent)
+        startForegroundService(serviceIntent)
     }
+
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         Constants.HAS_MAIN_FOCUSED = hasFocus
-        if (hasFocus) {
-            Log.d(TAG,"Main activity has focus")
-        } else {
-            createNotificationChannel()
-            Log.d(TAG,"Main activity has no focus")
-        }
     }
 
     private fun chooseFragment() {
         when (selectedId) {
             R.id.navigation_dashboard -> {
                 toolbar_title.text = "Dashboard"
-//                openFragment(DashboardFragment())
                 openFragment(DashboardPrototype1Fragment())
-//                openFragment(DashboardPrototype2Fragment())
-//                openFragment(DashboardPrototype3Fragment())
             }
 
             R.id.navigation_calendar -> {
@@ -112,22 +107,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "SDPRobot"
-            val descriptionText = "Notifications from robot"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(Constants.CHANNEL_ID, name, importance).apply {
-                description = descriptionText
-            }
-            // Register the channel with the system
-            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-    }
-
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putInt("selectedId", selectedId)
@@ -141,7 +120,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        db.detachListener()
+        db.detachListeners()
     }
 
     override fun onResume() {

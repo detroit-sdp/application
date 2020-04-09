@@ -25,34 +25,31 @@
             android:textSize="20sp"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
-            android:text="Add Resident"
+            android:text="New Resident"
             android:layout_gravity="center"/>
     </androidx.appcompat.widget.Toolbar>
 
-<!--    <Spinner-->
-<!--        android:id="@+id/priority"-->
-<!--        style="@style/Widget.AppCompat.Spinner.Underlined"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="24dp"-->
-<!--        android:layout_marginTop="26dp"-->
-<!--        android:layout_marginEnd="24dp"-->
-<!--        android:spinnerMode="dropdown"-->
-<!--        android:textAlignment="viewStart"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/first" />-->
+
+    <View
+        android:id="@+id/divider5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/add_patient_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:foreground="@color/colorGery"
+        android:background="?android:attr/listDivider" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/priority"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:theme="@style/MyTextLayout"
+        app:helperText="Priority"
         app:layout_constraintTop_toBottomOf="@+id/first">
 
         <androidx.appcompat.widget.AppCompatSpinner
@@ -62,34 +59,13 @@
             android:layout_height="match_parent" />
     </com.google.android.material.textfield.TextInputLayout>
 
-
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/location"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="24dp"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:layout_marginEnd="24dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        android:theme="@style/MyTextLayout"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/priority">-->
-
-<!--        <com.google.android.material.textfield.TextInputEditText-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:hint="Patient's Location"-->
-<!--            android:id="@+id/locationText"-->
-<!--            android:singleLine="true"/>-->
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="24dp"
         android:text="Save"
         android:textColor="@color/colorWhite"
         android:backgroundTint="@color/colorPrimary"
@@ -112,7 +88,6 @@
             android:id="@+id/firstText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="12dp"
             android:hint="Forename"
             android:textSize="16sp"
             android:singleLine="true" />
@@ -134,10 +109,21 @@
             android:id="@+id/lastText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="12dp"
             android:textSize="16sp"
             android:hint="Surename"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/colorPrimary"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
