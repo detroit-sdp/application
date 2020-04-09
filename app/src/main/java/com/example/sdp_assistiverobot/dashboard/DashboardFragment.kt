@@ -44,13 +44,13 @@ class DashboardFragment : Fragment() {
         getResidents()
         Log.d(TAG, "Getting residents data")
         setDeliveriesChart()
-        val button: Button = button_sendTadashi
-        button.setOnClickListener {
-            // Choose resident to send Tadashi to
-            Intent(this.context, ChooseResidentActivity::class.java).also {
-                startActivity(it)
-            }
-        }
+//        val button: Button = button_sendTadashi
+//        button.setOnClickListener {
+//            // Choose resident to send Tadashi to
+//            Intent(this.context, ChooseResidentActivity::class.java).also {
+//                startActivity(it)
+//            }
+//        }
     }
 
     private fun getResidents(){
