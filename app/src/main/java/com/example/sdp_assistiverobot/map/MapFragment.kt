@@ -23,6 +23,7 @@ import com.example.sdp_assistiverobot.util.DatabaseManager.authUser
 import com.example.sdp_assistiverobot.util.DatabaseManager.eventsRef
 import com.example.sdp_assistiverobot.util.DatabaseManager.getResidents
 import com.example.sdp_assistiverobot.util.DatabaseManager.updatePriority
+import com.example.sdp_assistiverobot.util.NetworkManager
 import com.example.sdp_assistiverobot.util.Util.nowToId
 import com.example.sdp_assistiverobot.util.Util.nowToLong
 import com.example.sdp_assistiverobot.util.Util.todayToLong
@@ -42,8 +43,6 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
 
     private val SHOW_RESIDENT_PROFILE = 0
 
-    private lateinit var br: NetworkBroadcastReceiver
-
     private var clickedButton: Int = 0
 
     override fun onCreateView(
@@ -56,8 +55,6 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        br = NetworkBroadcastReceiver()
 
         locationsToButtons = hashMapOf(
             "Room 1" to room_1.id,
@@ -81,11 +78,9 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
 
     override fun onResume() {
         super.onResume()
-        val filter = IntentFilter().apply {
-            addAction(Constants.ACTION_NETWORK_RECEIVE)
-        }
-        Log.d(TAG, "br registered")
-        activity?.registerReceiver(br, filter)
+//        val filter = IntentFilter().apply {
+//            addAction(Constants.ACTION_NETWORK_RECEIVE)
+//        }
     }
 
     private fun initialiseButtons() {
@@ -113,7 +108,7 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
         setOnClick(room_3)
         setOnClick(room_4)
 //        setOnClick(room_5)
-//        setOnClick(charge_station)
+        setOnClick(charge_station)
 
 //        map_help_button.setOnClickListener{
 //            val view = layoutInflater.inflate(R.layout.map_help_popup, null)
@@ -144,8 +139,10 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
             button.setOnClickListener {
                 if (button.tag == AVAILABLE) {
                     button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryYellow)
-                    showAlertDialog("Base", "Charging", "High", "")
+                    button.tag = SELECTED
+                    showAlertDialog("Base", "Charging", "High", "Go back to base.")
                 } else {
+                    button.tag = AVAILABLE
                     button.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryGreen)
                 }
                 clickedButton = button.id
@@ -213,6 +210,7 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
 
     override fun onDialogNegativeClick(id: String) {
         if (id == "Base") {
+            charge_station.tag = AVAILABLE
             charge_station.imageTintList = ContextCompat.getColorStateList(context!!, R.color.colorPrimaryGreen)
         } else {
             val residents = getResidents()
@@ -222,18 +220,10 @@ class MapFragment : Fragment(), ConfirmDialogFragment.ConfirmDialogListener,
         }
     }
 
-
-
     override fun onCloseClicked(dialog: DialogFragment) {
         val resident = dialog.arguments?.get("resident") as Resident
         val button = findButtonByLocation(resident.location)
         onOccupiedNormal(button)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(TAG, "br unregistered")
-        activity?.unregisterReceiver(br)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -6,9 +6,8 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
-import android.provider.ContactsContract
 import android.util.Log
-import com.example.sdp_assistiverobot.map.NetworkManager
+import com.example.sdp_assistiverobot.util.NetworkManager
 import com.example.sdp_assistiverobot.util.Constants.Delivery_Pending
 import com.example.sdp_assistiverobot.util.Constants.Delivery_Send
 import com.example.sdp_assistiverobot.util.DatabaseManager

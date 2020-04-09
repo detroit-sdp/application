@@ -89,7 +89,7 @@ class NetworkCommService : Service() {
         }
     }
 
-    private fun buildNotification(status: String? = "Tadashi Service Running"): Notification {
+    private fun buildNotification(status: String? = "No Internet"): Notification {
         val notificationIntent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
@@ -197,15 +197,12 @@ class NetworkCommService : Service() {
     }
 
     override fun onDestroy() {
-        onTaskRemoved(null)
         Log.d(TAG, "Service onDestroy")
         super.onDestroy()
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         Log.d(TAG, "Service onTaskRemoved")
-        Toast.makeText(applicationContext, "Tadashi connection lost", Toast.LENGTH_LONG).show()
-        // Remove notification
         super.onTaskRemoved(rootIntent)
     }
 }
