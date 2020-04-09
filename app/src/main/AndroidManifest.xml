@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.sdp_assistiverobot">
 
     <uses-permission
@@ -26,13 +27,13 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/tadashi_logo"
         android:label="@string/app_name"
         android:persistent="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/tadashi_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".calendar.EditEventActivity"></activity>
+        <activity android:name=".calendar.EditEventActivity"/>
 
         <service
             android:name=".calendar.DeliveryMonitorService"
@@ -45,16 +46,28 @@
 
         <activity
             android:name=".calendar.EventViewActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".calendar.AddEventActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".userpage.ChangePasswordActivity"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".dashboard.ChooseResidentActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            tools:ignore="LockedOrientationActivity"/>
 
         <service
             android:name=".map.NetworkCommService"
@@ -65,18 +78,33 @@
 <!--            android:parentActivityName=".MainActivity" />-->
         <activity
             android:name=".residents.EditResidentActivity"
-            android:parentActivityName=".residents.ResidentViewActivity" />
+            android:parentActivityName=".residents.ResidentViewActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".residents.ResidentViewActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".residents.AddResidentActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            tools:ignore="LockedOrientationActivity"/>
         <activity
             android:name=".login.SignupActivity"
-            android:parentActivityName=".login.LoginActivity" />
-        <activity android:name=".login.LoginActivity">
+            android:parentActivityName=".login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            tools:ignore="LockedOrientationActivity"/>
+        <activity android:name=".login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -85,7 +113,10 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

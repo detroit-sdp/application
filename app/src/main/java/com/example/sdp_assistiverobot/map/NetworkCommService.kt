@@ -114,7 +114,7 @@ class NetworkCommService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Toast.makeText(applicationContext, "Service started", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(applicationContext, "Service started", Toast.LENGTH_SHORT).show()
 //        bindService(Intent(this@NetworkCommService, GuardService::class.java), connection, Context.BIND_IMPORTANT)
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, buildNotification())
